@@ -7,7 +7,7 @@ function App() {
     { symbol: "USDT", buy: 1, sell: 1.01 }
   ]);
   
-  // just to avoid ESLint warning
+  // just to avoid ESLint warning2
   setCurrencies(currencies);
 
   return (
