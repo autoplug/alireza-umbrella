@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/alireza-umbrella/static/css/main.f87db60f.css",
+    "main.js": "/alireza-umbrella/static/js/main.104fa745.js",
+    "static/js/488.a8c14400.chunk.js": "/alireza-umbrella/static/js/488.a8c14400.chunk.js",
+    "index.html": "/alireza-umbrella/index.html",
+    "main.f87db60f.css.map": "/alireza-umbrella/static/css/main.f87db60f.css.map",
+    "main.104fa745.js.map": "/alireza-umbrella/static/js/main.104fa745.js.map",
+    "488.a8c14400.chunk.js.map": "/alireza-umbrella/static/js/488.a8c14400.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f87db60f.css",
+    "static/js/main.104fa745.js"
+  ]
+}
