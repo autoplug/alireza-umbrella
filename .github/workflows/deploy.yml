@@ -1,6 +1,5 @@
 name: Manual Deploy React App
 
-# این باعث می‌شود اکشن فقط با اجرای دستی اجرا شود
 on:
   workflow_dispatch:
 
@@ -24,7 +23,7 @@ jobs:
       run: npm run build
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v6
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
