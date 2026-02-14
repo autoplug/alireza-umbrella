@@ -1,36 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
-  const [currencies, setCurrencies] = useState([
-    { symbol: "BTC", buy: 27000, sell: 27100 },
-    { symbol: "ETH", buy: 1800, sell: 1820 },
-    { symbol: "USDT", buy: 1, sell: 1.01 }
-  ]);
-  
-  // just to avoid ESLint warning2
-  setCurrencies(currencies);
+  // State برای ذخیره خروجی
+  const [output, setOutput] = useState("Loading...");
+
+  useEffect(() => {
+    // اینجا می‌تونی فایل JSON یا HTML که اکشن تولید کرده بخونی
+    // برای مثال از یک لینک GitHub Pages
+    fetch("https://username.github.io/repo-name/index.html")
+      .then((res) => res.text())
+      .then((data) => setOutput(data))
+      .catch(() => setOutput("Failed to load output"));
+  }, []);
 
   return (
-    <div>
-      <h1>Currency Prices</h1>
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Buy</th>
-            <th>Sell</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currencies.map((item) => (
-            <tr key={item.symbol}>
-              <td>{item.symbol}</td>
-              <td>{item.buy}</td>
-              <td>{item.sell}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ textAlign: "center", marginTop: "50px", fontFamily: "Arial, sans-serif" }}>
+      <h1>Project Output</h1>
+      <div
+        className="result"
+        dangerouslySetInnerHTML={{ __html: output }} // برای نمایش HTML
+        style={{ fontSize: "20px", color: "#333", margin: "20px 0" }}
+      ></div>
     </div>
   );
 }
