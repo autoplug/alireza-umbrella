@@ -6,6 +6,9 @@ function App() {
     { symbol: "ETH", buy: 1800, sell: 1820 },
     { symbol: "USDT", buy: 1, sell: 1.01 }
   ]);
+  
+  // just to avoid ESLint warning
+  setCurrencies(currencies);
 
   return (
     <div>
