@@ -1,26 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 function App() {
-  // State برای ذخیره خروجی
-  const [output, setOutput] = useState("Loading...");
-
-  useEffect(() => {
-    // اینجا می‌تونی فایل JSON یا HTML که اکشن تولید کرده بخونی
-    // برای مثال از یک لینک GitHub Pages
-    fetch("https://username.github.io/repo-name/index.html")
-      .then((res) => res.text())
-      .then((data) => setOutput(data))
-      .catch(() => setOutput("Failed to load output"));
-  }, []);
+  // Function to handle button clicks
+  const handleClick = (name) => {
+    alert(`You clicked ${name}`);
+  };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px", fontFamily: "Arial, sans-serif" }}>
-      <h1>Project Output</h1>
+    // Main container with full viewport height and column layout
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      
+      {/* Main content area */}
+      <div style={{ flex: 1, padding: "20px", textAlign: "center" }}>
+        <h1>Welcome to My App</h1>
+        <p>This is the main content area.</p>
+      </div>
+
+      {/* Footer with buttons fixed at the bottom */}
       <div
-        className="result"
-        dangerouslySetInnerHTML={{ __html: output }} // برای نمایش HTML
-        style={{ fontSize: "20px", color: "#333", margin: "20px 0" }}
-      ></div>
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "10px 0",
+          borderTop: "1px solid #ccc",
+          backgroundColor: "#f8f8f8",
+          position: "sticky",
+          bottom: 0,
+        }}
+      >
+        {/* Each button triggers handleClick with its name */}
+        <button onClick={() => handleClick("Home")}>Home</button>
+        <button onClick={() => handleClick("Profile")}>Profile</button>
+        <button onClick={() => handleClick("Settings")}>Settings</button>
+      </div>
     </div>
   );
 }
