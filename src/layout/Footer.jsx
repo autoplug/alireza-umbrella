@@ -18,7 +18,7 @@ function Footer() {
         bottom: 0,
       }}
     >
-      <button onClick={() => handleClick("Home")}>Home 2</button>
+      <button onClick={() => handleClick("Home")}>Home 3</button>
       <button onClick={() => handleClick("Deposit")}>Deposit</button>
       <button onClick={() => handleClick("Settings")}>Settings</button>
     </div>
