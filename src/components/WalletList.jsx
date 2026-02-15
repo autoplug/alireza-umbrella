@@ -4,7 +4,6 @@ function WalletList({ wallets }) {
   return (
     <div>
       <h2>Wallets</h2>
-
       <table>
         <thead>
           <tr>
@@ -12,17 +11,21 @@ function WalletList({ wallets }) {
             <th>Balance</th>
           </tr>
         </thead>
-
         <tbody>
-          {wallets.map((wallet) => (
-            <tr key={wallet.id}>
-              {/* Display currency code in uppercase */}
-              <td>{wallet.currency.toUpperCase()}</td>
-
-              {/* Display total balance */}
-              <td>{wallet.balance}</td>
+          {wallets && wallets.length > 0 ? (
+            wallets.map((wallet) => (
+              <tr key={wallet.id}>
+                {/* Display currency code in uppercase */}
+                <td>{wallet.currency.toUpperCase()}</td>
+                {/* Display balance */}
+                <td>{wallet.balance}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="2">No wallets found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
