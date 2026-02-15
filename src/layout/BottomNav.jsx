@@ -5,7 +5,7 @@ function BottomNav({ goHome, goSettings }) {
     <div
       style={{
         position: "fixed",
-        bottom: 32,
+        bottom: 16,
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(255,255,255,0.9)",
@@ -13,7 +13,7 @@ function BottomNav({ goHome, goSettings }) {
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         display: "flex",
         zIndex: 1000,
-        width: "90%", // make it wide enough for touch
+        width: "90%",
         maxWidth: 400,
         padding: "8px 0",
       }}
@@ -35,7 +35,13 @@ function BottomNav({ goHome, goSettings }) {
           cursor: "pointer",
         }}
       >
-        <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        {/* Icon above the button */}
+        <div style={{ marginBottom: 4 }}>
+          <i className="fas fa-wallet" style={{ fontSize: 18 }}></i>
+        </div>
+        <div>
+          <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        </div>
         Home
       </button>
 
@@ -56,7 +62,13 @@ function BottomNav({ goHome, goSettings }) {
           cursor: "pointer",
         }}
       >
-        <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        {/* Icon above the button */}
+        <div style={{ marginBottom: 4 }}>
+          <i className="fas fa-sliders-h" style={{ fontSize: 18 }}></i>
+        </div>
+        <div>
+          <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        </div>
         Settings
       </button>
     </div>
