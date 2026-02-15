@@ -4,6 +4,9 @@ import WalletList from "../components/WalletList";
 import BottomNav from "../layout/BottomNav";
 import Settings from "./Settings";
 
+// Cache expiration time (5 minutes)
+const CACHE_TIME = 5 * 60 * 1000;
+
 function Home() {
   // State variables
   const [wallets, setWallets] = useState([]);
@@ -21,9 +24,6 @@ function Home() {
   );
 
   const workerUrl = "https://wallet.alireza-b83.workers.dev";
-
-  // Cache expiration time (5 minutes)
-  const CACHE_TIME = 5 * 60 * 1000;
 
   useEffect(() => {
     if (!token) return;
