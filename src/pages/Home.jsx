@@ -27,66 +27,60 @@ function Home() {
 
   useEffect(() => {
     if (!token) return;
-
+  
     const loadWallets = async () => {
       const cachedData = localStorage.getItem("NOBITEX_WALLETS");
-      const cachedTime = localStorage.getItem("NOBITEX_WALLETS_TIME");
+      const lastFetchTime = localStorage.getItem("NOBITEX_LAST_FETCH");
       const now = Date.now();
-
-      // If valid cache exists and not expired → use cached data
-      if (
-        cachedData &&
-        cachedTime &&
-        now - Number(cachedTime) < CACHE_TIME
-      ) {
+      const FIVE_MINUTES = 5 * 60 * 1000;
+  
+      // ✅ If we already have cached wallets → always show them
+      if (cachedData) {
         setWallets(JSON.parse(cachedData));
+      }
+  
+      // ✅ If last fetch was less than 5 minutes ago → DO NOT call API
+      if (lastFetchTime && now - Number(lastFetchTime) < FIVE_MINUTES) {
         return;
       }
-
-      // If offline but cache exists → use cached data
-      if (!navigator.onLine && cachedData) {
-        setWallets(JSON.parse(cachedData));
-        return;
-      }
-
-      // Otherwise fetch from server
+  
+      // ✅ Otherwise call API
       try {
         setLoading(true);
         setError(null);
-
+  
         const response = await axios.get(workerUrl, {
           headers: { Authorization: `Token ${token}` },
         });
-
+  
         const walletsData = response.data.wallets || [];
-
+  
         setWallets(walletsData);
-
-        // Save fresh data to cache
+  
+        // Save fresh data
         localStorage.setItem(
           "NOBITEX_WALLETS",
           JSON.stringify(walletsData)
         );
+  
+        // Save last fetch time (for rate limiting only)
         localStorage.setItem(
-          "NOBITEX_WALLETS_TIME",
+          "NOBITEX_LAST_FETCH",
           now.toString()
         );
-
+  
       } catch (err) {
-        // If request fails but cache exists → fallback to cache
-        if (cachedData) {
-          setWallets(JSON.parse(cachedData));
-        } else {
-          setError("Unable to load wallets");
-        }
+        setError("Unable to update wallets");
       } finally {
         setLoading(false);
       }
     };
-
+  
     loadWallets();
-
+  
   }, [token]);
+
+
 
   // Save token and clear old cache
   const handleTokenSave = (newToken) => {
