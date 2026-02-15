@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const currentPath = location.pathname;
 
   const buttonStyle = (isActive) => ({
