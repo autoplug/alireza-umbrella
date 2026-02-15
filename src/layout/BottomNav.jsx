@@ -1,7 +1,6 @@
 import React from "react";
 
-function BottomNav({ goHome, goSettings }) {
-  function BottomNav({ goHome, goSettings, currentPage }) {
+function BottomNav({ goHome, goSettings, currentPage }) {
     const buttonStyle = (isActive) => ({
       flex: 1,
       background: isActive ? "rgba(0,0,0,0.08)" : "none",
@@ -16,7 +15,7 @@ function BottomNav({ goHome, goSettings }) {
       userSelect: "none",        // جلوگیری از انتخاب متن
       WebkitUserSelect: "none",
       borderRadius: 30, // بیضی شدن دکمه فعال
-      transition: "0.2s",
+      transition: "0.2s"
     });
   
   return (
@@ -33,7 +32,7 @@ function BottomNav({ goHome, goSettings }) {
         zIndex: 1000,
         width: "90%",
         maxWidth: 400,
-        padding: "8px 0",
+        padding: "8px 0"
       }}
     >
       {/* Home button */}
