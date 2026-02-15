@@ -36,7 +36,7 @@ function TokenInput({ onTokenSubmit }) {
       </button>
       <button
         onClick={handleClear}
-        style={{ width: "100%", padding: "10px", fontSize: "16px", background: "#f44336", color: "white" }}
+        style={{ width: "100%", padding: "10px", fontSize: "16px", background: "#f44336" ,color: "white"}}
       >
         Clear Token
       </button>
