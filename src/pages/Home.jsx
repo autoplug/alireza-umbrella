@@ -31,9 +31,9 @@ function Home() {
 
       try {
         // ⚠️ Unsafe: token is used directly in frontend
-        const response = await axios.get("https://api.nobitex.ir/user/wallets", {
+        const response = await axios.get("https://apiv2.nobitex.ir/users/wallets/list", {
           headers: {
-            "Authorization": `Bearer ${token}`, // or X-API-TOKEN depending on API
+            "Authorization": `Token ${token}`, // or X-API-TOKEN depending on API
           },
         });
 
