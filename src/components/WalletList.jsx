@@ -4,7 +4,7 @@ import React from "react";
 import BTCLogo from "../assets/logos/btc.png";
 import ETHLogo from "../assets/logos/eth.png";
 import USDTLogo from "../assets/logos/usdt.png";
-import RLSLogo from "../assets/logos/rls.png";
+import RLSLogo from "../assets/logos/rls.jpg";
 
 // Map currency symbol to local logo
 const currencyLogos = {
