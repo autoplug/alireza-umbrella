@@ -9,7 +9,7 @@ function TokenInput({ onTokenSubmit }) {
     if (!token) return;
 
     onTokenSubmit(token); // Save token in parent/localStorage
-    navigate("/");        // Navigate to Home page
+    navigate("/");        // Go to Home page
   };
 
   return (
