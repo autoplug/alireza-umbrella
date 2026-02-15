@@ -36,9 +36,6 @@ function BottomNav({ goHome, goSettings }) {
         }}
       >
         {/* Icon above the button */}
-        <div style={{ marginBottom: 4 }}>
-          <i className="fas fa-wallet" style={{ fontSize: 18 }}></i>
-        </div>
         <div>
           <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
         </div>
@@ -63,9 +60,6 @@ function BottomNav({ goHome, goSettings }) {
         }}
       >
         {/* Icon above the button */}
-        <div style={{ marginBottom: 4 }}>
-          <i className="fas fa-sliders-h" style={{ fontSize: 18 }}></i>
-        </div>
         <div>
           <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
         </div>
