@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import WalletList from "../components/wallet/WalletList";
+import WalletList from "../components/WalletList";
 import { fetchWallets } from "../services/WalletService";
 
 function Home() {
