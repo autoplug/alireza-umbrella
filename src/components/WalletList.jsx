@@ -1,22 +1,34 @@
 import React from "react";
 
-function WalletList({ wallets = [] }) {
+// Import local logos (place your images in src/assets/logos/)
+import BTCLogo from "../assets/logos/btc.png";
+import ETHLogo from "../assets/logos/eth.png";
+import USDTLogo from "../assets/logos/usdt.png";
+import RLSLogo from "../assets/logos/rls.png";
 
+// Map currency symbol to local logo
+const currencyLogos = {
+  BTC: BTCLogo,
+  ETH: ETHLogo,
+  USDT: USDTLogo,
+  RLS: RLSLogo,
+  // Add more currencies as needed
+};
+
+function WalletList({ wallets = [] }) {
   if (!Array.isArray(wallets) || wallets.length === 0) {
     return <div>No wallets available</div>;
   }
 
-  // Format numbers for better readability
+  // Format balances for readability
   const formatBalance = (value) => {
     const number = Number(value);
     if (isNaN(number)) return value;
 
-    // If number is large → format with commas
-    if (number >= 1) {
-      return number.toLocaleString();
-    }
+    // Large numbers → commas
+    if (number >= 1) return number.toLocaleString();
 
-    // If small crypto → limit decimals
+    // Small crypto → limit decimals
     return number.toFixed(6);
   };
 
@@ -35,32 +47,22 @@ function WalletList({ wallets = [] }) {
             alignItems: "center",
           }}
         >
-          {/* Left side - Currency */}
+          {/* Left side: Logo + Currency */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            
-            {/* Circle indicator */}
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                backgroundColor: "#f2f2f2",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: "bold",
-                fontSize: 14,
-              }}
-            >
-              {wallet.currency.toUpperCase()}
-            </div>
+            {/* Currency logo */}
+            <img
+              src={currencyLogos[wallet.currency.toUpperCase()]}
+              alt={wallet.currency}
+              style={{ width: 36, height: 36, borderRadius: "50%" }}
+            />
 
+            {/* Currency symbol */}
             <div style={{ fontWeight: 600 }}>
               {wallet.currency.toUpperCase()}
             </div>
           </div>
 
-          {/* Right side - Balance */}
+          {/* Right side: Balance */}
           <div style={{ fontWeight: 500 }}>
             {formatBalance(wallet.balance)}
           </div>
