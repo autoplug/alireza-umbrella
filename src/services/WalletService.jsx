@@ -1,15 +1,17 @@
-// Function to fetch wallets from API
+import axios from "axios";
+
+// Create axios instance
+const api = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+  timeout: 5000,
+});
+
+// Fetch wallets from API
 export const fetchWallets = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const response = await api.get("/users");
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch wallets");
-  }
-
-  const data = await response.json();
-
-  // Transform API data to wallet format
-  return data.slice(0, 5).map((user) => ({
+  // Transform API data
+  return response.data.slice(0, 5).map((user) => ({
     id: user.id,
     name: user.name + " Wallet",
     balance: Math.floor(Math.random() * 1000) + " USD",
