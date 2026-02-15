@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-function BottomNav({ goHome, goSettings, goMarkets, currentPage }) {
-  // Button style with active pill
+function BottomNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentPath = location.pathname;
+
   const buttonStyle = (isActive) => ({
     flex: 1,
     background: isActive ? "rgba(0,0,0,0.08)" : "none",
@@ -15,8 +20,7 @@ function BottomNav({ goHome, goSettings, goMarkets, currentPage }) {
     cursor: "pointer",
     borderRadius: 30,
     transition: "0.2s",
-    userSelect: "none", // prevent text selection
-    WebkitUserSelect: "none",
+    userSelect: "none",
   });
 
   return (
@@ -36,48 +40,27 @@ function BottomNav({ goHome, goSettings, goMarkets, currentPage }) {
         zIndex: 1000,
       }}
     >
-      {/* Home Button */}
-      <button onClick={goHome} style={buttonStyle(currentPage === "home")}>
-        <i
-          className="fas fa-home"
-          style={{
-            fontSize: 20,
-            marginBottom: 2,
-            color: currentPage === "home" ? "#000" : "#555",
-          }}
-        ></i>
+      <button
+        onClick={() => navigate("/home")}
+        style={buttonStyle(currentPath === "/home")}
+      >
+        <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
         Home
       </button>
 
-      {/* Markets Button */}
       <button
-        onClick={goMarkets}
-        style={buttonStyle(currentPage === "markets")}
+        onClick={() => navigate("/markets")}
+        style={buttonStyle(currentPath === "/markets")}
       >
-        <i
-          className="fas fa-chart-line"
-          style={{
-            fontSize: 20,
-            marginBottom: 2,
-            color: currentPage === "markets" ? "#000" : "#555",
-          }}
-        ></i>
+        <i className="fas fa-chart-line" style={{ fontSize: 20, marginBottom: 2 }}></i>
         Markets
       </button>
 
-      {/* Settings Button */}
       <button
-        onClick={goSettings}
-        style={buttonStyle(currentPage === "settings")}
+        onClick={() => navigate("/settings")}
+        style={buttonStyle(currentPath === "/settings")}
       >
-        <i
-          className="fas fa-cog"
-          style={{
-            fontSize: 20,
-            marginBottom: 2,
-            color: currentPage === "settings" ? "#000" : "#555",
-          }}
-        ></i>
+        <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
         Settings
       </button>
     </div>
