@@ -63,7 +63,7 @@ function WalletList({ wallets = [] }) {
           </div>
 
           {/* Right side: Balance */}
-          <div style={{ fontWeight: 500 }}>
+          <div style={{ fontWeight: 500, textAlign: "left" }}>
             {formatBalance(wallet.balance)}
           </div>
         </div>
