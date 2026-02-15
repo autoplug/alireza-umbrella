@@ -9,12 +9,12 @@ function BottomNav({ goHome, goSettings, currentPage }) {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      padding: "10px 0",
+      padding: "12px 0",
       fontSize: 12,
       cursor: "pointer",
       userSelect: "none",        // جلوگیری از انتخاب متن
       WebkitUserSelect: "none",
-      borderRadius: 30, // بیضی شدن دکمه فعال
+      borderRadius: 35, // بیضی شدن دکمه فعال
       transition: "0.2s"
     });
   
