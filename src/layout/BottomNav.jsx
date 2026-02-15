@@ -12,8 +12,10 @@ function BottomNav({ goHome, goSettings }) {
         borderRadius: 50,
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         display: "flex",
-        padding: "8px 16px",
         zIndex: 1000,
+        width: "90%", // make it wide enough for touch
+        maxWidth: 400,
+        padding: "8px 0",
       }}
     >
       {/* Home button */}
@@ -26,9 +28,11 @@ function BottomNav({ goHome, goSettings }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "8px 12px",
+          justifyContent: "center",
+          padding: "12px 0",
           color: "#333",
           fontSize: 12,
+          cursor: "pointer",
         }}
       >
         <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
@@ -45,9 +49,11 @@ function BottomNav({ goHome, goSettings }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "8px 12px",
+          justifyContent: "center",
+          padding: "12px 0",
           color: "#333",
           fontSize: 12,
+          cursor: "pointer",
         }}
       >
         <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
