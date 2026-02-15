@@ -1,6 +1,24 @@
 import React from "react";
 
 function BottomNav({ goHome, goSettings }) {
+  function BottomNav({ goHome, goSettings, currentPage }) {
+    const buttonStyle = (isActive) => ({
+      flex: 1,
+      background: isActive ? "rgba(0,0,0,0.08)" : "none",
+      border: "none",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "10px 0",
+      fontSize: 12,
+      cursor: "pointer",
+      userSelect: "none",        // جلوگیری از انتخاب متن
+      WebkitUserSelect: "none",
+      borderRadius: 30, // بیضی شدن دکمه فعال
+      transition: "0.2s",
+    });
+  
   return (
     <div
       style={{
@@ -21,22 +39,9 @@ function BottomNav({ goHome, goSettings }) {
       {/* Home button */}
       <button
         onClick={goHome}
-        style={{
-          flex: 1,
-          background: "none",
-          border: "none",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "12px 0",
-          color: "#333",
-          fontSize: 12,
-          cursor: "pointer",
-          userSelect: "none",        // جلوگیری از انتخاب متن
-          WebkitUserSelect: "none",
-        }}
+        style={buttonStyle(currentPage === "home")}
       >
+       
         {/* Icon above the button */}
         <div>
           <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
@@ -47,22 +52,9 @@ function BottomNav({ goHome, goSettings }) {
       {/* Settings button */}
       <button
         onClick={goSettings}
-        style={{
-          flex: 1,
-          background: "none",
-          border: "none",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "12px 0",
-          color: "#333",
-          fontSize: 12,
-          cursor: "pointer",
-          userSelect: "none",        // جلوگیری از انتخاب متن
-          WebkitUserSelect: "none",
-        }}
+        style={buttonStyle(currentPage === "settings")}
       >
+   
         {/* Icon above the button */}
         <div>
           <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
