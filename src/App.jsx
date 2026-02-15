@@ -1,19 +1,22 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Footer from "./layout/Footer";
 
-// Root application component
 function App() {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Page content */}
-      <div style={{ flex: 1 }}>
-        <Home />
-      </div>
+    <Router>
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </div>
 
-      {/* Bottom footer */}
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
