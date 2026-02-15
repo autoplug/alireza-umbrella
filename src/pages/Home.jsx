@@ -16,7 +16,7 @@ function Home({ token }) {
 
       try {
         const response = await axios.get(
-          "https://apiv2.nobitex.ir/users/wallets/list",
+          "https://wallet.alireza-b83.workers.dev",
           {
             headers: {
               "Authorization": `Token ${token}`, // correct header
