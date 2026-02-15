@@ -13,11 +13,11 @@ function Home() {
 
   const workerUrl = "https://wallet.alireza-b83.workers.dev";
 
-  const fetchWallets = async () => {
+  const fetchWallets = React.useCallback(async () => {
     if (!token) return;
     setLoading(true);
     setError(null);
-
+  
     try {
       const response = await axios.get(workerUrl, {
         headers: { Authorization: `Token ${token}` },
@@ -28,11 +28,11 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [token]);
+  
   useEffect(() => {
     fetchWallets();
-  }, [token]);
+  }, [fetchWallets]); 
 
   const handleTokenSave = (newToken) => {
     localStorage.setItem("NOBITEX_TOKEN", newToken);
