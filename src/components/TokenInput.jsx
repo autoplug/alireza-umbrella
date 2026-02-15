@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 
 function TokenInput({ onTokenSubmit }) {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("API_TOKEN") || "");
+  const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
 
   const handleSubmit = () => {
     if (!token) return;
-    localStorage.setItem("API_TOKEN", token);
+    localStorage.setItem("NOBITEX_TOKEN", token);
     onTokenSubmit(token);
     navigate("/");
   };
 
   const handleClear = () => {
-    localStorage.removeItem("API_TOKEN");
+    localStorage.removeItem("NOBITEX_TOKEN");
     setToken("");
     onTokenSubmit("");
   };
