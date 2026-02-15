@@ -33,6 +33,8 @@ function BottomNav({ goHome, goSettings }) {
           color: "#333",
           fontSize: 12,
           cursor: "pointer",
+          userSelect: "none",        // جلوگیری از انتخاب متن
+          WebkitUserSelect: "none",
         }}
       >
         {/* Icon above the button */}
@@ -57,6 +59,8 @@ function BottomNav({ goHome, goSettings }) {
           color: "#333",
           fontSize: 12,
           cursor: "pointer",
+          userSelect: "none",        // جلوگیری از انتخاب متن
+          WebkitUserSelect: "none",
         }}
       >
         {/* Icon above the button */}
