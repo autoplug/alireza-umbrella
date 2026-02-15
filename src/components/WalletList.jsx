@@ -1,9 +1,9 @@
 import React from "react";
 
 // Import local logos (place your images in src/assets/logos/)
-import BTCLogo from "../assets/logos/btc.png";
-import ETHLogo from "../assets/logos/eth.png";
-import USDTLogo from "../assets/logos/usdt.png";
+import BTCLogo from "../assets/logos/btc.PNG";
+import ETHLogo from "../assets/logos/eth.PNG";
+import USDTLogo from "../assets/logos/usdt.PNG";
 import RLSLogo from "../assets/logos/rls.jpg";
 
 // Map currency symbol to local logo
