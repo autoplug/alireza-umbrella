@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WalletList from "../components/wallet/WalletList";
-import { fetchWallets } from "../services/walletService";
+import { fetchWallets } from "../services/WalletService";
 
 function Home() {
   // Local state for wallets
