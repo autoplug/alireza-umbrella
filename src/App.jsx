@@ -1,21 +1,26 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import Footer from "./layout/Footer";
+import TokenInput from "./components/TokenInput";
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem("API_TOKEN") || "");
+
   return (
     <Router>
-      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </div>
+      <Routes>
+        {/* Home page */}
+        <Route
+          path="/"
+          element={token ? <Home /> : <Navigate to="/token" replace />}
+        />
 
-        <Footer />
-      </div>
+        {/* Token input page */}
+        <Route
+          path="/token"
+          element={<TokenInput onTokenSubmit={setToken} />}
+        />
+      </Routes>
     </Router>
   );
 }
