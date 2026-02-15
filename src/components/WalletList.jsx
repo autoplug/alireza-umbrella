@@ -1,27 +1,31 @@
 import React from "react";
 
 function WalletList({ wallets }) {
-  if (!wallets || wallets.length === 0) {
-    return <div>No wallets found.</div>;
-  }
-
   return (
-    <ul style={{ listStyle: "none", padding: 0 }}>
-      {wallets.map((wallet) => (
-        <li
-          key={wallet.id}
-          style={{
-            padding: "15px",
-            marginBottom: "10px",
-            background: "#f1f1f1",
-            borderRadius: "8px",
-            fontSize: "16px",
-          }}
-        >
-          <strong>{wallet.name}</strong>: {wallet.balance} {wallet.currency}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h2>Wallets</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Currency</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {wallets.map((wallet) => (
+            <tr key={wallet.id}>
+              {/* Display currency code in uppercase */}
+              <td>{wallet.currency.toUpperCase()}</td>
+
+              {/* Display total balance */}
+              <td>{wallet.balance}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
