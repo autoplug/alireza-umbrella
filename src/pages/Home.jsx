@@ -45,10 +45,6 @@ function Home() {
     setCurrentPage("home"); // go back to home after saving
   };
 
-  // Navigation handlers
-  const goHome = () => setCurrentPage("home");
-  const goSettings = () => setCurrentPage("settings");
-
   return (
     <div style={{ paddingBottom: 100 }}>
       {/* Page content */}
@@ -71,7 +67,7 @@ function Home() {
       )}
 
       {/* Footer / Bottom Navigation */}
-      <BottomNav goHome={goHome} goSettings={goSettings} />
+      <BottomNav goHome={() => setCurrentPage("home")} goSettings={() => setCurrentPage("settings")} />
     </div>
   );
 }
