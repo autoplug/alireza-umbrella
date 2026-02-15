@@ -14,7 +14,7 @@ function Home() {
     if (!token) {
       setError("No token found");
       setLoading(false);
-      return;
+      //return;
     }
 
     const fetchWallets = async () => {
