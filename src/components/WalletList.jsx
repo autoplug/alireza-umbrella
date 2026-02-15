@@ -1,17 +1,27 @@
 import React from "react";
-import WalletItem from "./WalletItem";
 
-// Wallet list component
 function WalletList({ wallets }) {
-  return (
-    <div style={{ padding: "20px" }}>
-      <h2>My Wallets</h2>
+  if (!wallets || wallets.length === 0) {
+    return <div>No wallets found.</div>;
+  }
 
-      {/* Render each wallet item */}
+  return (
+    <ul style={{ listStyle: "none", padding: 0 }}>
       {wallets.map((wallet) => (
-        <WalletItem key={wallet.id} wallet={wallet} />
+        <li
+          key={wallet.id}
+          style={{
+            padding: "15px",
+            marginBottom: "10px",
+            background: "#f1f1f1",
+            borderRadius: "8px",
+            fontSize: "16px",
+          }}
+        >
+          <strong>{wallet.name}</strong>: {wallet.balance} {wallet.currency}
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
