@@ -50,7 +50,11 @@ function Home() {
         </div>
       )}
 
-      <BottomNav goHome={() => setCurrentPage("home")} goSettings={() => setCurrentPage("settings")} />
+      <BottomNav 
+      currentPage={currentPage}
+      goHome={() => setCurrentPage("home")} 
+      goSettings={() => setCurrentPage("settings")} 
+      />
     </div>
   );
 }
