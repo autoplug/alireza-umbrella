@@ -7,7 +7,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("nobitex_token");
+  const token = localStorage.getItem("NOBITEX_TOKEN");
   const workerUrl = "https://wallet.alireza-b83.workers.dev"; // ← لینک Cloudflare Worker
 
   useEffect(() => {
