@@ -7,7 +7,6 @@ function Home({ token }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch wallets from Nobitex API
   useEffect(() => {
     if (!token) return;
 
@@ -16,13 +15,17 @@ function Home({ token }) {
       setError(null);
 
       try {
-        const response = await axios.get("https://api.nobitex.ir/user/wallets", {
-          headers: {
-            "Authorization": `Bearer ${token}`, // or "X-API-TOKEN"
-          },
-        });
+        const response = await axios.get(
+          "https://apiv2.nobitex.ir/users/wallets/list",
+          {
+            headers: {
+              "Authorization": `Token ${token}`, // correct header
+            },
+          }
+        );
 
-        // Inspect response to match the structure
+        // Check the data structure returned by Nobitex
+        // For example, it might be response.data.wallets or just response.data
         setWallets(response.data);
       } catch (err) {
         setError("Failed to fetch wallets: " + err.message);
@@ -34,6 +37,8 @@ function Home({ token }) {
 
     fetchWallets();
   }, [token]);
+
+  if (!token) return <div>Please enter token first</div>;
 
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "50px auto" }}>
