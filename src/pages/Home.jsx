@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import WalletList from "../components/WalletList";
 
-function Home({ token }) {
+function Home() {
   const [wallets, setWallets] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const token = localStorage.getItem("nobitex_token");
+  const workerUrl = "https://wallet.alireza-b83.workers.dev"; // ← لینک Cloudflare Worker
+
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      setError("No token found");
+      setLoading(false);
+      return;
+    }
 
     const fetchWallets = async () => {
-      setLoading(true);
-      setError(null);
-
       try {
-        const response = await axios.get(
-          "https://wallet.alireza-b83.workers.dev",
-          {
-            headers: {
-              "Authorization": `Token ${token}`, // correct header
-            },
-          }
-        );
+        const response = await axios.get(workerUrl, {
+          headers: { Authorization: `Token ${token}` },
+        });
 
-        // Check the data structure returned by Nobitex
-        // For example, it might be response.data.wallets or just response.data
-        setWallets(response.data);
+        // Safely get wallets array or empty array
+        setWallets(response.data.wallets || []);
       } catch (err) {
-        setError("Failed to fetch wallets: " + err.message);
-        setWallets([]);
+        console.error(err);
+        setError("Failed to load wallets");
       } finally {
         setLoading(false);
       }
@@ -38,19 +36,10 @@ function Home({ token }) {
     fetchWallets();
   }, [token]);
 
-  if (!token) return <div>Please enter token first</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
-  return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "50px auto" }}>
-      <h2>Your Wallets</h2>
-
-      {loading && <div>Loading wallets...</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>}
-
-      {/* WalletList component */}
-      <WalletList wallets={wallets} />
-    </div>
-  );
+  return <WalletList wallets={wallets} />;
 }
 
 export default Home;
