@@ -23,7 +23,7 @@ function WalletList({ wallets = [] }) {
   // Format balances for readability
   const formatBalance = (value, currency) => {
     if (currency == "rls") {
-      const toman = Math.floor(Number(wallet.rialBalance) / 10);
+      const toman = Math.floor(Number(value) / 10);
       return `${toman.toLocaleString()}`;
     }
     const number = Number(value);
