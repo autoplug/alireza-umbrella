@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import WalletList from "../components/WalletList";
 import TokenInput from "../components/TokenInput";
-import BottomNav from "../components/BottomNav";
+import BottomNav from "../layout/BottomNav";
 
 function Home() {
   // State
