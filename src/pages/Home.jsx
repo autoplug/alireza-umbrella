@@ -111,6 +111,7 @@ function Home() {
       <BottomNav
         currentPage={currentPage}
         goHome={() => setCurrentPage("home")}
+        goMarkets={() => setCurrentPage("markets")}
         goSettings={() => setCurrentPage("settings")}
       />
     </div>
