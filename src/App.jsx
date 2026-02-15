@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import WalletList from "./components/WalletList";
 
 function App() {
+  // State to store wallet data
+  const [wallets] = useState([
+    { id: 1, name: "Bitcoin Wallet", balance: "0.45 BTC" },
+    { id: 2, name: "Ethereum Wallet", balance: "2.1 ETH" },
+    { id: 3, name: "USDT Wallet", balance: "1500 USDT" },
+  ]);
+
   // Function to handle button clicks
   const handleClick = (name) => {
     alert(`You clicked ${name}`);
   };
 
   return (
-    // Main container with full viewport height and column layout
+    // Main layout container
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       
-      {/* Main content area */}
-      <div style={{ flex: 1, padding: "20px", textAlign: "center" }}>
-        <h1>Welcome to My App</h1>
-        <p>This is the main content area.</p>
+      {/* Load WalletList component */}
+      <div style={{ flex: 1 }}>
+        <WalletList wallets={wallets} />
       </div>
 
-      {/* Footer with buttons fixed at the bottom */}
+      {/* Bottom navigation buttons */}
       <div
         style={{
           display: "flex",
@@ -28,9 +35,8 @@ function App() {
           bottom: 0,
         }}
       >
-        {/* Each button triggers handleClick with its name */}
         <button onClick={() => handleClick("Home")}>Home</button>
-        <button onClick={() => handleClick("Profile")}>Profile</button>
+        <button onClick={() => handleClick("Deposit")}>Deposit</button>
         <button onClick={() => handleClick("Settings")}>Settings</button>
       </div>
     </div>
