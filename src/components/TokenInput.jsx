@@ -1,44 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function TokenInput({ onTokenSubmit }) {
-  const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
+function TokenInput({ onSave, initialToken = "" }) {
+  const [token, setToken] = useState(initialToken);
 
-  const handleSubmit = () => {
-    if (!token) return;
-    localStorage.setItem("NOBITEX_TOKEN", token);
-    onTokenSubmit(token);
-    navigate("/");
-  };
-
-  const handleClear = () => {
-    localStorage.removeItem("NOBITEX_TOKEN");
-    setToken("");
-    onTokenSubmit("");
+  const handleSave = () => {
+    if (!token) return alert("Please enter a token");
+    onSave(token);
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Enter Your API Token</h2>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <label htmlFor="token">Nobitex Token:</label>
       <input
+        id="token"
         type="text"
-        placeholder="API Token"
         value={token}
         onChange={(e) => setToken(e.target.value)}
-        style={{ width: "100%", padding: "10px", marginBottom: "15px", fontSize: "16px" }}
+        style={{
+          padding: 8,
+          fontSize: 14,
+          borderRadius: 4,
+          border: "1px solid #ccc",
+        }}
+        placeholder="Enter your token here"
       />
       <button
-        onClick={handleSubmit}
-        style={{ width: "100%", padding: "10px", fontSize: "16px", marginBottom: "10px" }}
+        onClick={handleSave}
+        style={{
+          padding: 8,
+          backgroundColor: "#4CAF50",
+          color: "#fff",
+          border: "none",
+          borderRadius: 4,
+          cursor: "pointer",
+        }}
       >
         Save Token
-      </button>
-      <button
-        onClick={handleClear}
-        style={{ width: "100%", padding: "10px", fontSize: "16px", background: "#f44336" ,color: "white"}}
-      >
-        Clear Token
       </button>
     </div>
   );
