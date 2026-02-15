@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function TokenInput({ onTokenSubmit }) {
-  const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("API_TOKEN") || "");
 
   const handleSubmit = () => {
     if (!token) return;
+    localStorage.setItem("API_TOKEN", token);
+    onTokenSubmit(token);
+    navigate("/");
+  };
 
-    onTokenSubmit(token); // Save token in parent/localStorage
-    navigate("/");        // Go to Home page
+  const handleClear = () => {
+    localStorage.removeItem("API_TOKEN");
+    setToken("");
+    onTokenSubmit("");
   };
 
   return (
@@ -24,9 +30,15 @@ function TokenInput({ onTokenSubmit }) {
       />
       <button
         onClick={handleSubmit}
-        style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+        style={{ width: "100%", padding: "10px", fontSize: "16px", marginBottom: "10px" }}
       >
         Save Token
+      </button>
+      <button
+        onClick={handleClear}
+        style={{ width: "100%", padding: "10px", fontSize: "16px", background: "#f44336", color: "white" }}
+      >
+        Clear Token
       </button>
     </div>
   );
