@@ -22,7 +22,7 @@ function TokenInput({ onTokenSubmit }) {
     <div style={{ padding: "20px", maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
       <h2>Enter Your API Token</h2>
       <input
-        type="password"
+        type="text"
         placeholder="API Token"
         value={token}
         onChange={(e) => setToken(e.target.value)}
