@@ -1,7 +1,6 @@
 import React from "react";
 
 function Footer() {
-  var topImageUrl="https://example.com/footer-top.png";
   const handleHome = () => {
     const walletSection = document.getElementById("wallet-section");
     if (walletSection) {
@@ -30,14 +29,6 @@ function Footer() {
         boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
       }}
     >
-      {/* Top image above buttons */}
-      {topImageUrl && (
-        <img
-          src={topImageUrl}
-          alt="footer icon"
-          style={{ width: 40, height: 40, marginTop: 4, marginBottom: 4 }}
-        />
-      )}
 
       {/* Buttons */}
       <div style={{ display: "flex", width: "100%" }}>
