@@ -1,7 +1,7 @@
 import React from "react";
 
 function Footer() {
-  topImageUrl="https://example.com/footer-top.png";
+  var topImageUrl="https://example.com/footer-top.png";
   const handleHome = () => {
     const walletSection = document.getElementById("wallet-section");
     if (walletSection) {
@@ -89,4 +89,7 @@ function Footer() {
   );
 }
 
-export default BottomNav;
+export default Footer;
+
+
+
