@@ -1,45 +1,79 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import WalletList from "../components/WalletList";
+import TokenInput from "../components/TokenInput";
+import BottomNav from "../components/BottomNav";
 
 function Home() {
+  // State
   const [wallets, setWallets] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
+  const [currentPage, setCurrentPage] = useState(token ? "home" : "settings");
 
-  const token = localStorage.getItem("NOBITEX_TOKEN");
-  const workerUrl = "https://wallet.alireza-b83.workers.dev"; // ← لینک Cloudflare Worker
+  const workerUrl = "https://wallet.alireza-b83.workers.dev";
 
-  useEffect(() => {
-    if (!token) {
-      setError("No token found");
+  // Fetch wallets from Worker
+  const fetchWallets = async (currentToken) => {
+    if (!currentToken) return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get(workerUrl, {
+        headers: { Authorization: `Token ${currentToken}` },
+      });
+      setWallets(response.data.wallets || []);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load wallets");
+    } finally {
       setLoading(false);
-      return;
     }
+  };
 
-    const fetchWallets = async () => {
-      try {
-        const response = await axios.get(workerUrl, {
-          headers: { Authorization: `Token ${token}` },
-        });
-
-        // Safely get wallets array or empty array
-        setWallets(response.data.wallets || []);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load wallets");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWallets();
+  // Load wallets on token change
+  useEffect(() => {
+    if (token) fetchWallets(token);
   }, [token]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // Save token to localStorage
+  const handleTokenSave = (newToken) => {
+    localStorage.setItem("NOBITEX_TOKEN", newToken);
+    setToken(newToken);
+    setCurrentPage("home"); // go back to home after saving
+  };
 
-  return <WalletList wallets={wallets} />;
+  // Navigation handlers
+  const goHome = () => setCurrentPage("home");
+  const goSettings = () => setCurrentPage("settings");
+
+  return (
+    <div style={{ paddingBottom: 100 }}>
+      {/* Page content */}
+      {currentPage === "settings" ? (
+        <div id="token-input-section" style={{ padding: 16 }}>
+          <h2>Settings</h2>
+          <TokenInput onSave={handleTokenSave} initialToken={token} />
+          {/* Additional settings can be added here */}
+        </div>
+      ) : (
+        <div id="wallet-section" style={{ padding: 16 }}>
+          {loading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>{error}</div>
+          ) : (
+            <WalletList wallets={wallets} />
+          )}
+        </div>
+      )}
+
+      {/* Footer / Bottom Navigation */}
+      <BottomNav goHome={goHome} goSettings={goSettings} />
+    </div>
+  );
 }
 
 export default Home;
