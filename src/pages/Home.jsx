@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import TokenInput from "../components/TokenInput";
 
 function Home() {
   // Load token from localStorage if it exists
   const [token, setToken] = useState(localStorage.getItem("API_TOKEN") || "");
 
-  // Wallet data from API
+  // Wallets state
   const [wallets, setWallets] = useState([]);
 
   // Loading and error states
@@ -15,31 +14,31 @@ function Home() {
 
   // Save token to localStorage whenever it changes
   useEffect(() => {
-    if (token) {
-      localStorage.setItem("API_TOKEN", token);
-    }
+    if (token) localStorage.setItem("API_TOKEN", token);
   }, [token]);
 
-  // Fetch wallets automatically when token is available
+  // When token exists, fetch wallets (mock for testing)
   useEffect(() => {
     if (!token) return;
 
-    // Define async function inside useEffect to avoid dependency warnings
     const fetchWallets = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        // ⚠️ Unsafe: token is used directly in frontend
-        const response = await axios.get("https://apiv2.nobitex.ir/users/wallets/list", {
-          headers: {
-            "Authorization": `Token ${token}`, // or X-API-TOKEN depending on API
-          },
-        });
+        // Mock wallet data for testing UI
+        const mockWallets = [
+          { id: 1, name: "Bitcoin", balance: 0.5, currency: "BTC" },
+          { id: 2, name: "Ethereum", balance: 1.2, currency: "ETH" },
+          { id: 3, name: "Tether", balance: 1000, currency: "USDT" },
+        ];
 
-        setWallets(response.data); // store wallet data in state
+        // Simulate network delay
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        setWallets(mockWallets);
       } catch (err) {
-        setError("Failed to fetch wallets: " + err.message);
+        setError("Failed to fetch wallets");
         setWallets([]);
       } finally {
         setLoading(false);
@@ -47,26 +46,23 @@ function Home() {
     };
 
     fetchWallets();
-  }, [token]); // Only run when token changes
+  }, [token]);
 
-  // If no token exists, show the TokenInput component
+  // If no token, show TokenInput component
   if (!token) {
     return <TokenInput onTokenSubmit={setToken} />;
   }
 
-  // If token exists, display the wallet list
+  // Display wallets when token exists
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Your Wallets</h2>
+      <h2>Your Wallets (Mock Data)</h2>
 
-      {/* Loading and error messages */}
       {loading && <div>Loading wallets...</div>}
       {error && <div style={{ color: "red" }}>{error}</div>}
 
-      {/* Show message if no wallets found */}
       {!loading && wallets.length === 0 && !error && <div>No wallets found.</div>}
 
-      {/* List wallets */}
       <ul>
         {wallets.map((wallet) => (
           <li key={wallet.id} style={{ marginBottom: "10px" }}>
@@ -75,22 +71,22 @@ function Home() {
         ))}
       </ul>
 
-      {/* Refresh button */}
+      {/* Refresh button to reload mock data */}
       <button
         onClick={() => {
           const fetchWalletsAgain = async () => {
             setLoading(true);
             setError(null);
-
             try {
-              const response = await axios.get("https://api.nobitex.ir/user/wallets", {
-                headers: {
-                  "Authorization": `Bearer ${token}`,
-                },
-              });
-              setWallets(response.data);
+              const mockWallets = [
+                { id: 1, name: "Bitcoin", balance: 0.5, currency: "BTC" },
+                { id: 2, name: "Ethereum", balance: 1.2, currency: "ETH" },
+                { id: 3, name: "Tether", balance: 1000, currency: "USDT" },
+              ];
+              await new Promise((resolve) => setTimeout(resolve, 500));
+              setWallets(mockWallets);
             } catch (err) {
-              setError("Failed to fetch wallets: " + err.message);
+              setError("Failed to fetch wallets");
               setWallets([]);
             } finally {
               setLoading(false);
