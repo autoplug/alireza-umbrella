@@ -5,7 +5,7 @@ function BottomNav({ goHome, goSettings }) {
     <div
       style={{
         position: "fixed",
-        bottom: 16,
+        bottom: 32,
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(255,255,255,0.9)",
