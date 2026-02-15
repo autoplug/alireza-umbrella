@@ -26,7 +26,6 @@ function App() {
         </Routes>
       </div>
 
-      <Footer /> {/* Always visible at bottom */}
     </Router>
   );
 }
