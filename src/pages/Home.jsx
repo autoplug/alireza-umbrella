@@ -1,119 +1,68 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import WalletList from "../components/WalletList";
-import BottomNav from "../layout/BottomNav";
-import Settings from "./Settings";
+import WalletSkeleton from "../components/WalletSkeleton";
 
+const CACHE_KEY = "WALLET_CACHE";
+const CACHE_TIME_KEY = "WALLET_CACHE_TIME";
+const MIN_FETCH_INTERVAL = 60 * 1000; // 1 minute
 
 function Home() {
-  // State variables
   const [wallets, setWallets] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Load token from localStorage
-  const [token, setToken] = useState(
-    localStorage.getItem("NOBITEX_TOKEN") || ""
-  );
-
-  // Control which page is currently visible
-  const [currentPage, setCurrentPage] = useState(
-    token ? "home" : "settings"
-  );
-
-  const workerUrl = "https://wallet.alireza-b83.workers.dev";
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
-  
-    const loadWallets = async () => {
-      const cachedData = localStorage.getItem("NOBITEX_WALLETS");
-      const lastFetchTime = localStorage.getItem("NOBITEX_LAST_FETCH");
-      const now = Date.now();
-      const FIVE_MINUTES = 5 * 60 * 1000;
-  
-      // ✅ If we already have cached wallets → always show them
-      if (cachedData) {
-        setWallets(JSON.parse(cachedData));
-      }
-  
-      // ✅ If last fetch was less than 5 minutes ago → DO NOT call API
-      if (lastFetchTime && now - Number(lastFetchTime) < FIVE_MINUTES) {
-        return;
-      }
-  
-      // ✅ Otherwise call API
+    const now = Date.now();
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    const lastFetch = localStorage.getItem(CACHE_TIME_KEY);
+
+    // 1️⃣ If cache exists → show immediately
+    if (cachedData) {
+      setWallets(JSON.parse(cachedData));
+      setLoading(false);
+    }
+
+    // 2️⃣ Prevent frequent API calls
+    if (lastFetch && now - Number(lastFetch) < MIN_FETCH_INTERVAL) {
+      return;
+    }
+
+    // 3️⃣ Fetch fresh data
+    const fetchWallets = async () => {
       try {
-        setLoading(true);
-        setError(null);
-  
-        const response = await axios.get(workerUrl, {
-          headers: { Authorization: `Token ${token}` },
+        const token = localStorage.getItem("NOBITEX_TOKEN");
+
+        const response = await fetch("YOUR_WORKER_URL", {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
         });
-  
-        const walletsData = response.data.wallets || [];
-  
-        setWallets(walletsData);
-  
-        // Save fresh data
-        localStorage.setItem(
-          "NOBITEX_WALLETS",
-          JSON.stringify(walletsData)
-        );
-  
-        // Save last fetch time (for rate limiting only)
-        localStorage.setItem(
-          "NOBITEX_LAST_FETCH",
-          now.toString()
-        );
-  
+
+        const data = await response.json();
+
+        setWallets(data.wallets);
+
+        // Save to cache
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data.wallets));
+        localStorage.setItem(CACHE_TIME_KEY, now.toString());
       } catch (err) {
-        setError("Unable to update wallets");
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
-  
-    loadWallets();
-  
-  }, [token]);
 
-
-
-  // Save token and clear old cache
-  const handleTokenSave = (newToken) => {
-    localStorage.setItem("NOBITEX_TOKEN", newToken);
-
-    // Clear previous wallet cache
-    localStorage.removeItem("NOBITEX_WALLETS");
-    localStorage.removeItem("NOBITEX_WALLETS_TIME");
-
-    setToken(newToken);
-    setCurrentPage("home");
-  };
+    fetchWallets();
+  }, []);
 
   return (
-    <div style={{ paddingBottom: 100 }}>
-      {currentPage === "settings" ? (
-        <Settings token={token} onSaveToken={handleTokenSave} />
-      ) : (
-        <div style={{ padding: 16 }}>
-          {loading ? (
-            <div>Loading...</div>
-          ) : error ? (
-            <div>{error}</div>
-          ) : (
-            <WalletList wallets={wallets} />
-          )}
-        </div>
-      )}
+    <div style={{ padding: 16 }}>
+      <h2>Wallets</h2>
 
-      <BottomNav
-        currentPage={currentPage}
-        goHome={() => setCurrentPage("home")}
-        goMarkets={() => setCurrentPage("markets")}
-        goSettings={() => setCurrentPage("settings")}
-      />
+      {loading ? (
+        <WalletSkeleton />
+      ) : (
+        <WalletList wallets={wallets} />
+      )}
     </div>
   );
 }
