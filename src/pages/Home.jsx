@@ -1,22 +1,11 @@
 import React from "react";
-import WalletList from "../components/WalletList";
+import WalletList from "./components/WalletList";
 
-export default function Home({ wallets }) {
+export default function Home() {
   return (
-    <div>
-      
-      
-      
-      <div>
-  <h3>Wallet Debug:</h3>
-  <pre>
-    {JSON.stringify(wallets, null, 2)}
-  </pre>
-</div>
-      
-      
-      <h2>Wallets</h2>
-      <WalletList wallets={wallets} />
+    <div style={{ padding: 16, maxWidth: 800, margin: "0 auto" }}>
+      <h1>Wallets</h1>
+      <WalletList />
     </div>
   );
 }
