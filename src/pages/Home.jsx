@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { fetchAllData } from "../api/api";
+import React from "react";
+import WalletList from "../components/WalletList";
+import OrdersList from "../components/OrdersList";
 
-function Home() {
-  const [wallets, setWallets] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchAllData();
-      setWallets(data.wallets || []);
-      setLoading(false);
-    };
-    loadData();
-  }, []);
-
+export default function Home({ wallets, orders }) {
   return (
     <div>
-      {loading ? <div>Loading...</div> : <WalletList wallets={wallets} />}
+      <h2>Wallets</h2>
+      <WalletList wallets={wallets} />
+
+      <h2>Orders</h2>
+      <OrdersList orders={orders} />
     </div>
   );
 }
-
-export default Home;
