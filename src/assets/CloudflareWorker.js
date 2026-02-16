@@ -1,68 +1,55 @@
-export default {
-  async fetch(request) {
+addEventListener("fetch", (event) => {
+  event.respondWith(handleRequest(event.request));
+});
+
+async function handleRequest(request) {
+  try {
     const url = new URL(request.url);
-    const type = url.searchParams.get("type");
+    const type = url.searchParams.get("type"); // wallets / orders / markets
+
+    let apiUrl = "";
+    const headers = {};
+
+    // Token از Header می‌خوانیم (برای orders و wallets)
     const token = request.headers.get("Authorization");
+    if (token) headers["Authorization"] = token;
 
-    // 1️⃣ Wallets
-    if (type === "wallets") {
-      if (!token) {
-        return jsonResponse({ error: "No token provided" }, 401);
-      }
+    // انتخاب endpoint بر اساس type
+    switch (type) {
+      case "wallets":
+        apiUrl = "https://apiv2.nobitex.ir/users/wallets/list";
+        break;
 
-      const response = await fetch(
-        "https://apiv2.nobitex.ir/users/wallets/list",
-        {
-          method: "GET",
-          headers: { Authorization: token },
-        }
-      );
+      case "orders":
+        apiUrl = "https://apiv2.nobitex.ir/market/orders/list";
+        break;
 
-      const data = await response.json();
-      return jsonResponse(data);
+      case "markets":
+        apiUrl = "https://apiv2.nobitex.ir/market/stats";
+        break;
+
+      default:
+        return new Response(JSON.stringify({ error: "Invalid type" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
     }
 
-    // 2️⃣ Orders with details=2 & status=all
-    if (type === "orders") {
-      if (!token) {
-        return jsonResponse({ error: "No token provided" }, 401);
-      }
+    // درخواست به نوبیتکس
+    const response = await fetch(apiUrl, { method: "GET", headers });
+    const data = await response.json();
 
-      const apiUrl =
-        "https://apiv2.nobitex.ir/market/orders/list?details=2&status=all";
-
-      const response = await fetch(apiUrl, {
-        method: "GET",
-        headers: { Authorization: token },
-      });
-
-      const data = await response.json();
-      return jsonResponse(data);
-    }
-
-    // 3️⃣ Markets (no token needed)
-    if (type === "markets") {
-      const response = await fetch("https://apiv2.nobitex.ir/market/stats", {
-        method: "GET",
-      });
-
-      const data = await response.json();
-      return jsonResponse({ markets: data }); // wrap in 'markets' key
-    }
-
-    // Invalid type
-    return jsonResponse({ error: "Invalid request type" }, 400);
-  },
-};
-
-// Helper function to add CORS headers
-function jsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Authorization, Content-Type",
-    },
-  });
+    // پاسخ به مرورگر با CORS فعال
+    return new Response(JSON.stringify(data), {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
