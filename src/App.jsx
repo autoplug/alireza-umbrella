@@ -1,61 +1,53 @@
-import React, { useEffect } from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 // Pages
 import Home from "./pages/Home";
-import MarketsPage from "./pages/Markets";
+import Markets from "./pages/Markets";
 import SettingsPage from "./pages/Settings";
 
-// Bottom navigation in layout folder
-import BottomNavigation from "./layout/BottomNavigation";
+// Components
+import BottomNavigation from "./layouts/BottomNavigation"; // یا مسیر صحیح کامپوننت
 
 // API
 import { fetchAllData } from "./api/api";
 
 export default function App() {
-  
-  
-  const loadData2 = async () => {
-      try {
-        const result = await fetchAllData();
-        console.log("Fetch result:", result);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
+  const [loading, setLoading] = useState(true);
 
-    loadData2();
-  
-  
   useEffect(() => {
-    // Fetch all data once to fill cache/localStorage
-    const loadData = async () => {
-      try {
-        const result = await fetchAllData();
-        console.log("Fetch result:", result);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-
-    loadData();
+    fetchAllData()
+      .then(() => setLoading(false))
+      .catch((err) => {
+        console.error("Failed to fetch data:", err);
+        setLoading(false);
+      });
   }, []);
 
   return (
-    <Router>
-      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-        {/* Main content */}
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/markets" element={<MarketsPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-          </Routes>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* Loader text at top */}
+      {loading && (
+        <div style={{ padding: 12, textAlign: "center", fontWeight: 600 }}>
+          Loading data...
         </div>
+      )}
 
-        {/* Bottom navigation */}
-        <BottomNavigation />
-      </div>
-    </Router>
+      {/* Main content */}
+      {!loading && (
+        <div style={{ flex: 1 }}>
+          <HashRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/markets" element={<Markets />} />
+              <Route path="/settings" element={<SettingsPage />} />
+            </Routes>
+          </HashRouter>
+        </div>
+      )}
+
+      {/* Bottom navigation always visible */}
+      <BottomNavigation />
+    </div>
   );
 }
