@@ -16,15 +16,16 @@ import DebugPanel from "./components/DebugPanel";
 export default function App() {
   //const [loading, setLoading] = useState(true);
   const loading = true
-  /*useEffect(() => {
-    fetchAllData()
+  useEffect(() => {
+ /*   fetchAllData()
       .then(() => setLoading(false))
       .catch((err) => {
         console.error("Failed to fetch data:", err);
         setLoading(false);
       });
-  }, []);
 */
+  }, []);
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <DebugPanel />
