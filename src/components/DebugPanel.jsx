@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+import { fetchData } from "../api/api";
 
 export default function DebugPanel() {
   const [logs, setLogs] = useState([]);
@@ -9,35 +8,24 @@ export default function DebugPanel() {
     setLogs((prev) => [...prev, text]);
   };
 
-  const directCall = async (type) => {
-    log(`===== Direct Call: ${type} =====`);
+  const test = async (type) => {
+    log(`----- Testing ${type} -----`);
 
     try {
-      let url = `${WORKER_URL}?type=${type}`;
+      const result = await fetchData(type);
 
-      if (type === "orders") {
-        url += "&details=2&status=all";
-      }
+      log("Result:");
+      log(JSON.stringify(result, null, 2));
 
-      log("URL:");
-      log(url);
+      const cacheKey =
+        type === "wallets"
+          ? "WALLETS_CACHE"
+          : type === "orders"
+          ? "ORDERS_CACHE"
+          : "MARKETS_CACHE";
 
-      const token = localStorage.getItem("NOBITEX_TOKEN");
-      log("Token : ")
-      log(token)
-      const response = await fetch(url, {
-        headers: token
-          ? { Authorization: `Token ${token}` }
-          : {},
-      });
-
-      log("Response status:");
-      log(response.status.toString());
-
-      const data = await response.json();
-
-      log("Response data:");
-      log(JSON.stringify(data, null, 2));
+      log("Saved in localStorage:");
+      log(localStorage.getItem(cacheKey) || "Nothing saved");
     } catch (err) {
       log("ERROR:");
       log(err.toString());
@@ -48,36 +36,26 @@ export default function DebugPanel() {
     <div
       style={{
         padding: 15,
-        background: "#000",
+        background: "#111",
         color: "#0f0",
         fontSize: 12,
         maxHeight: 400,
         overflow: "auto",
       }}
     >
-      <h3>Direct Worker Debug</h3>
+      <h3>Debug Panel</h3>
 
-      <button onClick={() => directCall("wallets")}>
-        Direct Wallets
-      </button>
+      <div style={{ marginBottom: 10 }}>
+        <button onClick={() => test("wallets")}>Test Wallets</button>
+        <button onClick={() => test("orders")} style={{ marginLeft: 10 }}>
+          Test Orders
+        </button>
+        <button onClick={() => test("markets")} style={{ marginLeft: 10 }}>
+          Test Markets
+        </button>
+      </div>
 
-      <button
-        onClick={() => directCall("orders")}
-        style={{ marginLeft: 10 }}
-      >
-        Direct Orders
-      </button>
-
-      <button
-        onClick={() => directCall("markets")}
-        style={{ marginLeft: 10 }}
-      >
-        Direct Markets
-      </button>
-
-      <pre style={{ marginTop: 15 }}>
-        {logs.join("\n\n")}
-      </pre>
+      <pre>{logs.join("\n\n")}</pre>
     </div>
   );
 }
