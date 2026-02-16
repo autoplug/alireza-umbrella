@@ -1,64 +1,107 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-// Sample market data (replace with API later)
-const sampleMarkets = [
-  { pair: "BTC/USDT", price: "28,500", change: "+2.5%" },
-  { pair: "ETH/USDT", price: "1,800", change: "-1.2%" },
-  { pair: "USDT/RLS", price: "42000", change: "+0.1%" },
-  { pair: "BTC/RLS", price: "1,200,000,000", change: "+0.5%" },
-];
+const WORKER_URL = "https://wallet.alireza-b83.workers.dev";
 
 function Markets() {
-  const [markets, setMarkets] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load sample data initially
-    setMarkets(sampleMarkets);
+    const fetchMyOrders = async () => {
+      try {
+        const token = localStorage.getItem("NOBITEX_TOKEN");
 
-    // Later: fetch real data from API
-    // fetchMarkets();
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(
+          `${WORKER_URL}?type=myorders`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+
+        if (response.data && response.data.orders) {
+          setOrders(response.data.orders);
+        }
+      } catch (error) {
+        console.error("Order fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMyOrders();
   }, []);
 
-  // Format large numbers
-  const formatNumber = (value) => {
-    const number = Number(value.toString().replace(/,/g, ""));
-    if (isNaN(number)) return value;
-    return number.toLocaleString();
+  const formatPrice = (price) => {
+    const toman = Math.floor(Number(price) / 10);
+    return toman.toLocaleString();
   };
 
   return (
     <div style={{ padding: 16, paddingBottom: 120 }}>
-      <h2 style={{ marginBottom: 16 }}>Markets</h2>
+      <h2>My Orders</h2>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {markets.map((market) => (
+      {loading && <div>Loading...</div>}
+
+      {!loading && orders.length === 0 && (
+        <div>No orders found</div>
+      )}
+
+      {!loading &&
+        orders.map((order) => (
           <div
-            key={market.pair}
+            key={order.id}
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              backgroundColor: "#fff",
               padding: 16,
               borderRadius: 16,
+              marginBottom: 12,
               boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-              backgroundColor: "#ffffff",
             }}
           >
-            <div style={{ fontWeight: 600 }}>{market.pair}</div>
-            <div style={{ fontWeight: 500 }}>
-              {formatNumber(market.price)}
+            <div style={{ fontWeight: 600 }}>
+              {order.srcCurrency.toUpperCase()} /{" "}
+              {order.dstCurrency.toUpperCase()}
             </div>
+
             <div
               style={{
-                color: market.change.startsWith("+") ? "green" : "red",
-                fontWeight: 500,
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: 8,
               }}
             >
-              {market.change}
+              <span>
+                Price: {formatPrice(order.price)} تومان
+              </span>
+
+              <span>
+                Amount: {Number(order.amount).toFixed(4)}
+              </span>
+            </div>
+
+            <div
+              style={{
+                marginTop: 6,
+                color:
+                  order.status === "active"
+                    ? "orange"
+                    : order.status === "done"
+                    ? "green"
+                    : "red",
+              }}
+            >
+              {order.status}
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 }
