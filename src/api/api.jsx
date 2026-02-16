@@ -22,7 +22,7 @@ export const fetchAllData = async () => {
       axios.get(`${WORKER_URL}?type=wallets`, {
         headers: { Authorization: `Token ${token}` },
       }),
-      axios.get(`${WORKER_URL}?type=myorders&details=2`, {
+      axios.get(`${WORKER_URL}?type=myorders&status=all&details=2`, {
         headers: { Authorization: `Token ${token}` },
       }),
     ]);
