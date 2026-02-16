@@ -10,7 +10,7 @@ import SettingsPage from "./pages/Settings";
 import BottomNavigation from "./layout/BottomNavigation";
 
 // API
-import { fetchAllData } from "./api";
+import { fetchAllData } from "./api/api";
 
 export default function App() {
   useEffect(() => {
