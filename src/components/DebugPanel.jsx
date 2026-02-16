@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchData } from "../api/api";
+import { fetchWallets } from "./api/fetchWallets";
 
 function DebugPanel() {
   const [wallets, setWallets] = useState(null);
-  const [orders, setOrders] = useState(null);
-  const [markets, setMarkets] = useState(null);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,43 +10,31 @@ function DebugPanel() {
   const addLog = (msg) => setLogs((prev) => [...prev, msg]);
 
   useEffect(() => {
-    const debugFetch = async () => {
+    const debugFetchWallets = async () => {
       setLoading(true);
-      addLog("Starting fetchAllData...");
+      addLog("Starting fetchWallets...");
 
       try {
-        // Fetch each type individually
-        const types = ["wallets", "orders", "markets"];
-        for (const type of types) {
-          addLog(`Fetching ${type}...`);
-          try {
-            const data = await fetchData(type);
-            addLog(`Fetched ${type}: ${JSON.stringify(data, null, 2)}`);
+        const data = await fetchWallets();
+        addLog(`Fetched wallets: ${JSON.stringify(data, null, 2)}`);
 
-            // Update state
-            if (type === "wallets") setWallets(data);
-            if (type === "orders") setOrders(data);
-            if (type === "markets") setMarkets(data);
-          } catch (err) {
-            addLog(`Error fetching ${type}: ${err.message}`);
-          }
-        }
-
-        addLog("fetchAllData finished!");
+        setWallets(data);
       } catch (err) {
-        addLog(`Unexpected error: ${err.message}`);
+        addLog(`Error fetching wallets: ${err.message}`);
+        setWallets([]);
       }
 
       setLoading(false);
+      addLog("fetchWallets finished!");
     };
 
-    debugFetch();
+    debugFetchWallets();
   }, []);
 
   return (
     <div style={{ padding: 20, fontFamily: "monospace" }}>
-      <h2>Debug Panel</h2>
-      {loading && <div style={{ marginBottom: 10 }}>Loading data...</div>}
+      <h2>Debug Panel - Wallets</h2>
+      {loading && <div style={{ marginBottom: 10 }}>Loading wallets...</div>}
 
       <h3>Logs:</h3>
       <div
@@ -56,7 +42,7 @@ function DebugPanel() {
           background: "#f0f0f0",
           padding: 10,
           borderRadius: 8,
-          maxHeight: 400,
+          maxHeight: 300,
           overflowY: "auto",
         }}
       >
@@ -67,14 +53,12 @@ function DebugPanel() {
         ))}
       </div>
 
-      <h3>Wallets:</h3>
-      <pre>{JSON.stringify(wallets, null, 2)}</pre>
-
-      <h3>Orders:</h3>
-      <pre>{JSON.stringify(orders, null, 2)}</pre>
-
-      <h3>Markets:</h3>
-      <pre>{JSON.stringify(markets, null, 2)}</pre>
+      <h3>Wallets Data:</h3>
+      {wallets ? (
+        <pre>{JSON.stringify(wallets, null, 2)}</pre>
+      ) : (
+        <div>No wallets data available</div>
+      )}
     </div>
   );
 }
