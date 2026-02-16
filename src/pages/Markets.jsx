@@ -1,37 +1,17 @@
 import React from "react";
 import OrdersList from "../components/OrdersList";
+import MarketsList from "../components/MarketsList"; // if you prefer a Markets component
 
-export default function Markets({ markets, orders }) {
+export default function MarketPage() {
   return (
-    <div style={{ padding: 16 }}>
-      <h2>Markets</h2>
-      {markets && Object.keys(markets).length > 0 ? (
-        <div>
-          {Object.entries(markets).map(([pair, info]) => (
-            <div
-              key={pair}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: 8,
-                borderBottom: "1px solid #ccc",
-              }}
-            >
-              <span>{pair}</span>
-              <span>{info.last || "-"}</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>No market data</div>
-      )}
+    <div style={{ padding: 16, maxWidth: 1000, margin: "0 auto" }}>
+      {/* Markets section */}
+      <h1>Markets</h1>
+      <MarketsList />
 
-      <h2 style={{ marginTop: 24 }}>Orders</h2>
-      {orders && orders.length > 0 ? (
-        <OrdersList orders={orders} />
-      ) : (
-        <div>No orders available</div>
-      )}
+      {/* Orders section */}
+      <h1 style={{ marginTop: 32 }}>Orders</h1>
+      <OrdersList />
     </div>
   );
 }
