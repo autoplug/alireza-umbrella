@@ -10,12 +10,12 @@ import SettingsPage from "./pages/Settings";
 import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
 
 // API
-import { fetchAllData } from "./api/api";
+//import { fetchAllData } from "./api/api";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+  //const [loading, setLoading] = useState(true);
+  const loading = true
+  /*useEffect(() => {
     fetchAllData()
       .then(() => setLoading(false))
       .catch((err) => {
@@ -23,7 +23,7 @@ export default function App() {
         setLoading(false);
       });
   }, []);
-
+*/
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Loader text at top */}
