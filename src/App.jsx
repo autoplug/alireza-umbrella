@@ -17,7 +17,8 @@ export default function App() {
     // Fetch all data once to fill cache/localStorage
     const loadData = async () => {
       try {
-        await fetchAllData();
+        const result = await fetchAllData();
+        console.log("Fetch result:", result);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
