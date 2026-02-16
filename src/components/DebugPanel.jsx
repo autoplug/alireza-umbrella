@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import localWallets from "./assets/nobitex.json"; // local fallback
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 function DebugPanel() {
   const [wallets, setWallets] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [source, setSource] = useState("");
 
   useEffect(() => {
     const fetchWallets = async () => {
       setLoading(true);
-      setError(null);
+      setSource("");
 
       try {
         const token = localStorage.getItem("NOBITEX_TOKEN");
         if (!token) throw new Error("No token found");
 
-        const response = await axios.get(`${WORKER_URL}?type=wallets`, {
+        const response = await fetch(`${WORKER_URL}?type=wallets`, {
           headers: { Authorization: `Token ${token}` },
         });
 
-        setWallets(response.data.wallets || []);
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+        const data = await response.json();
+        setWallets(data.wallets || []);
+        setSource("Worker API");
       } catch (err) {
-        setError(err.message);
-        setWallets([]);
+        setWallets(localWallets || []);
+        setSource("Local file (fallback)");
       } finally {
         setLoading(false);
       }
@@ -37,14 +41,14 @@ function DebugPanel() {
     <div style={{ padding: 20, fontFamily: "monospace" }}>
       {loading && <div>Loading wallets...</div>}
 
-      {error && <div style={{ color: "red" }}>Error: {error}</div>}
+      {!loading && <div>Data source: {source}</div>}
 
       <h3>Wallets Data:</h3>
       {wallets && wallets.length > 0 ? (
         <pre>{JSON.stringify(wallets, null, 2)}</pre>
-      ) : !loading ? (
-        <div>No wallets available</div>
-      ) : null}
+      ) : (
+        !loading && <div>No wallets available</div>
+      )}
     </div>
   );
 }
