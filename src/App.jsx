@@ -8,6 +8,7 @@ import SettingsPage from "./pages/Settings";
 
 // Components
 import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
+import DebugPanel from "./components/DebugPanel";
 
 // API
 //import { fetchAllData } from "./api/api";
@@ -26,6 +27,7 @@ export default function App() {
 */
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <DebugPanel />
       {/* Loader text at top */}
       {loading && (
         <div style={{ padding: 12, textAlign: "center", fontWeight: 600 }}>
