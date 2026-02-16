@@ -1,46 +1,70 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function BottomNavigation() {
+function BottomNavigation() {
   const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
 
-  const buttons = [
-    { label: "Home", path: "/" },
-    { label: "Markets", path: "/markets" },
-    { label: "Settings", path: "/settings" },
-  ];
+  const buttonStyle = (isActive) => ({
+    flex: 1,
+    background: isActive ? "rgba(0,0,0,0.08)" : "none",
+    border: "none",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "10px 0",
+    fontSize: 12,
+    cursor: "pointer",
+    borderRadius: 30,
+    transition: "0.2s",
+    userSelect: "none",
+  });
 
   return (
     <div
       style={{
+        position: "fixed",
+        bottom: 16,
+        left: "50%",
+        transform: "translateX(-50%)",
+        backgroundColor: "rgba(255,255,255,0.9)",
+        borderRadius: 50,
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         display: "flex",
-        justifyContent: "space-around",
-        padding: 8,
-        background: "rgba(255,255,255,0.9)",
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
+        width: "90%",
+        maxWidth: 400,
+        padding: "8px",
+        zIndex: 1000,
       }}
     >
-      {buttons.map((btn) => {
-        const active = location.pathname === btn.path;
-        return (
-          <button
-            key={btn.path}
-            onClick={() => navigate(btn.path)}
-            style={{
-              padding: "8px 16px",
-              borderRadius: 16,
-              background: active ? "#007bff" : "transparent",
-              color: active ? "#fff" : "#000",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            {btn.label}
-          </button>
-        );
-      })}
+      <button
+        onClick={() => navigate("/home")}
+        style={buttonStyle(currentPath === "/home")}
+      >
+        <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        Home
+      </button>
+
+      <button
+        onClick={() => navigate("/markets")}
+        style={buttonStyle(currentPath === "/markets")}
+      >
+        <i className="fas fa-chart-line" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        Markets
+      </button>
+
+      <button
+        onClick={() => navigate("/settings")}
+        style={buttonStyle(currentPath === "/settings")}
+      >
+        <i className="fas fa-cog" style={{ fontSize: 20, marginBottom: 2 }}></i>
+        Settings
+      </button>
     </div>
   );
 }
+
+export default BottomNavigation;
+
