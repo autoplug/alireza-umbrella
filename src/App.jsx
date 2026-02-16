@@ -47,7 +47,7 @@ export default function App() {
      <div>
   <h3>Wallet Debug:</h3>
   <pre>
-    {JSON.stringify(wallets, null, 2)}
+    {loading && JSON.stringify(wallets, null, 2)}
   </pre>
 </div>
       
@@ -56,7 +56,7 @@ export default function App() {
       <div>
   <h3>orders Debug:</h3>
   <pre>
-    {JSON.stringify(orders, null, 2)}
+    {loading && JSON.stringify(orders, null, 2)}
   </pre>
 </div>
       
@@ -66,7 +66,7 @@ export default function App() {
       <div>
   <h3>markets Debug:</h3>
   <pre>
-    {JSON.stringify(markets, null, 2)}
+    {loading && JSON.stringify(markets, null, 2)}
   </pre>
 </div>
       
