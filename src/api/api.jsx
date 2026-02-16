@@ -93,13 +93,41 @@ export const fetchData = async (type) => {
 
 // Fetch all data sequentially with 1-second delay
 export const fetchAllData = async () => {
-  const wallets = await fetchData("wallets");
-  await sleep(1000);
+  // Store results
+  let wallets = [];
+  let orders = [];
+  let markets = {};
 
-  const orders = await fetchData("orders");
-  await sleep(1000);
+  // Fetch wallets independently
+  try {
+    wallets = await fetchData("wallets");
+  } catch (err) {
+    console.error("Failed to fetch wallets:", err);
+    wallets = []; // fallback empty
+  }
 
-  const markets = await fetchData("markets");
+  // Fetch orders independently
+  try {
+    orders = await fetchData("orders");
+  } catch (err) {
+    console.error("Failed to fetch orders:", err);
+    orders = []; // fallback empty
+  }
+
+  // Fetch markets independently
+  try {
+    markets = await fetchData("markets");
+  } catch (err) {
+    console.error("Failed to fetch markets:", err);
+    markets = {}; // fallback empty
+  }
 
   return { wallets, orders, markets };
+};
+  
+  
+  
+  
+  
+  
 };
