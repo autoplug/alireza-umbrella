@@ -13,6 +13,20 @@ import BottomNavigation from "./layout/BottomNavigation";
 import { fetchAllData } from "./api/api";
 
 export default function App() {
+  
+  
+  const loadData2 = async () => {
+      try {
+        const result = await fetchAllData();
+        console.log("Fetch result:", result);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    loadData2();
+  
+  
   useEffect(() => {
     // Fetch all data once to fill cache/localStorage
     const loadData = async () => {
