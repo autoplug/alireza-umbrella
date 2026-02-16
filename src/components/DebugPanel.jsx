@@ -3,51 +3,44 @@ import React, { useEffect, useState } from "react";
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 function DebugPanel() {
-  const [wallets, setWallets] = useState(null);
+  const [markets, setMarkets] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [source, setSource] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchWallets = async () => {
+    const fetchMarkets = async () => {
       setLoading(true);
-      setSource("");
+      setError(null);
 
       try {
-        const token = localStorage.getItem("NOBITEX_TOKEN");
-        if (!token) throw new Error("No token found");
-
-        const response = await fetch(`${WORKER_URL}?type=wallets`, {
-          headers: { Authorization: `Token ${token}` },
-        });
-
+        const response = await fetch(`${WORKER_URL}?type=markets`);
         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
         const data = await response.json();
-        setWallets(data.wallets || []);
-        setSource("Worker API");
+        setMarkets(data.stats || {});
       } catch (err) {
-        setWallets([]);
-        setSource("Local file (fallback)");
+        setError(err.message);
+        setMarkets({});
       } finally {
         setLoading(false);
       }
     };
 
-    fetchWallets();
+    fetchMarkets();
   }, []);
 
   return (
     <div style={{ padding: 20, fontFamily: "monospace" }}>
-      {loading && <div>Loading wallets...</div>}
+      {loading && <div>Loading markets...</div>}
 
-      {!loading && <div>Data source: {source}</div>}
+      {error && <div style={{ color: "red" }}>Error: {error}</div>}
 
-      <h3>Wallets Data:</h3>
-      {wallets && wallets.length > 0 ? (
-        <pre>{JSON.stringify(wallets, null, 2)}</pre>
-      ) : (
-        !loading && <div>No wallets available</div>
-      )}
+      <h3>Markets Data:</h3>
+      {markets && Object.keys(markets).length > 0 ? (
+        <pre>{JSON.stringify(markets, null, 2)}</pre>
+      ) : !loading ? (
+        <div>No market data available</div>
+      ) : null}
     </div>
   );
 }
