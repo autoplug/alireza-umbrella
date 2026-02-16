@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllData, fetchData } from "../api/api";
+import { fetchData } from "../api/api";
 
 function DebugPanel() {
   const [wallets, setWallets] = useState(null);
