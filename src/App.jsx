@@ -14,8 +14,8 @@ import DebugPanel from "./components/DebugPanel";
 //import { fetchAllData } from "./api/api";
 
 export default function App() {
-  //const [loading, setLoading] = useState(true);
-  const loading = true
+  const [loading, setLoading] = useState(true);
+  setLoading(false);
   useEffect(() => {
  /*   fetchAllData()
       .then(() => setLoading(false))
