@@ -4,7 +4,7 @@ import WalletSkeleton from "../components/WalletSkeleton";
 
 const CACHE_KEY = "WALLET_CACHE";
 const CACHE_TIME_KEY = "WALLET_CACHE_TIME";
-const MIN_FETCH_INTERVAL = 60 * 1000; // 1 minute
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 1 minute
 
 function Home() {
   const [wallets, setWallets] = useState([]);
