@@ -23,7 +23,7 @@ export default function DebugPanel() {
       log(url);
 
       const token = localStorage.getItem("NOBITEX_TOKEN");
-
+      log("Token : ",token)
       const response = await fetch(url, {
         headers: token
           ? { Authorization: `Token ${token}` }
