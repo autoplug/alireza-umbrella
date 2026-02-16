@@ -11,19 +11,19 @@ import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صح�
 import DebugPanel from "./components/DebugPanel";
 
 // API
-//import { fetchAllData } from "./api/api";
+import { fetchAllData } from "./api/api";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   setLoading(false);
   useEffect(() => {
- /*   fetchAllData()
+   fetchAllData()
       .then(() => setLoading(false))
       .catch((err) => {
         console.error("Failed to fetch data:", err);
         setLoading(false);
       });
-*/
+
   }, []);
 
   return (
