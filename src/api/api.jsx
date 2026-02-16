@@ -1,5 +1,5 @@
 import axios from "axios";
-import localOrders from "../assets/localOrders.json"; // local JSON file
+import localOrders from "../assets/nobitex.json"; // <-- changed file name
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
@@ -27,6 +27,16 @@ const shouldFetch = () => {
   return !lastFetch || Date.now() - Number(lastFetch) > MIN_FETCH_INTERVAL;
 };
 
+// Helper to merge orders and remove duplicates by id
+const mergeOrdersUnique = (ordersArray) => {
+  const uniqueMap = new Map();
+  ordersArray.forEach(order => {
+    if (order.id != null) uniqueMap.set(order.id, order);
+  });
+  return Array.from(uniqueMap.values());
+};
+
+// Fetch data for a type: wallets / orders / markets
 export const fetchData = async (type) => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   const cacheKey = CACHE_KEYS[type];
@@ -48,14 +58,9 @@ export const fetchData = async (type) => {
 
       data = type === "wallets" ? response.data.wallets || [] : response.data.orders || [];
 
+      // Merge local file for orders and remove duplicates
       if (type === "orders") {
-        // Merge with localOrders but avoid duplicates by id
-        const combined = [...localOrders, ...data];
-        const uniqueMap = new Map();
-        combined.forEach((order) => {
-          if (order.id != null) uniqueMap.set(order.id, order);
-        });
-        data = Array.from(uniqueMap.values());
+        data = mergeOrdersUnique([...localOrders, ...data]);
       }
     }
 
@@ -71,12 +76,7 @@ export const fetchData = async (type) => {
 
     if (type === "orders") {
       const cached = getCache(cacheKey) || [];
-      const combined = [...localOrders, ...cached];
-      const uniqueMap = new Map();
-      combined.forEach((order) => {
-        if (order.id != null) uniqueMap.set(order.id, order);
-      });
-      return Array.from(uniqueMap.values());
+      return mergeOrdersUnique([...localOrders, ...cached]);
     }
 
     return getCache(cacheKey) || (type === "markets" ? {} : []);
