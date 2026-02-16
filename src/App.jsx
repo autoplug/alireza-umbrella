@@ -7,7 +7,7 @@ import Markets from "./pages/Markets";
 import SettingsPage from "./pages/Settings";
 
 // Components
-import BottomNavigation from "./layouts/BottomNavigation"; // یا مسیر صحیح کامپوننت
+import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
 
 // API
 import { fetchAllData } from "./api/api";
