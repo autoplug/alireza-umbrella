@@ -28,11 +28,12 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Loader text at top */}
+      jfjjdjdjjdjdjjdjdjdjdj
       {loading && (
         <div style={{ padding: 12, textAlign: "center", fontWeight: 600 }}>
           Loading data...
         </div>
-      }
+      )}
 
       {/* Main content */}
         <div style={{ flex: 1 }}>
