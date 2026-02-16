@@ -6,8 +6,8 @@ import Home from "./pages/Home";
 import MarketsPage from "./pages/Markets";
 import SettingsPage from "./pages/Settings";
 
-// Components
-import BottomNavigation from "./components/BottomNavigation";
+// Bottom navigation in layout folder
+import BottomNavigation from "./layout/BottomNavigation";
 
 // API
 import { fetchAllData } from "./api";
