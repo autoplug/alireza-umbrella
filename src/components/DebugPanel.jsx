@@ -26,7 +26,7 @@ function DebugPanel() {
         setWallets(data.wallets || []);
         setSource("Worker API");
       } catch (err) {
-        setWallets(localWallets || []);
+        setWallets([]);
         setSource("Local file (fallback)");
       } finally {
         setLoading(false);
