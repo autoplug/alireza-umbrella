@@ -1,40 +1,32 @@
 import axios from "axios";
+import localOrders from "../assets/localOrders.json"; // local JSON file
 
-// Worker URL
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
-// LocalStorage keys
 const CACHE_KEYS = {
   wallets: "WALLETS_CACHE",
   orders: "ORDERS_CACHE",
   markets: "MARKETS_CACHE",
 };
 
-// Single cache timestamp for all types
 const CACHE_TIME_KEY = "API_CACHE_TIME";
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-// Minimum interval between server calls (5 min)
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
-
-// Read cache
 const getCache = (key) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 };
 
-// Write cache + update timestamp
 const setCache = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
   localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 };
 
-// Check if cache expired
 const shouldFetch = () => {
   const lastFetch = localStorage.getItem(CACHE_TIME_KEY);
   return !lastFetch || Date.now() - Number(lastFetch) > MIN_FETCH_INTERVAL;
 };
 
-// Fetch data for a type: wallets / orders / markets
 export const fetchData = async (type) => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   const cacheKey = CACHE_KEYS[type];
@@ -55,10 +47,19 @@ export const fetchData = async (type) => {
       });
 
       data = type === "wallets" ? response.data.wallets || [] : response.data.orders || [];
+
+      if (type === "orders") {
+        // Merge with localOrders but avoid duplicates by id
+        const combined = [...localOrders, ...data];
+        const uniqueMap = new Map();
+        combined.forEach((order) => {
+          if (order.id != null) uniqueMap.set(order.id, order);
+        });
+        data = Array.from(uniqueMap.values());
+      }
     }
 
     if (type === "markets") {
-      // fetch from Worker (or direct API) and extract 'stats'
       const response = await axios.get(`${WORKER_URL}?type=markets`);
       data = response.data.stats || {};
     }
@@ -67,6 +68,17 @@ export const fetchData = async (type) => {
     return data;
   } catch (err) {
     console.error(`Fetch ${type} error:`, err);
+
+    if (type === "orders") {
+      const cached = getCache(cacheKey) || [];
+      const combined = [...localOrders, ...cached];
+      const uniqueMap = new Map();
+      combined.forEach((order) => {
+        if (order.id != null) uniqueMap.set(order.id, order);
+      });
+      return Array.from(uniqueMap.values());
+    }
+
     return getCache(cacheKey) || (type === "markets" ? {} : []);
   }
 };
