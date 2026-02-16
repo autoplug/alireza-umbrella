@@ -1,5 +1,5 @@
 import React from "react";
-import WalletList from "./components/WalletList";
+import WalletList from "../components/WalletList";
 
 export default function Home() {
   return (
