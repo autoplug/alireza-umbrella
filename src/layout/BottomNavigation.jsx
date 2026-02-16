@@ -40,8 +40,8 @@ function BottomNavigation() {
       }}
     >
       <button
-        onClick={() => navigate("/home")}
-        style={buttonStyle(currentPath === "/home")}
+        onClick={() => navigate("/")}
+        style={buttonStyle(currentPath === "/")}
       >
         <i className="fas fa-home" style={{ fontSize: 20, marginBottom: 2 }}></i>
         Home
