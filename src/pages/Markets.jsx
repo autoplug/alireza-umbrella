@@ -1,109 +1,37 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import OrdersList from "../components/OrdersList";
 
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
-
-function Markets() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchMyOrders = async () => {
-      try {
-        const token = localStorage.getItem("NOBITEX_TOKEN");
-
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
-        const response = await axios.get(
-          `${WORKER_URL}?status=all&details=2`,
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
-
-        if (response.data && response.data.orders) {
-          setOrders(response.data.orders);
-        }
-      } catch (error) {
-        console.error("Order fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMyOrders();
-  }, []);
-
-  const formatPrice = (price) => {
-    const toman = Math.floor(Number(price) / 10);
-    return toman.toLocaleString();
-  };
-
+export default function Markets({ markets, orders }) {
   return (
-    <div style={{ padding: 16, paddingBottom: 120 }}>
-      <h2>My Orders</h2>
-
-      {loading && <div>Loading...</div>}
-
-      {!loading && orders.length === 0 && (
-        <div>No orders found</div>
-      )}
-
-      {!loading &&
-        orders.map((order) => (
-          <div
-            key={order.id}
-            style={{
-              backgroundColor: "#fff",
-              padding: 16,
-              borderRadius: 16,
-              marginBottom: 12,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            }}
-          >
-            <div style={{ fontWeight: 600 }}>
-              {order.srcCurrency.toUpperCase()} /{" "}
-              {order.dstCurrency.toUpperCase()}
-            </div>
-
+    <div style={{ padding: 16 }}>
+      <h2>Markets</h2>
+      {markets && Object.keys(markets).length > 0 ? (
+        <div>
+          {Object.entries(markets).map(([pair, info]) => (
             <div
+              key={pair}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                marginTop: 8,
+                padding: 8,
+                borderBottom: "1px solid #ccc",
               }}
             >
-              <span>
-                Price: {formatPrice(order.price)} تومان
-              </span>
-
-              <span>
-                Amount: {Number(order.amount).toFixed(4)}
-              </span>
+              <span>{pair}</span>
+              <span>{info.last || "-"}</span>
             </div>
+          ))}
+        </div>
+      ) : (
+        <div>No market data</div>
+      )}
 
-            <div
-              style={{
-                marginTop: 6,
-                color:
-                  order.status === "active"
-                    ? "orange"
-                    : order.status === "done"
-                    ? "green"
-                    : "red",
-              }}
-            >
-              {order.status}
-            </div>
-          </div>
-        ))}
+      <h2 style={{ marginTop: 24 }}>Orders</h2>
+      {orders && orders.length > 0 ? (
+        <OrdersList orders={orders} />
+      ) : (
+        <div>No orders available</div>
+      )}
     </div>
   );
 }
-
-export default Markets;
