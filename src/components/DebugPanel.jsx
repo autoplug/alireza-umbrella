@@ -22,7 +22,7 @@ function DebugPanel() {
         // Read cache
         const cachedRaw = localStorage.getItem(CACHE_KEY);
         const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
-
+        addLog(cached);
         const lastFetchRaw = localStorage.getItem(CACHE_TIME_KEY);
         const lastFetch = lastFetchRaw ? Number(lastFetchRaw) : 0;
         const now = Date.now();
