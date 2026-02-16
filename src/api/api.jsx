@@ -15,7 +15,7 @@ const CACHE_TIME_KEYS = {
   markets: "MARKETS_CACHE_TIME",
 };
 
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const MIN_FETCH_INTERVAL = 100; // 5 minutes
 
 // Read from cache safely
 const getCache = (key) => {
