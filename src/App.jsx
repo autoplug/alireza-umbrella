@@ -34,7 +34,6 @@ export default function App() {
       )}
 
       {/* Main content */}
-      {!loading && (
         <div style={{ flex: 1 }}>
           <HashRouter>
             <Routes>
@@ -44,7 +43,7 @@ export default function App() {
             </Routes>
           </HashRouter>
         </div>
-      )}
+      
 
       {/* Bottom navigation always visible */}
       <BottomNavigation />
