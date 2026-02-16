@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import localWallets from "./assets/nobitex.json"; // local fallback
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
