@@ -3,11 +3,11 @@ import axios from "axios";
 import WalletList from "../components/WalletList";
 import WalletSkeleton from "../components/WalletSkeleton";
 
-const WORKER_URL = "https://wallet.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 const CACHE_KEY = "WALLET_CACHE";
 const CACHE_TIME_KEY = "WALLET_CACHE_TIME";
-const MIN_FETCH_INTERVAL = 60 * 1000; // 1 minute
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 1 minute
 
 function Home() {
   const [wallets, setWallets] = useState([]);
