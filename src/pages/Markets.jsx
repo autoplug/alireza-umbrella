@@ -18,7 +18,7 @@ function Markets() {
         }
 
         const response = await axios.get(
-          `${WORKER_URL}?type=myorders`,
+          `${WORKER_URL}?status=all&details=2`,
           {
             headers: {
               Authorization: `Token ${token}`,
