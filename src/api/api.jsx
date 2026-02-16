@@ -1,5 +1,5 @@
 import axios from "axios";
-import localOrders from "../assets/nobitex.json"; // <-- changed file name
+import localOrders from "../assets/nobitex.json";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
@@ -11,6 +11,9 @@ const CACHE_KEYS = {
 
 const CACHE_TIME_KEY = "API_CACHE_TIME";
 const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+// 1 second delay helper
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const getCache = (key) => {
   const data = localStorage.getItem(key);
@@ -27,16 +30,16 @@ const shouldFetch = () => {
   return !lastFetch || Date.now() - Number(lastFetch) > MIN_FETCH_INTERVAL;
 };
 
-// Helper to merge orders and remove duplicates by id
+// Merge orders and remove duplicates by id
 const mergeOrdersUnique = (ordersArray) => {
   const uniqueMap = new Map();
-  ordersArray.forEach(order => {
+  ordersArray.forEach((order) => {
     if (order.id != null) uniqueMap.set(order.id, order);
   });
   return Array.from(uniqueMap.values());
 };
 
-// Fetch data for a type: wallets / orders / markets
+// Fetch single type
 export const fetchData = async (type) => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   const cacheKey = CACHE_KEYS[type];
@@ -56,9 +59,11 @@ export const fetchData = async (type) => {
         headers: { Authorization: `Token ${token}` },
       });
 
-      data = type === "wallets" ? response.data.wallets || [] : response.data.orders || [];
+      data =
+        type === "wallets"
+          ? response.data.wallets || []
+          : response.data.orders || [];
 
-      // Merge local file for orders and remove duplicates
       if (type === "orders") {
         data = mergeOrdersUnique([...localOrders, ...data]);
       }
@@ -83,13 +88,17 @@ export const fetchData = async (type) => {
   }
 };
 
-// Fetch all data at once
+// Fetch all data sequentially with 1 second delay between each request
 export const fetchAllData = async () => {
-  const [wallets, orders, markets] = await Promise.all([
-    fetchData("wallets"),
-    fetchData("orders"),
-    fetchData("markets"),
-  ]);
+  const wallets = await fetchData("wallets");
+
+  await sleep(1000); // 1 second delay
+
+  const orders = await fetchData("orders");
+
+  await sleep(1000); // 1 second delay
+
+  const markets = await fetchData("markets");
 
   return { wallets, orders, markets };
 };
