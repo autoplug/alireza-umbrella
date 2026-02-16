@@ -1,44 +1,83 @@
 import axios from "axios";
 
+// Worker URL
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+
+// LocalStorage keys
+const CACHE_KEYS = {
+  wallets: "WALLETS_CACHE",
+  orders: "ORDERS_CACHE",
+  markets: "MARKETS_CACHE",
+};
+
+// Single cache timestamp for all types
 const CACHE_TIME_KEY = "API_CACHE_TIME";
-const CACHE_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-export const fetchAllData = async () => {
-  const now = Date.now();
+// Minimum interval between server calls (5 min)
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
+
+// Read cache
+const getCache = (key) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+};
+
+// Write cache + update timestamp
+const setCache = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+  localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+};
+
+// Check if cache expired
+const shouldFetch = () => {
   const lastFetch = localStorage.getItem(CACHE_TIME_KEY);
+  return !lastFetch || Date.now() - Number(lastFetch) > MIN_FETCH_INTERVAL;
+};
 
-  // Prevent frequent calls
-  if (lastFetch && now - Number(lastFetch) < CACHE_INTERVAL) {
-    return JSON.parse(localStorage.getItem("API_CACHE")) || {};
-  }
+// Fetch data for a type: wallets / orders / markets
+export const fetchData = async (type) => {
+  const token = localStorage.getItem("NOBITEX_TOKEN");
+  const cacheKey = CACHE_KEYS[type];
+
+  if (!shouldFetch()) return getCache(cacheKey);
 
   try {
-    const token = localStorage.getItem("NOBITEX_TOKEN");
-    if (!token) return {};
+    let data = null;
 
-    // Fetch all endpoints
-    const [walletsRes, ordersRes] = await Promise.all([
-      axios.get(`${WORKER_URL}?type=wallets`, {
+    if (type === "wallets" || type === "orders") {
+      if (!token) return [];
+
+      let url = `${WORKER_URL}?type=${type}`;
+      if (type === "orders") url += "&details=2&status=all";
+
+      const response = await axios.get(url, {
         headers: { Authorization: `Token ${token}` },
-      }),
-      axios.get(`${WORKER_URL}?type=myorders&status=all&details=2`, {
-        headers: { Authorization: `Token ${token}` },
-      }),
-    ]);
+      });
 
-    const data = {
-      wallets: walletsRes.data.wallets || [],
-      orders: ordersRes.data.orders || [],
-    };
+      data = type === "wallets" ? response.data.wallets || [] : response.data.orders || [];
+    }
 
-    // Save to localStorage
-    localStorage.setItem("API_CACHE", JSON.stringify(data));
-    localStorage.setItem(CACHE_TIME_KEY, now.toString());
+    if (type === "markets") {
+      // fetch from Worker (or direct API) and extract 'stats'
+      const response = await axios.get(`${WORKER_URL}?type=markets`);
+      data = response.data.stats || {};
+    }
 
+    setCache(cacheKey, data);
     return data;
   } catch (err) {
-    console.error("Fetch all data error:", err);
-    return JSON.parse(localStorage.getItem("API_CACHE")) || {};
+    console.error(`Fetch ${type} error:`, err);
+    return getCache(cacheKey) || (type === "markets" ? {} : []);
   }
+};
+
+// Fetch all data at once
+export const fetchAllData = async () => {
+  const [wallets, orders, markets] = await Promise.all([
+    fetchData("wallets"),
+    fetchData("orders"),
+    fetchData("markets"),
+  ]);
+
+  return { wallets, orders, markets };
 };
