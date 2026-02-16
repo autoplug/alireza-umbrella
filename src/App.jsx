@@ -30,7 +30,21 @@ export default function App() {
       
       
             
-      <div>
+ 
+      
+      
+      
+      <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        {/* Main content */}
+        <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
+          {loading && <div>Loading...</div>}
+
+
+
+
+
+
+     <div>
   <h3>Wallet Debug:</h3>
   <pre>
     {JSON.stringify(wallets, null, 2)}
@@ -56,13 +70,12 @@ export default function App() {
   </pre>
 </div>
       
-      
-      
-      
-      <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-        {/* Main content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
-          {loading && <div>Loading...</div>}
+
+
+
+
+
+
 
           <Routes>
             <Route path="/" element={<HomePage wallets={wallets}  />} />
