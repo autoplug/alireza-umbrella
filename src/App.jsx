@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { fetchAllData } from "./api/api";
 
-import HomePage from "./pages/HomePage";
-import MarketsPage from "./pages/MarketsPage";
-import SettingsPage from "./pages/SettingsPage";
+import HomePage from "./pages/Home";
+import MarketsPage from "./pages/Markets";
+import SettingsPage from "./pages/Settings";
 import BottomNavigation from "./layout/BottomNavigation";
 
 export default function App() {
