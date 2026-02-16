@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function TokenInput({ onSave, initialToken = "" }) {
+export default function TokenInput({ onSave, initialToken = "" }) {
   const [token, setToken] = useState(initialToken);
 
   const handleSave = () => {
@@ -40,5 +40,3 @@ function TokenInput({ onSave, initialToken = "" }) {
     </div>
   );
 }
-
-export default TokenInput;
