@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";// optional, not needed for wallets
+import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "WALLETS_CACHE";
@@ -10,32 +10,35 @@ function DebugPanel() {
   const [wallets, setWallets] = useState(null);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cache, setCacheState] = useState(null); // cache current value
 
   const addLog = (msg) => setLogs((prev) => [...prev, msg]);
 
   useEffect(() => {
     const fetchWallets = async () => {
       setLoading(true);
-      addLog("Starting fetchWallets...");
+      addLog("=== DebugPanel: Start fetchWallets ===");
+
+      // Read current cache
+      const cachedRaw = localStorage.getItem(CACHE_KEY);
+      const cachedData = cachedRaw ? JSON.parse(cachedRaw) : null;
+      setCacheState(cachedData);
+      addLog(`Current cache: ${JSON.stringify(cachedData, null, 2)}`);
+
+      // Read last fetch time
+      const lastFetchRaw = localStorage.getItem(CACHE_TIME_KEY);
+      const lastFetch = lastFetchRaw ? Number(lastFetchRaw) : 0;
+      const now = Date.now();
+
+      // Decide if fetch needed
+      if (cachedData && now - lastFetch < MIN_FETCH_INTERVAL) {
+        addLog("Cache is still valid, using cached wallets");
+        setWallets(cachedData);
+        setLoading(false);
+        return;
+      }
 
       try {
-        // Read cache
-        const cachedRaw = localStorage.getItem(CACHE_KEY);
-        const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
-        addLog(cached);
-        const lastFetchRaw = localStorage.getItem(CACHE_TIME_KEY);
-        const lastFetch = lastFetchRaw ? Number(lastFetchRaw) : 0;
-        const now = Date.now();
-
-        // Only fetch if cache expired
-        if (cached && now - lastFetch < MIN_FETCH_INTERVAL) {
-          addLog("Using cached wallets");
-          setWallets(cached);
-          setLoading(false);
-          return;
-        }
-
-        // Get token
         const token = localStorage.getItem("NOBITEX_TOKEN");
         if (!token) {
           addLog("No token found, returning empty array");
@@ -44,7 +47,7 @@ function DebugPanel() {
           return;
         }
 
-        addLog("Fetching from worker...");
+        addLog("Fetching wallets from Worker...");
         const response = await axios.get(`${WORKER_URL}?type=wallets`, {
           headers: { Authorization: `Token ${token}` },
         });
@@ -52,11 +55,10 @@ function DebugPanel() {
         const data = response.data.wallets || [];
         addLog(`Fetched wallets: ${JSON.stringify(data, null, 2)}`);
 
-        // Save cache only if data is not empty
         if (data.length > 0) {
           localStorage.setItem(CACHE_KEY, JSON.stringify(data));
           localStorage.setItem(CACHE_TIME_KEY, now.toString());
-          addLog("Cache updated");
+          addLog("Cache updated with new data");
         } else {
           addLog("Fetched empty wallets, cache not updated");
         }
@@ -64,14 +66,13 @@ function DebugPanel() {
         setWallets(data);
       } catch (err) {
         addLog(`Error fetching wallets: ${err.message}`);
-        // Fallback to cache
-        const cachedRaw = localStorage.getItem(CACHE_KEY);
-        const cached = cachedRaw ? JSON.parse(cachedRaw) : [];
-        setWallets(cached);
+        // fallback to cache
+        setWallets(cachedData || []);
+        addLog("Using cached data as fallback");
       }
 
       setLoading(false);
-      addLog("fetchWallets finished");
+      addLog("=== DebugPanel: fetchWallets finished ===");
     };
 
     fetchWallets();
@@ -90,6 +91,7 @@ function DebugPanel() {
           borderRadius: 8,
           maxHeight: 300,
           overflowY: "auto",
+          marginBottom: 10,
         }}
       >
         {logs.map((log, idx) => (
@@ -98,6 +100,9 @@ function DebugPanel() {
           </pre>
         ))}
       </div>
+
+      <h3>Current Cache:</h3>
+      <pre>{cache ? JSON.stringify(cache, null, 2) : "No cache yet"}</pre>
 
       <h3>Wallets Data:</h3>
       {wallets ? (
