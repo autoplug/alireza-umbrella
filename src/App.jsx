@@ -33,13 +33,10 @@ export default function App() {
           {loading && <div>Loading...</div>}
 
           <Routes>
-            <Route
-              path="/"
-              element={<HomePage wallets={wallets} orders={orders} />}
-            />
+            <Route path="/" element={<HomePage wallets={wallets}  />} />
             <Route
               path="/markets"
-              element={<MarketsPage markets={markets} />}
+              element={<MarketsPage markets={markets} orders={orders}/>}
             />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
