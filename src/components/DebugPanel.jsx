@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import localOrders from "./assets/nobitex.json"; // optional, not needed for wallets
+import localOrders from "../assets/nobitex.json"; // optional, not needed for wallets
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "WALLETS_CACHE";
