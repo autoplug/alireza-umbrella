@@ -3,44 +3,33 @@ import localOrders from "../assets/nobitex.json";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
-// Cache keys for storing data
 const CACHE_KEYS = {
   wallets: "WALLETS_CACHE",
   orders: "ORDERS_CACHE",
   markets: "MARKETS_CACHE",
 };
 
-// Separate cache timestamps for each data type
-const CACHE_TIME_KEYS = {
-  wallets: "WALLETS_CACHE_TIME",
-  orders: "ORDERS_CACHE_TIME",
-  markets: "MARKETS_CACHE_TIME",
-};
+// No cache time needed now
+// const CACHE_TIME_KEYS = {...};
 
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // Minimum 5 minutes between fetches
-
-// Helper: sleep for specified milliseconds
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Helper: get cached data from localStorage
 const getCache = (key) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 };
 
-// Helper: set cache in localStorage and update timestamp
-const setCache = (type, key, value) => {
+const setCache = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
-  localStorage.setItem(CACHE_TIME_KEYS[type], Date.now().toString());
 };
 
-// Helper: check if data should be fetched (based on cache time)
+// Check if we need to fetch: only if cache is empty
 const shouldFetch = (type) => {
-  const lastFetch = localStorage.getItem(CACHE_TIME_KEYS[type]);
-  return !lastFetch || Date.now() - Number(lastFetch) > MIN_FETCH_INTERVAL;
+  const cacheKey = CACHE_KEYS[type];
+  const cached = localStorage.getItem(cacheKey);
+  return !cached;
 };
 
-// Merge orders and remove duplicates by 'id'
 const mergeOrdersUnique = (ordersArray) => {
   const uniqueMap = new Map();
   ordersArray.forEach((order) => {
@@ -49,18 +38,17 @@ const mergeOrdersUnique = (ordersArray) => {
   return Array.from(uniqueMap.values());
 };
 
-// Fetch a single data type: wallets, orders, or markets
+// Fetch a single data type
 export const fetchData = async (type) => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   const cacheKey = CACHE_KEYS[type];
 
-  // Return cache if it's still valid
+  // Only fetch if no cached data
   if (!shouldFetch(type)) return getCache(cacheKey);
 
   try {
     let data = null;
 
-    // Wallets or Orders require token
     if (type === "wallets" || type === "orders") {
       if (!token) return [];
 
@@ -76,28 +64,24 @@ export const fetchData = async (type) => {
           ? response.data.wallets || []
           : response.data.orders || [];
 
-      // Merge with local orders and remove duplicates
       if (type === "orders") {
         data = mergeOrdersUnique([...localOrders, ...data]);
       }
 
-      // ✅ Only update cache if fetch succeeded
-      setCache(type, cacheKey, data);
+      // Only cache if fetch succeeded
+      setCache(cacheKey, data);
     }
 
-    // Markets do not require token
     if (type === "markets") {
       const response = await axios.get(`${WORKER_URL}?type=markets`);
       data = response.data.stats || {};
-
-      setCache(type, cacheKey, data);
+      setCache(cacheKey, data);
     }
 
     return data;
   } catch (err) {
     console.error(`Fetch ${type} error:`, err);
 
-    // On error, return cached data (or localOrders for orders)
     if (type === "orders") {
       const cached = getCache(cacheKey) || [];
       return mergeOrdersUnique([...localOrders, ...cached]);
@@ -107,13 +91,13 @@ export const fetchData = async (type) => {
   }
 };
 
-// Fetch all data sequentially with 1-second delay between each request
+// Fetch all data sequentially with 1-second delay
 export const fetchAllData = async () => {
   const wallets = await fetchData("wallets");
-  await sleep(1000); // 1-second delay
+  await sleep(1000);
 
   const orders = await fetchData("orders");
-  await sleep(1000); // 1-second delay
+  await sleep(1000);
 
   const markets = await fetchData("markets");
 
