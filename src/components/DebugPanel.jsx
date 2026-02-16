@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { fetchData } from "../api/api";
+
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 export default function DebugPanel() {
   const [logs, setLogs] = useState([]);
@@ -8,24 +9,34 @@ export default function DebugPanel() {
     setLogs((prev) => [...prev, text]);
   };
 
-  const test = async (type) => {
-    log(`----- Testing ${type} -----`);
+  const directCall = async (type) => {
+    log(`===== Direct Call: ${type} =====`);
 
     try {
-      const result = await fetchData(type);
+      let url = `${WORKER_URL}?type=${type}`;
 
-      log("Result:");
-      log(JSON.stringify(result, null, 2));
+      if (type === "orders") {
+        url += "&details=2&status=all";
+      }
 
-      const cacheKey =
-        type === "wallets"
-          ? "WALLETS_CACHE"
-          : type === "orders"
-          ? "ORDERS_CACHE"
-          : "MARKETS_CACHE";
+      log("URL:");
+      log(url);
 
-      log("Saved in localStorage:");
-      log(localStorage.getItem(cacheKey) || "Nothing saved");
+      const token = localStorage.getItem("NOBITEX_TOKEN");
+
+      const response = await fetch(url, {
+        headers: token
+          ? { Authorization: `Token ${token}` }
+          : {},
+      });
+
+      log("Response status:");
+      log(response.status.toString());
+
+      const data = await response.json();
+
+      log("Response data:");
+      log(JSON.stringify(data, null, 2));
     } catch (err) {
       log("ERROR:");
       log(err.toString());
@@ -36,26 +47,36 @@ export default function DebugPanel() {
     <div
       style={{
         padding: 15,
-        background: "#111",
+        background: "#000",
         color: "#0f0",
         fontSize: 12,
         maxHeight: 400,
         overflow: "auto",
       }}
     >
-      <h3>Debug Panel</h3>
+      <h3>Direct Worker Debug</h3>
 
-      <div style={{ marginBottom: 10 }}>
-        <button onClick={() => test("wallets")}>Test Wallets</button>
-        <button onClick={() => test("orders")} style={{ marginLeft: 10 }}>
-          Test Orders
-        </button>
-        <button onClick={() => test("markets")} style={{ marginLeft: 10 }}>
-          Test Markets
-        </button>
-      </div>
+      <button onClick={() => directCall("wallets")}>
+        Direct Wallets
+      </button>
 
-      <pre>{logs.join("\n\n")}</pre>
+      <button
+        onClick={() => directCall("orders")}
+        style={{ marginLeft: 10 }}
+      >
+        Direct Orders
+      </button>
+
+      <button
+        onClick={() => directCall("markets")}
+        style={{ marginLeft: 10 }}
+      >
+        Direct Markets
+      </button>
+
+      <pre style={{ marginTop: 15 }}>
+        {logs.join("\n\n")}
+      </pre>
     </div>
   );
 }
