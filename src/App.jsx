@@ -1,26 +1,53 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { fetchAllData } from "./api/api";
 
-import Home from "./pages/Home";
-import Markets from "./pages/Markets";
-import Settings from "./pages/Settings";
-import BottomNav from "./layout/BottomNav";
+import HomePage from "./pages/HomePage";
+import MarketsPage from "./pages/MarketsPage";
+import SettingsPage from "./pages/SettingsPage";
+import BottomNavigation from "./layout/BottomNavigation";
 
-function App() {
+export default function App() {
+  const [wallets, setWallets] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [markets, setMarkets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      const data = await fetchAllData();
+      setWallets(data.wallets);
+      setOrders(data.orders);
+      setMarkets(data.markets);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
   return (
     <Router>
-      <div style={{ paddingBottom: "100px" }}> {/* space for BottomNav */}
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/markets" element={<Markets />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </div>
+      <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        {/* Main content */}
+        <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
+          {loading && <div>Loading...</div>}
 
-      <BottomNav />
+          <Routes>
+            <Route
+              path="/"
+              element={<HomePage wallets={wallets} orders={orders} />}
+            />
+            <Route
+              path="/markets"
+              element={<MarketsPage markets={markets} />}
+            />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Routes>
+        </div>
+
+        {/* Bottom navigation */}
+        <BottomNavigation />
+      </div>
     </Router>
   );
 }
-
-export default App;
