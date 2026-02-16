@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TokenInput from "../components/TokenInput";
 
-function Settings({ token, onSaveToken }) {
+function Settings() {
+  const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
+
+  const handleTokenSave = (newToken) => {
+    localStorage.setItem("NOBITEX_TOKEN", newToken);
+    setToken(newToken);
+  };
+
   return (
     <div style={{ padding: 16 }}>
       <h2>Settings</h2>
-
-      {/* Token setting */}
-      <div style={{ marginBottom: 16 }}>
-        <h4>Nobitex Token</h4>
-        <TokenInput onSave={onSaveToken} initialToken={token} />
-      </div>
-
-      {/* Other settings can be added here */}
+      <TokenInput initialToken={token} onSave={handleTokenSave} />
+      {/* Additional settings can be added here */}
     </div>
   );
 }
