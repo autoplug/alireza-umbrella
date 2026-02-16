@@ -1,88 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { fetchAllData } from "./api/api";
 
-import HomePage from "./pages/Home";
+// Pages
+import Home from "./pages/Home";
 import MarketsPage from "./pages/Markets";
 import SettingsPage from "./pages/Settings";
-import BottomNavigation from "./layout/BottomNavigation";
+
+// Components
+import BottomNavigation from "./components/BottomNavigation";
+
+// API
+import { fetchAllData } from "./api";
 
 export default function App() {
-  const [wallets, setWallets] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [markets, setMarkets] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
+    // Fetch all data once to fill cache/localStorage
     const loadData = async () => {
-      setLoading(true);
-      const data = await fetchAllData();
-      setWallets(data.wallets);
-      setOrders(data.orders);
-      setMarkets(data.markets);
-      setLoading(false);
+      try {
+        await fetchAllData();
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
     };
+
     loadData();
   }, []);
 
   return (
     <Router>
-      
-      
-            
- 
-      
-      
-      
-      <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         {/* Main content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
-          {loading && <div>Loading...</div>}
-
-
-
-
-
-
-     <div>
-  <h3>Wallet Debug:</h3>
-  <pre>
-    {loading && JSON.stringify(wallets, null, 2)}
-  </pre>
-</div>
-      
-      
-            
-      <div>
-  <h3>orders Debug:</h3>
-  <pre>
-    {loading && JSON.stringify(orders, null, 2)}
-  </pre>
-</div>
-      
-      
-      
-            
-      <div>
-  <h3>markets Debug:</h3>
-  <pre>
-    {loading && JSON.stringify(markets, null, 2)}
-  </pre>
-</div>
-      
-
-
-
-
-
-
-
+        <div style={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<HomePage wallets={wallets}  />} />
-            <Route
-              path="/markets"
-              element={<MarketsPage markets={markets} orders={orders}/>}
-            />
+            <Route path="/" element={<Home />} />
+            <Route path="/markets" element={<MarketsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>
