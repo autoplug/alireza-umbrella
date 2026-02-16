@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // Import local logos (place your images in src/assets/logos/)
 import BTCLogo from "../assets/logos/btc.PNG";
@@ -15,14 +15,26 @@ const currencyLogos = {
   // Add more currencies as needed
 };
 
-function WalletList({ wallets = [] }) {
-  if (!Array.isArray(wallets) || wallets.length === 0) {
-    return <div>No wallets available</div>;
-  }
+// Helper to get cached data
+const getCache = (key) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
+};
+
+export default function WalletList() {
+  const [wallets, setWallets] = useState([]);
+
+  // Load wallets from localStorage/cache on mount
+  useEffect(() => {
+    const cachedWallets = getCache("WALLETS_CACHE");
+    setWallets(cachedWallets);
+  }, []);
+
+  if (!wallets.length) return <div>No wallets available</div>;
 
   // Format balances for readability
   const formatBalance = (value, currency) => {
-    if (currency === "rls") {
+    if (currency.toLowerCase() === "rls") {
       const toman = Math.floor(Number(value) / 10);
       return `${toman.toLocaleString()}`;
     }
@@ -75,5 +87,3 @@ function WalletList({ wallets = [] }) {
     </div>
   );
 }
-
-export default WalletList;
