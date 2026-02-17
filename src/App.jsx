@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 
 // Components
 //import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
+import DebugPanel from "./components/DebugPanel";
 
 // API
 //import { fetchAllData } from "./api/api";
@@ -39,7 +40,7 @@ gggggggggg
       
 
       {/* Bottom navigation always visible */}
-    
+    <DebugPanel />
     </div>
   );
 }
