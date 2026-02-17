@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import TitleBar from "./TitleBar";
+
 // Import local logos (place your images in src/assets/logos/)
 import BTCLogo from "../assets/logos/btc.PNG";
 import ETHLogo from "../assets/logos/eth.PNG";
