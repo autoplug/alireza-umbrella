@@ -191,7 +191,7 @@ export default function ActiveOrders() {
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
       {/* Header 10px from left with order count inside [ ] */}
       <h3 style={{ marginLeft: "10px" }}>
-        Active Orders [{totalOrders}]
+        Active Orders ({totalOrders})
       </h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
