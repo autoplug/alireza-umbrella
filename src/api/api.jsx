@@ -114,6 +114,7 @@ export const fetchAllData = async () => {
 
   for (const type of ["wallets", "orders", "markets"]) {
     try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       results[type] = await fetchData(type);
     } catch (err) {
       console.error(`Error fetching ${type}:`, err);
