@@ -65,7 +65,7 @@ export default function Header() {
           width: "100%",
           backgroundColor: "#858585",
           borderBottom: "2px solid #707070",
-          padding: "12px 10px",
+          padding: "8px 16px",
           zIndex: 1000,        // بالاتر از سایر المان‌ها
           fontSize: "12px",
       }}
