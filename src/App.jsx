@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
 // Pages
-import Home from "./pages/Home";
+//import Home from "./pages/Home";
 
 // Components
 import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
@@ -35,15 +35,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Main content */}
-        <div style={{ flex: 1 }}>
-          <HashRouter>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              
-            </Routes>
-          </HashRouter>
-        </div>
+
       
 
       {/* Bottom navigation always visible */}
