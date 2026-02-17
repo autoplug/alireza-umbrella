@@ -3,8 +3,6 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 
 // Pages
 import Home from "./pages/Home";
-import Markets from "./pages/Markets";
-import SettingsPage from "./pages/Settings";
 
 // Components
 import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
@@ -14,7 +12,7 @@ import { fetchAllData } from "./api/api";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  setLoading(false);
+  
   useEffect(() => {
    fetchAllData()
       .then(() => setLoading(false))
@@ -40,8 +38,7 @@ export default function App() {
           <HashRouter>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/markets" element={<Markets />} />
-              <Route path="/settings" element={<SettingsPage />} />
+              
             </Routes>
           </HashRouter>
         </div>
