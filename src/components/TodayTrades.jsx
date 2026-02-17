@@ -56,7 +56,7 @@ const MarketIcon = ({ market }) => {
           height: "20px",
           borderRadius: "50%",
           position: "absolute",
-          left: 12,
+          left: 6,
           top: 0,
           zIndex: 0,
         }}
@@ -93,12 +93,12 @@ export default function TodayTrades() {
       const allOrders = JSON.parse(cached);
       const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
-      // Filter Done orders with today's date
+      // Filter Done orders with created_at today
       const doneToday = allOrders.filter(
         (o) =>
           o.status === "Done" &&
-          o.timestamp &&
-          o.timestamp.slice(0, 10) === todayStr
+          o.created_at &&
+          o.created_at.slice(0, 10) === todayStr
       );
 
       const grouped = doneToday.reduce((acc, order) => {
@@ -144,6 +144,7 @@ export default function TodayTrades() {
 
     if (market) {
       const parts = market.split("-");
+      const base = parts[0] || "";
       const quote = parts[1] || "";
 
       if (quote.toUpperCase() === "RLS") {
@@ -203,9 +204,9 @@ export default function TodayTrades() {
         (() => {
           let rowCounter = 0;
           return Object.entries(ordersByMarket).map(([market, orders]) => {
-            // Sort by timestamp descending (newest first)
+            // Sort by created_at descending (newest first)
             const sortedOrders = [...orders].sort(
-              (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
 
             return (
