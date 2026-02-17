@@ -107,7 +107,6 @@ const formatPrice = (price, market) => {
 
   if (market) {
     const parts = market.split("-");
-    const base = parts[0] || "";
     const quote = parts[1] || "";
 
     if (quote.toUpperCase() === "RLS") {
