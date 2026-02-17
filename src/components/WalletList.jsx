@@ -50,7 +50,7 @@ export default function WalletList() {
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      <h3 style={{ marginLeft: "10px" }}>Wallets</h3>
+    <TitleBar title="Active Orders" count={orders.length} />
       
       {wallets.map((wallet) => (
         <div
