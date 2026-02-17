@@ -56,13 +56,13 @@ export default function Header() {
           position: "fixed",
           top: 0,
           left: 0,
+          height: "40px",
           width: "100%",
           backgroundColor: "#858585",
           borderBottom: "2px solid #707070",
           padding: "12px 10px",
           zIndex: 1000,        // بالاتر از سایر المان‌ها
-          fontWeight: "bold",
-          fontSize: "16px",
+          fontSize: "12px",
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
