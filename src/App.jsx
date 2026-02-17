@@ -26,7 +26,7 @@ export default function App() {
   }, []);
 
   return (
-    <div }>
+    <div>
       {/* Loader text at top */}
       jfjjdjdjjdjdjjdjdjdjdj
       {loading && (
