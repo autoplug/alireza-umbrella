@@ -13,13 +13,13 @@ const tableStyle = {
 const thStyle = {
   borderBottom: "1px solid #aaa",
   textAlign: "left",
-  padding: "8px 20px",   // 🔥 much smaller vertical padding
+  padding: "8px 20px",
   fontSize: "14px",
 };
 
 const tdStyle = {
   borderBottom: "1px solid #ddd",
-  padding: "6px 20px",   // 🔥 compact row height
+  padding: "6px 20px",
   fontSize: "14px",
 };
 
@@ -59,15 +59,15 @@ export default function ActiveOrders() {
   const getRowStyle = (type) => {
     if (!type) return {};
     if (type.toLowerCase() === "buy")
-      return { backgroundColor: "#e6f4ea" }; // very light green
+      return { backgroundColor: "#74bd57", color: "#fff" };
     if (type.toLowerCase() === "sell")
-      return { backgroundColor: "#fdecea" }; // very light red
+      return { backgroundColor: "#c2191c", color: "#fff" };
     return {};
   };
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      <h3 style={{ marginLeft: "20px" }}>Active Orders</h3>
+      <h3 style={{ marginLeft: "10px" }}>Active Orders</h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
         <p style={{ marginLeft: "20px" }}>No active orders.</p>
