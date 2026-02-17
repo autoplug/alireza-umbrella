@@ -55,7 +55,6 @@ export default function Header() {
         style={{
           color : "#fff",
           display: "flex",
-          transform: "translateX(-50%)",
           alignItems: "center",
           gap: "8px",
           justifyContent: "flex-start",
