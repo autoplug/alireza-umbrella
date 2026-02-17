@@ -63,7 +63,7 @@ const MarketIcon = ({ market }) => {
           height: "20px",
           borderRadius: "50%",
           position: "absolute",
-          left: 6,
+          left: 12,
           top: 0,
           zIndex: 0,
         }}
