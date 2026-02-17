@@ -53,6 +53,7 @@ export default function Header() {
   return (
     <div
         style={{
+          transform: "translateX(0%)",
           color : "#fff",
           display: "flex",
           alignItems: "center",
