@@ -22,7 +22,7 @@ const thStyle = {
 const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
-  fontSize: "14px",
+  fontSize: "13px", // 🔹 smaller font for rows
 };
 
 export default function ActiveOrders() {
@@ -58,11 +58,36 @@ export default function ActiveOrders() {
     return () => clearInterval(interval);
   }, []);
 
-  const formatNumber = (value) => {
-    if (value == null) return "";
-    return Number(value).toLocaleString("en-US");
+  // 🔹 Format Amount
+  const formatAmount = (amount, market) => {
+    if (amount == null) return "";
+
+    if (market && market.toUpperCase().startsWith("BTC")) {
+      const newAmount = Number(amount) * 1000000;
+      return newAmount.toLocaleString("en-US") + " e-6";
+    }
+
+    return Number(amount).toLocaleString("en-US");
   };
 
+  // 🔹 Format Price
+  const formatPrice = (price, market) => {
+    if (price == null) return "";
+
+    const value = Number(price);
+
+    if (market) {
+      const parts = market.split("-");
+      if (parts[1] && parts[1].toUpperCase() === "RLS") {
+        const millions = Math.floor(value / 10000000);
+        return millions.toLocaleString("en-US") + "M";
+      }
+    }
+
+    return value.toLocaleString("en-US");
+  };
+
+  // 🔹 Render Type with colored circle arrow
   const renderType = (type) => {
     if (!type) return "";
 
@@ -114,15 +139,9 @@ export default function ActiveOrders() {
                 {orders.map((order, index) => (
                   <tr key={index}>
                     <td style={tdStyle}>{index + 1}</td>
-                    <td style={tdStyle}>
-                      {formatNumber(order.amount)}
-                    </td>
-                    <td style={tdStyle}>
-                      {formatNumber(order.price)}
-                    </td>
-                    <td style={tdStyle}>
-                      {renderType(order.type)}
-                    </td>
+                    <td style={tdStyle}>{formatAmount(order.amount, market)}</td>
+                    <td style={tdStyle}>{formatPrice(order.price, market)}</td>
+                    <td style={tdStyle}>{renderType(order.type)}</td>
                   </tr>
                 ))}
               </tbody>
