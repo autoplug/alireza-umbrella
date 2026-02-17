@@ -7,16 +7,22 @@ export default function TitleBar({ title, count }) {
     borderBottom: "2px solid #d9bfae",
     padding: "6px 10px",
     margin: "10px 0",
-    fontWeight: "bold",
-    fontSize: "16px",
     display: "flex",
     alignItems: "center",
     gap: "6px",
   };
 
+  const h3Style = {
+    margin: 0,
+    fontWeight: "bold",
+    fontSize: "16px",
+  };
+
   return (
     <div style={barStyle}>
-      {title} {typeof count === "number" ? `[${count}]` : ""}
+      <h3 style={h3Style}>
+        {title} {typeof count === "number" ? `[${count}]` : ""}
+      </h3>
     </div>
   );
 }
