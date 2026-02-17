@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
-// Shared table styles
 const tableStyle = {
   width: "100%",
   borderCollapse: "collapse",
@@ -14,12 +13,14 @@ const tableStyle = {
 const thStyle = {
   borderBottom: "1px solid #aaa",
   textAlign: "left",
-  padding: "14px 20px", // reduced height
+  padding: "8px 20px",   // 🔥 much smaller vertical padding
+  fontSize: "14px",
 };
 
 const tdStyle = {
   borderBottom: "1px solid #ddd",
-  padding: "14px 20px", // reduced height
+  padding: "6px 20px",   // 🔥 compact row height
+  fontSize: "14px",
 };
 
 export default function ActiveOrders() {
@@ -58,22 +59,22 @@ export default function ActiveOrders() {
   const getRowStyle = (type) => {
     if (!type) return {};
     if (type.toLowerCase() === "buy")
-      return { backgroundColor: "#e6f4ea" }; // lighter green
+      return { backgroundColor: "#e6f4ea" }; // very light green
     if (type.toLowerCase() === "sell")
-      return { backgroundColor: "#fdecea" }; // lighter red
+      return { backgroundColor: "#fdecea" }; // very light red
     return {};
   };
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      <h3 style={{ marginLeft: "10px" }}>Active Orders</h3>
+      <h3 style={{ marginLeft: "20px" }}>Active Orders</h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
-        <p style={{ marginLeft: "10px" }}>No active orders.</p>
+        <p style={{ marginLeft: "20px" }}>No active orders.</p>
       ) : (
         Object.entries(ordersByMarket).map(([market, orders]) => (
-          <div key={market} style={{ marginBottom: "24px" }}>
-            <h4 style={{ marginBottom: "8px", paddingLeft: "10px" }}>
+          <div key={market} style={{ marginBottom: "20px" }}>
+            <h4 style={{ marginBottom: "6px", marginLeft: "20px" }}>
               {market}
             </h4>
 
