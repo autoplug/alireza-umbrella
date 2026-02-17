@@ -19,11 +19,12 @@ export default function App() {
   return (
     <Router>
       <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
+        
+        {/* Header above all pages */}
+        <Header />
+        
         {/* Routes */}
         <Routes>
-          {/* Header above all pages */}
-          <Header />
-          
           <Route path="/" element={<Home />} />
           <Route path="/trades" element={<Trades />} />
           <Route path="/settings" element={<Settings />} />
