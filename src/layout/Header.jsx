@@ -1,36 +1,53 @@
 import React, { useEffect, useState } from "react";
 
-// Keys must match api.js
+// Keys from api.js
 const CACHE_TIME_KEYS = {
   wallets: "WALLETS_CACHE_TIME",
   orders: "ORDERS_CACHE_TIME",
-  markets: "MARKETS_CACHE_TIME",
 };
 
-export default function Header({ type = "wallets" }) {
+// Helper: simplified time ago in English
+const simpleTimeAgo = (timestamp) => {
+  if (!timestamp) return "Never";
+
+  const diff = Date.now() - Number(timestamp);
+  const minutes = Math.floor(diff / 60000);
+
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+  return "more than an hour ago";
+};
+
+export default function Header() {
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  // Format timestamp to HH:MM:SS
-  const formatTime = (ts) => {
-    if (!ts) return "Never";
-    const date = new Date(Number(ts));
-    return date.toLocaleTimeString();
+  const updateTime = () => {
+    const walletTs = localStorage.getItem(CACHE_TIME_KEYS.wallets);
+    const ordersTs = localStorage.getItem(CACHE_TIME_KEYS.orders);
+
+    const latest = [walletTs, ordersTs]
+      .filter(Boolean)
+      .map(Number)
+      .sort((a, b) => b - a)[0];
+
+    setLastUpdate(latest || null);
   };
 
   useEffect(() => {
-    const update = () => {
-      const ts = localStorage.getItem(CACHE_TIME_KEYS[type]);
-      setLastUpdate(ts);
-    };
+    updateTime();
 
-    update();
+    // Refresh every 30 seconds for accuracy
+    const interval = setInterval(updateTime, 30000);
 
-    // Optional: listen to storage events in case fetchAllData runs elsewhere
-    const listener = () => update();
+    // Listen to storage events
+    const listener = () => updateTime();
     window.addEventListener("storage", listener);
 
-    return () => window.removeEventListener("storage", listener);
-  }, [type]);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("storage", listener);
+    };
+  }, []);
 
   return (
     <div
@@ -42,7 +59,7 @@ export default function Header({ type = "wallets" }) {
         textAlign: "center",
       }}
     >
-      Last {type} update: {formatTime(lastUpdate)}
+      Last update: {simpleTimeAgo(lastUpdate)}
     </div>
   );
 }
