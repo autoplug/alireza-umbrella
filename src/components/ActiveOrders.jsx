@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
@@ -6,8 +8,8 @@ const tableStyle = {
   width: "100%",
   borderCollapse: "collapse",
   backgroundColor: "#f9f9f9",
-  color: "#000",
   margin: 0,
+  fontWeight: "bold",
 };
 
 const thStyle = {
@@ -56,17 +58,37 @@ export default function ActiveOrders() {
     return () => clearInterval(interval);
   }, []);
 
-  const getRowStyle = (type) => {
-    if (!type) return {};
-    if (type.toLowerCase() === "buy")
-      return { backgroundColor: "#74bd57", color: "#fff" };
-    if (type.toLowerCase() === "sell")
-      return { backgroundColor: "#c2191c", color: "#fff" };
-    return {};
+  const formatNumber = (value) => {
+    if (value == null) return "";
+    return Number(value).toLocaleString("en-US");
+  };
+
+  const renderType = (type) => {
+    if (!type) return "";
+
+    const isBuy = type.toLowerCase() === "buy";
+
+    return (
+      <span
+        style={{
+          color: isBuy ? "#74bd57" : "#c2191c",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={isBuy ? faCircleArrowUp : faCircleArrowDown}
+          size="sm"
+        />
+        {type}
+      </span>
+    );
   };
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+      {/* Header 10px from left */}
       <h3 style={{ marginLeft: "10px" }}>Active Orders</h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
@@ -74,6 +96,7 @@ export default function ActiveOrders() {
       ) : (
         Object.entries(ordersByMarket).map(([market, orders]) => (
           <div key={market} style={{ marginBottom: "20px" }}>
+            {/* Market name 20px from left */}
             <h4 style={{ marginBottom: "6px", marginLeft: "20px" }}>
               {market}
             </h4>
@@ -89,11 +112,17 @@ export default function ActiveOrders() {
               </thead>
               <tbody>
                 {orders.map((order, index) => (
-                  <tr key={index} style={getRowStyle(order.type)}>
+                  <tr key={index}>
                     <td style={tdStyle}>{index + 1}</td>
-                    <td style={tdStyle}>{order.amount}</td>
-                    <td style={tdStyle}>{order.price}</td>
-                    <td style={tdStyle}>{order.type}</td>
+                    <td style={tdStyle}>
+                      {formatNumber(order.amount)}
+                    </td>
+                    <td style={tdStyle}>
+                      {formatNumber(order.price)}
+                    </td>
+                    <td style={tdStyle}>
+                      {renderType(order.type)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
