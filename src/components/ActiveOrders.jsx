@@ -22,7 +22,7 @@ const thStyle = {
 const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
-  fontSize: "13px", // smaller font for rows
+  fontSize: "12px", // smaller font for rows
 };
 
 export default function ActiveOrders() {
@@ -70,7 +70,7 @@ export default function ActiveOrders() {
     return Number(amount).toLocaleString("en-US");
   };
 
-  // Format Price with RLS special case
+  // Format Price with RLS special cases
   const formatPrice = (price, market) => {
     if (price == null) return "";
 
@@ -79,8 +79,14 @@ export default function ActiveOrders() {
     if (market) {
       const parts = market.split("-");
       if (parts[1] && parts[1].toUpperCase() === "RLS") {
-        const millions = Math.floor(value / 10000000); // remove 7 digits
-        return millions.toLocaleString("en-US") + "M";
+        if (market.toUpperCase() === "USDT-RLS") {
+          // 🔹 USDT-RLS → divide by 10, no M
+          return (value / 10).toLocaleString("en-US");
+        } else {
+          // 🔹 Other RLS → remove 7 digits + M
+          const millions = Math.floor(value / 10000000);
+          return millions.toLocaleString("en-US") + " M";
+        }
       }
     }
 
