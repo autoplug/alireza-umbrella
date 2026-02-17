@@ -1,67 +1,83 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const WORKER_URL = "https://api.alireza-b83.workers.dev";
 
 function DebugPanel() {
   const [logs, setLogs] = useState([]);
 
-  const addLog = (msg) => setLogs((prev) => [...prev, msg]);
+  const log = (message) => {
+    setLogs((prev) => [...prev, message]);
+  };
 
   useEffect(() => {
-    const fetchWallets = async () => {
-      addLog("Starting fetch for wallets...");
+    const runDebug = async () => {
+      log("=== WALLET DEBUG (AXIOS) START ===");
 
       try {
         const token = localStorage.getItem("NOBITEX_TOKEN");
+
         if (!token) {
-          addLog("No token found in localStorage!");
+          log("❌ No token found in localStorage");
           return;
         }
 
-        // --- 1 second delay ---
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        log("✅ Token found");
+        log("Sending request with axios...");
 
-        const response = await fetch(`${WORKER_URL}/users/wallets/list`, {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${WORKER_URL}/users/wallets/list`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+            validateStatus: () => true, // prevent axios from throwing on non-200
+          }
+        );
 
-        // Read response text to prevent crash if not 
+        log(`Response status: ${response.status}`);
 
-        try {
-          const data = JSON.parse(text);
-          addLog("Wallets result:");
-          addLog(JSON.stringify(data, null, 2));
-        } catch {
-          addLog("Received invalid JSON:");
+        if (typeof response.data === "object") {
+          log("✅ JSON received:");
+          log(JSON.stringify(response.data, null, 2));
+        } else {
+          log("⚠ Non-JSON response received:");
+          log(response.data);
         }
 
-      } catch (err) {
-        addLog(`Fetch error: ${err.message}`);
+      } catch (error) {
+        log("❌ Axios error:");
+
+        if (error.response) {
+          log(`Status: ${error.response.status}`);
+          log(JSON.stringify(error.response.data, null, 2));
+        } else if (error.request) {
+          log("No response received (Network error)");
+        } else {
+          log(error.message);
+        }
       }
 
-      addLog("Fetch complete!");
+      log("=== WALLET DEBUG END ===");
     };
 
-    fetchWallets();
+    runDebug();
   }, []);
 
   return (
     <div
       style={{
         fontFamily: "monospace",
-        backgroundColor: "#f0f0f0",
-        padding: 12,
-        borderRadius: 8,
+        background: "#111",
+        color: "#0f0",
+        padding: 16,
         maxHeight: "80vh",
         overflowY: "auto",
       }}
     >
-      {logs.map((log, index) => (
-        <div key={index} style={{ marginBottom: 6, whiteSpace: "pre-wrap" }}>
-          {log}
+      {logs.map((item, index) => (
+        <div key={index} style={{ whiteSpace: "pre-wrap" }}>
+          {item}
         </div>
       ))}
     </div>
