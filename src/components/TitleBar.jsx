@@ -6,7 +6,8 @@ export default function TitleBar({ title, count }) {
     borderTop: "2px solid #d9bfae",   // کرم تیره‌تر
     borderBottom: "2px solid #d9bfae",
     padding: "12px 10px",
-    margin: "10px 0",
+    margin: "16px 0",
+    marginBottom : "3px",
     display: "flex",
     alignItems: "center",
     gap: "6px",
