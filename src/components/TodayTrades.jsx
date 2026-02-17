@@ -37,7 +37,7 @@ export default function TodayTrades() {
   return (
     <div>
       <h3 style={{ marginLeft: "10px" }}>
-        Today Trades [{orders.length}]
+        Today Trades ({orders.length})
       </h3>
       <TableOrder orders={orders} />
     </div>
