@@ -31,9 +31,7 @@ export default function ActiveOrders() {
 
   return (
     <div>
-      <h3 style={{ marginLeft: "10px" }}>
-        Active Orders ({orders.length})
-      </h3>
+      <TitleBar title="Today Trades" count={orders.length} />
       <TableOrder orders={orders} />
     </div>
   );
