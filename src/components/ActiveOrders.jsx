@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
+// Logos
+import BTCLogo from "../assets/logos/btc.PNG";
+import ETHLogo from "../assets/logos/eth.PNG";
+import USDTLogo from "../assets/logos/usdt.PNG";
+import RLSLogo from "../assets/logos/rls.jpg";
+
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 const tableStyle = {
@@ -23,6 +29,50 @@ const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
   fontSize: "12px",
+};
+
+// Map currency codes to logos
+const logoMap = {
+  BTC: BTCLogo,
+  ETH: ETHLogo,
+  USDT: USDTLogo,
+  RLS: RLSLogo,
+};
+
+// Component to show overlapping currency icons
+const MarketIcon = ({ market }) => {
+  const [base, quote] = market.split("-");
+  const baseImg = logoMap[base] || "";
+  const quoteImg = logoMap[quote] || "";
+
+  return (
+    <div style={{ position: "relative", width: "32px", height: "32px" }}>
+      <img
+        src={quoteImg}
+        alt=""
+        style={{
+          width: "24px",
+          height: "24px",
+          borderRadius: "50%",
+          position: "absolute",
+          left: 0,
+          top: 0,
+        }}
+      />
+      <img
+        src={baseImg}
+        alt=""
+        style={{
+          width: "24px",
+          height: "24px",
+          borderRadius: "50%",
+          position: "absolute",
+          left: 12, // overlap base over quote
+          top: 0,
+        }}
+      />
+    </div>
+  );
 };
 
 export default function ActiveOrders() {
@@ -100,7 +150,6 @@ export default function ActiveOrders() {
         display = value.toLocaleString("en-US");
       }
 
-      // USD text for quote USD (excluding USDT-RLS)
       if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
         display = "USD " + display;
       }
@@ -147,41 +196,68 @@ export default function ActiveOrders() {
       ) : (
         (() => {
           let rowCounter = 0;
-          return Object.entries(ordersByMarket).map(([market, orders]) => (
-            <div key={market} style={{ marginBottom: "20px" }}>
-              {/* Market name 20px from left */}
-              <h4 style={{ marginBottom: "6px", marginLeft: "20px" }}>
-                {market}
-              </h4>
+          return Object.entries(ordersByMarket).map(([market, orders]) => {
+            // Sort by timestamp descending (newest first)
+            const sortedOrders = [...orders].sort(
+              (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+            );
 
-              <table style={tableStyle}>
-                <thead>
-                  <tr>
-                    <th style={{ ...thStyle, width: "5%" }}>#</th>
-                    <th style={{ ...thStyle, width: "40%" }}>Amount</th>
-                    <th style={{ ...thStyle, width: "40%" }}>Price</th>
-                    <th style={{ ...thStyle, width: "15%" }}>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => {
-                    rowCounter += 1;
-                    const isBuy = order.type?.toLowerCase() === "buy";
-                    const rowColor = isBuy ? "#568546" : "#c2191c";
+            return (
+              <div key={market} style={{ marginBottom: "20px" }}>
+                {/* Market name 20px from left with icons */}
+                <h4
+                  style={{
+                    marginBottom: "6px",
+                    marginLeft: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <MarketIcon market={market} />
+                  {market}
+                </h4>
 
-                    return (
-                      <tr key={rowCounter}>
-                        <td style={{ ...tdStyle, color: rowColor }}>{rowCounter}</td>
-                        <td style={{ ...tdStyle, color: rowColor }}>{formatAmount(order.amount, market)}</td>
-                        <td style={{ ...tdStyle, color: rowColor }}>{formatPrice(order.price, market)}</td>
-                        <td style={{ ...tdStyle, color: rowColor }}>{renderType(order.type)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ));
+                <table style={tableStyle}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...thStyle, width: "5%" }}>#</th>
+                      <th style={{ ...thStyle, width: "40%" }}>Amount</th>
+                      <th style={{ ...thStyle, width: "40%" }}>Price</th>
+                      <th style={{ ...thStyle, width: "15%" }}>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedOrders.map((order, index) => {
+                      rowCounter += 1;
+                      const isBuy = order.type?.toLowerCase() === "buy";
+                      const baseColor = isBuy ? "#568546" : "#c2191c";
+
+                      // Alternate row background (white / very light gray)
+                      const bgColor = index % 2 === 0 ? "#ffffff" : "#fafafa";
+
+                      return (
+                        <tr key={rowCounter} style={{ backgroundColor: bgColor }}>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {rowCounter}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {formatAmount(order.amount, market)}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {formatPrice(order.price, market)}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {renderType(order.type)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            );
+          });
         })()
       )}
     </div>
