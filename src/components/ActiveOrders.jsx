@@ -44,10 +44,8 @@ export default function ActiveOrders() {
       ) : (
         Object.entries(ordersByMarket).map(([market, orders]) => (
           <div key={market} style={{ marginBottom: "24px" }}>
-            {/* Market header */}
             <h4 style={{ marginBottom: "8px", paddingLeft: "10px" }}>{market}</h4>
 
-            {/* Table for active orders */}
             <table
               style={{
                 width: "100%",
@@ -85,10 +83,10 @@ export default function ActiveOrders() {
 const thStyle = {
   borderBottom: "1px solid #aaa",
   textAlign: "left",
-  padding: "8px",
+  padding: "20px", // <-- padding updated
 };
 
 const tdStyle = {
   borderBottom: "1px solid #ddd",
-  padding: "8px",
+  padding: "20px", // <-- padding updated
 };
