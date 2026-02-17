@@ -5,7 +5,7 @@ export default function TitleBar({ title, count }) {
     backgroundColor: "#f5e1c9",       // کرم روشن
     borderTop: "2px solid #d9bfae",   // کرم تیره‌تر
     borderBottom: "2px solid #d9bfae",
-    padding: "6px 10px",
+    padding: "12px 10px",
     margin: "10px 0",
     display: "flex",
     alignItems: "center",
