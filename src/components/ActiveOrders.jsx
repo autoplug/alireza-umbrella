@@ -39,7 +39,7 @@ export default function ActiveOrders() {
   }, []);
 
   return (
-    <div style={{ padding: "16px", maxHeight: "80vh", overflowY: "auto" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {/* Main title */}
       <h3>Active Orders</h3>
 
