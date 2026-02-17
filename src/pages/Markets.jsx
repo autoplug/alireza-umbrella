@@ -5,13 +5,14 @@ import MarketsList from "../components/MarketsList"; // if you prefer a Markets 
 export default function MarketPage() {
   return (
     <div style={{ padding: 16, maxWidth: 1000, margin: "0 auto" }}>
+      {/* Orders section */}
+      <h1>Orders</h1>
+      <OrdersList />
+      
       {/* Markets section */}
-      <h1>Markets</h1>
+      <h1 style={{ marginTop: 32 }}>Markets</h1>
       <MarketsList />
 
-      {/* Orders section */}
-      <h1 style={{ marginTop: 32 }}>Orders</h1>
-      <OrdersList />
     </div>
   );
 }
