@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchData } from "../api/api";
+
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 function DebugPanel() {
   const [logs, setLogs] = useState([]);
@@ -7,48 +8,53 @@ function DebugPanel() {
   const addLog = (msg) => setLogs((prev) => [...prev, msg]);
 
   useEffect(() => {
-    const runDebug = async () => {
-      addLog("Starting fetchData for wallets...");
+    const fetchWallets = async () => {
+      addLog("Starting fetch for wallets...");
 
       try {
-        const wallets = await fetchData("wallets");
-        addLog("Wallets result:");
-        addLog(JSON.stringify(wallets, null, 2));
+        const token = localStorage.getItem("NOBITEX_TOKEN");
+        if (!token) {
+          addLog("No token found in localStorage!");
+          return;
+        }
+
+        // --- 1 second delay ---
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const response = await fetch(`${WORKER_URL}?type=wallets`, {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        // Read response text to prevent crash if not JSON
+        const text = await response.text();
+
+        try {
+          const data = JSON.parse(text);
+          addLog("Wallets result:");
+          addLog(JSON.stringify(data, null, 2));
+        } catch {
+          addLog("Received invalid JSON:");
+          addLog(text);
+        }
+
       } catch (err) {
-        addLog(`Wallets error: ${err.message}`);
+        addLog(`Fetch error: ${err.message}`);
       }
 
-      addLog("Starting fetchData for orders...");
-
-      try {
-        const orders = await fetchData("orders");
-        addLog("Orders result:");
-        addLog(JSON.stringify(orders, null, 2));
-      } catch (err) {
-        addLog(`Orders error: ${err.message}`);
-      }
-
-      addLog("Starting fetchData for markets...");
-
-      try {
-        const markets = await fetchData("markets");
-        addLog("Markets result:");
-        addLog(JSON.stringify(markets, null, 2));
-      } catch (err) {
-        addLog(`Markets error: ${err.message}`);
-      }
-
-      addLog("DebugPanel fetch complete!");
+      addLog("Fetch complete!");
     };
 
-    runDebug();
+    fetchWallets();
   }, []);
 
   return (
     <div
       style={{
         fontFamily: "monospace",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#f0f0f0",
         padding: 12,
         borderRadius: 8,
         maxHeight: "80vh",
