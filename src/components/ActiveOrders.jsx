@@ -115,7 +115,7 @@ export default function ActiveOrders() {
     return (
       <span
         style={{
-          color: isBuy ? "#74bd57" : "#c2191c",
+          color: isBuy ? "#568546" : "#c2191c", // Buy green updated
           display: "flex",
           alignItems: "center",
           gap: "6px",
@@ -159,12 +159,15 @@ export default function ActiveOrders() {
                 <tbody>
                   {orders.map((order) => {
                     rowCounter += 1;
+                    const isBuy = order.type?.toLowerCase() === "buy";
+                    const rowColor = isBuy ? "#568546" : "#c2191c"; // row text color
+
                     return (
                       <tr key={rowCounter}>
-                        <td style={tdStyle}>{rowCounter}</td>
-                        <td style={tdStyle}>{formatAmount(order.amount, market)}</td>
-                        <td style={tdStyle}>{formatPrice(order.price, market)}</td>
-                        <td style={tdStyle}>{renderType(order.type)}</td>
+                        <td style={{ ...tdStyle, color: rowColor }}>{rowCounter}</td>
+                        <td style={{ ...tdStyle, color: rowColor }}>{formatAmount(order.amount, market)}</td>
+                        <td style={{ ...tdStyle, color: rowColor }}>{formatPrice(order.price, market)}</td>
+                        <td style={{ ...tdStyle, color: rowColor }}>{renderType(order.type)}</td>
                       </tr>
                     );
                   })}
