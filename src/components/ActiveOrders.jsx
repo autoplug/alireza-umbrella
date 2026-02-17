@@ -50,18 +50,18 @@ export default function ActiveOrders() {
             {/* Table for active orders */}
             <table
               style={{
-                width: "100%", // full width
+                width: "100%",
                 borderCollapse: "collapse",
                 backgroundColor: "#f9f9f9",
                 color: "#000",
-                margin: 0, // remove any margin
+                margin: 0,
               }}
             >
               <thead>
                 <tr>
-                  <th style={{ ...thStyle, width: "30%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Amount</th>
-                  <th style={{ ...thStyle, width: "30%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Price</th>
-                  <th style={{ ...thStyle, width: "40%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Type</th>
+                  <th style={{ ...thStyle, width: "40%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Amount</th>
+                  <th style={{ ...thStyle, width: "40%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Price</th>
+                  <th style={{ ...thStyle, width: "20%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Type</th>
                 </tr>
               </thead>
               <tbody>
