@@ -15,7 +15,8 @@ export default function ActiveOrders() {
 
     try {
       const allOrders = JSON.parse(cached);
-      const activeOrders = allOrders.filter((o) => o.status === "active");
+      // Only keep orders with Status = "Active"
+      const activeOrders = allOrders.filter((o) => o.status === "Active");
       setOrders(activeOrders);
     } catch {
       setOrders([]);
@@ -32,7 +33,7 @@ export default function ActiveOrders() {
 
   return (
     <div style={{ padding: "16px" }}>
-      <h4>Active Orders</h4>
+      <h2>Active Orders</h2>
       {orders.length === 0 ? (
         <p>No active orders.</p>
       ) : (
