@@ -24,7 +24,7 @@ export default function App() {
         <Header />
         
         {/* Spacer برای محتوای صفحه */}
-        <div style={{ height: "48px" }}></div> 
+        <div style={{ height: "36px" }}></div> 
         
         {/* Routes */}
         <Routes>
