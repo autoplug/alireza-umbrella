@@ -53,6 +53,10 @@ export default function Header() {
   return (
     <div
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          justifyContent: "flex-start",
           position: "fixed",
           fontFamily : "monospace",
           top: 0,
