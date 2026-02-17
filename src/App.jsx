@@ -1,46 +1,62 @@
 import React, { useEffect, useState } from "react";
-//import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
+import BottomNavigation from "./layout/BottomNavigation";
+import { fetchAllData } from "./api/api";
 
 // Pages
-//import Home from "./pages/Home";
-
-// Components
-//import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
-import DebugPanel from "./components/DebugPanel";
-
-// API
-//import { fetchAllData } from "./api/api";
+import Home from "./pages/Home";
+import Markets from "./pages/Markets";
+import Settings from "./pages/Settings";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-  setLoading(true);
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    /*
-   fetchAllData()
-      .then(() => setLoading(false))
-      .catch((err) => {
-        console.error("Failed to fetch data:", err);
-        setLoading(false);
-      });
-*/
+    loadData();
   }, []);
 
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      await fetchAllData();
+    } catch (error) {
+      console.log("App fetch error:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      {/* Loader text at top */}
-      jfjjdjdjjdjdjjdjdjdjdj
-      {loading && (
-        <div style={{ padding: 12, textAlign: "center", fontWeight: 600 }}>
-          Loading data...
-        </div>
-      )}
+    <Router>
+      <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
+        
+        {/* Loader text */}
+        {loading && (
+          <div
+            style={{
+              textAlign: "center",
+              padding: "10px",
+              fontWeight: "bold"
+            }}
+          >
+            Loading data...
+          </div>
+        )}
 
-gggggggggg
-      
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/markets" element={<Markets />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
 
-      {/* Bottom navigation always visible */}
-    <DebugPanel />
-    </div>
+        {/* Bottom Navigation */}
+        <BottomNavigation />
+
+      </div>
+    </Router>
   );
 }
+
+
