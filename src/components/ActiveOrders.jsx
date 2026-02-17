@@ -39,15 +39,29 @@ const logoMap = {
   RLS: RLSLogo,
 };
 
-// Component to show overlapping currency icons, base on left
+// MarketIcon with Base on top of Quote
 const MarketIcon = ({ market }) => {
   const [base, quote] = market.split("-");
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
   return (
-    <div style={{ position: "relative", width: "28px", height: "20px" }}>
-      {/* Base on left */}
+    <div style={{ position: "relative", width: "28px", height: "22px" }}>
+      {/* Quote behind, slightly lower and right */}
+      <img
+        src={quoteImg}
+        alt=""
+        style={{
+          width: "20px",
+          height: "20px",
+          borderRadius: "50%",
+          position: "absolute",
+          left: 6,
+          top: 2,
+          zIndex: 0,
+        }}
+      />
+      {/* Base on top */}
       <img
         src={baseImg}
         alt=""
@@ -58,19 +72,7 @@ const MarketIcon = ({ market }) => {
           position: "absolute",
           left: 0,
           top: 0,
-        }}
-      />
-      {/* Quote behind, slightly right */}
-      <img
-        src={quoteImg}
-        alt=""
-        style={{
-          width: "20px",
-          height: "20px",
-          borderRadius: "50%",
-          position: "absolute",
-          left: 14, // overlap behind
-          top: 0,
+          zIndex: 1,
         }}
       />
     </div>
@@ -151,7 +153,7 @@ export default function ActiveOrders() {
           unit = "IRM";
         } else {
           value = Math.floor(value / 10000000);
-          unit = ""; // M rule removed
+          unit = ""; // M removed
         }
       } else if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
         unit = "USD";
