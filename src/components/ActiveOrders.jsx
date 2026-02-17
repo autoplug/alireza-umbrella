@@ -32,7 +32,7 @@ export default function ActiveOrders() {
 
   return (
     <div>
-      <TitleBar title="Today Trades" count={orders.length} />
+      <TitleBar title="Active Orders" count={orders.length} />
       <TableOrder orders={orders} />
     </div>
   );
