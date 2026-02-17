@@ -32,7 +32,7 @@ export default function ActiveOrders() {
   return (
     <div>
       <h3 style={{ marginLeft: "10px" }}>
-        Active Orders [{orders.length}]
+        Active Orders ({orders.length})
       </h3>
       <TableOrder orders={orders} />
     </div>
