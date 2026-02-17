@@ -21,7 +21,7 @@ export default function TitleBar({ title, count }) {
   return (
     <div style={barStyle}>
       <h3 style={h3Style}>
-        {title} {typeof count === "number" ? `[${count}]` : ""}
+        {title} {count > 0 ? `(${count})` : ""}
       </h3>
     </div>
   );
