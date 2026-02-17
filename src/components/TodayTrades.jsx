@@ -37,9 +37,7 @@ export default function TodayTrades() {
 
   return (
     <div>
-      <h3 style={{ marginLeft: "10px" }}>
-        Today Trades ({orders.length})
-      </h3>
+      <TitleBar title="Today Trades" count={orders.length} />
       <TableOrder orders={orders} />
     </div>
   );
