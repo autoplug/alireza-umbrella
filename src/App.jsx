@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import BottomNavigation from "./layout/BottomNavigation";
+import Header from "./components/Header";
 import { fetchAllData } from "./api/api";
 
 // Pages
@@ -29,22 +30,11 @@ export default function App() {
   return (
     <Router>
       <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
-        
-        {/* Loader text */}
-        {loading && (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "10px",
-              fontWeight: "bold"
-            }}
-          >
-            Loading data...
-          </div>
-        )}
-
         {/* Routes */}
         <Routes>
+          {/* Header above all pages */}
+          <Header />
+          
           <Route path="/" element={<Home />} />
           <Route path="/trades" element={<Trades />} />
           <Route path="/settings" element={<Settings />} />
