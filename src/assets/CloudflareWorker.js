@@ -1,55 +1,56 @@
-addEventListener("fetch", (event) => {
-  event.respondWith(handleRequest(event.request));
-});
+export default {
+  async fetch(request) {
 
-async function handleRequest(request) {
-  try {
-    const url = new URL(request.url);
-    const type = url.searchParams.get("type"); // wallets / orders / markets
-
-    let apiUrl = "";
-    const headers = {};
-
-    // Token از Header می‌خوانیم (برای orders و wallets)
-    const token = request.headers.get("Authorization");
-    if (token) headers["Authorization"] = token;
-
-    // انتخاب endpoint بر اساس type
-    switch (type) {
-      case "wallets":
-        apiUrl = "https://apiv2.nobitex.ir/users/wallets/list";
-        break;
-
-      case "orders":
-        apiUrl = "https://apiv2.nobitex.ir/market/orders/list";
-        break;
-
-      case "markets":
-        apiUrl = "https://apiv2.nobitex.ir/market/stats";
-        break;
-
-      default:
-        return new Response(JSON.stringify({ error: "Invalid type" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
+    // Handle CORS preflight request
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      });
     }
 
-    // درخواست به نوبیتکس
-    const response = await fetch(apiUrl, { method: "GET", headers });
-    const data = await response.json();
+    try {
+      const incomingUrl = new URL(request.url);
 
-    // پاسخ به مرورگر با CORS فعال
-    return new Response(JSON.stringify(data), {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+      const targetUrl =
+        "https://apiv2.nobitex.ir" +
+        incomingUrl.pathname +
+        incomingUrl.search;
+
+      const proxiedRequest = new Request(targetUrl, {
+        method: request.method,
+        headers: request.headers,
+        body:
+          request.method !== "GET" && request.method !== "HEAD"
+            ? request.body
+            : undefined,
+      });
+
+      const response = await fetch(proxiedRequest);
+
+      return new Response(response.body, {
+        status: response.status,
+        headers: {
+          ...Object.fromEntries(response.headers),
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+
+    } catch (error) {
+      return new Response(
+        JSON.stringify({ error: error.message }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+    }
   }
-}
+};
