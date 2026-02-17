@@ -1,7 +1,9 @@
 import axios from "axios";
-import localOrders from "../assets/nobitex.json";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+
+// 5 minutes
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
 
 const CACHE_KEYS = {
   wallets: "WALLETS_CACHE",
@@ -15,14 +17,11 @@ const CACHE_TIME_KEYS = {
   markets: "MARKETS_CACHE_TIME",
 };
 
-// 5 minutes (you had 100ms before)
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
-
 
 // ---------------- CACHE HELPERS ----------------
 
-const getCache = (key) => {
-  const data = localStorage.getItem(key);
+const getCache = (type) => {
+  const data = localStorage.getItem(CACHE_KEYS[type]);
   if (!data) return null;
   try {
     return JSON.parse(data);
@@ -31,8 +30,8 @@ const getCache = (key) => {
   }
 };
 
-const setCache = (key, value, type) => {
-  localStorage.setItem(key, JSON.stringify(value));
+const setCache = (type, value) => {
+  localStorage.setItem(CACHE_KEYS[type], JSON.stringify(value));
   localStorage.setItem(CACHE_TIME_KEYS[type], Date.now().toString());
 };
 
@@ -43,22 +42,10 @@ const shouldFetch = (type) => {
 };
 
 
-// ---------------- ORDERS MERGE ----------------
-
-const mergeOrdersUnique = (ordersArray) => {
-  const map = new Map();
-  ordersArray.forEach((order) => {
-    if (order?.id != null) map.set(order.id, order);
-  });
-  return Array.from(map.values());
-};
-
-
-// ---------------- FETCH DATA ----------------
+// ---------------- CORE FETCH ----------------
 
 export const fetchData = async (type) => {
-  const cacheKey = CACHE_KEYS[type];
-  const cached = getCache(cacheKey);
+  const cached = getCache(type);
 
   // Use cache if still valid
   if (!shouldFetch(type) && cached) {
@@ -67,78 +54,58 @@ export const fetchData = async (type) => {
 
   try {
     let url = "";
-    let data = null;
+    let headers = {};
 
-    // ----- WALLET -----
     if (type === "wallets") {
       const token = localStorage.getItem("NOBITEX_TOKEN");
       if (!token) return [];
-
+      headers.Authorization = `Token ${token}`;
       url = `${WORKER_URL}/users/wallets/list`;
-
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-        validateStatus: () => true,
-      });
-
-      data = response.data?.wallets || [];
-
-      if (Array.isArray(data) && data.length > 0) {
-        setCache(cacheKey, data, type);
-      }
-
-      return data;
     }
 
-    // ----- ORDERS -----
     if (type === "orders") {
       const token = localStorage.getItem("NOBITEX_TOKEN");
-
+      if (token) headers.Authorization = `Token ${token}`;
       url = `${WORKER_URL}/market/orders/list?details=2&status=all`;
-
-      const response = await axios.get(url, {
-        headers: token ? { Authorization: `Token ${token}` } : {},
-        validateStatus: () => true,
-      });
-
-      data = response.data?.orders || [];
-
-      const merged = mergeOrdersUnique([...localOrders, ...data]);
-
-      if (merged.length > 0) {
-        setCache(cacheKey, merged, type);
-      }
-
-      return merged;
     }
 
-    // ----- MARKETS -----
     if (type === "markets") {
       url = `${WORKER_URL}/market/stats`;
-
-      const response = await axios.get(url, {
-        validateStatus: () => true,
-      });
-
-      data = response.data?.stats || {};
-
-      if (data && Object.keys(data).length > 0) {
-        setCache(cacheKey, data, type);
-      }
-
-      return data;
     }
+
+    const response = await axios.get(url, {
+      headers,
+      validateStatus: () => true,
+    });
+
+    let data;
+
+    if (type === "wallets") {
+      data = response.data?.wallets || [];
+    }
+
+    if (type === "orders") {
+      data = response.data?.orders || [];
+    }
+
+    if (type === "markets") {
+      data = response.data?.stats || {};
+    }
+
+    // Save cache only if valid data received
+    const isValid =
+      Array.isArray(data)
+        ? data.length > 0
+        : data && Object.keys(data).length > 0;
+
+    if (isValid) {
+      setCache(type, data);
+    }
+
+    return data;
 
   } catch (err) {
     console.error(`Fetch ${type} failed:`, err);
-
-    if (type === "orders") {
-      const fallback = cached || [];
-      return mergeOrdersUnique([...localOrders, ...fallback]);
-    }
-
     return cached || (type === "markets" ? {} : []);
   }
 };
