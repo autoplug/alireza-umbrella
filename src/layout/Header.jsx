@@ -53,7 +53,7 @@ export default function Header() {
   return (
     <div
       style={{
-        backgroundColor: "#cbeef2",
+        backgroundColor: "#706e6b",
         color: "#fff",
         padding: "8px 16px",
         fontFamily: "monospace",
