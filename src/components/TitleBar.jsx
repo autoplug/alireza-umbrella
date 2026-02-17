@@ -15,7 +15,6 @@ export default function TitleBar({ title, count }) {
   const h3Style = {
     margin: 0,
     fontWeight: "bold",
-    fontSize: "16px",
   };
 
   return (
