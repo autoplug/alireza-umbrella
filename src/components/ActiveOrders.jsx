@@ -14,12 +14,12 @@ const tableStyle = {
 const thStyle = {
   borderBottom: "1px solid #aaa",
   textAlign: "left",
-  padding: "20px",
+  padding: "14px 20px", // reduced height
 };
 
 const tdStyle = {
   borderBottom: "1px solid #ddd",
-  padding: "20px",
+  padding: "14px 20px", // reduced height
 };
 
 export default function ActiveOrders() {
@@ -55,12 +55,12 @@ export default function ActiveOrders() {
     return () => clearInterval(interval);
   }, []);
 
-  const getTypeStyle = (type) => {
+  const getRowStyle = (type) => {
     if (!type) return {};
     if (type.toLowerCase() === "buy")
-      return { backgroundColor: "#d4edda" }; // light green
+      return { backgroundColor: "#e6f4ea" }; // lighter green
     if (type.toLowerCase() === "sell")
-      return { backgroundColor: "#f8d7da" }; // light red
+      return { backgroundColor: "#fdecea" }; // lighter red
     return {};
   };
 
@@ -88,13 +88,11 @@ export default function ActiveOrders() {
               </thead>
               <tbody>
                 {orders.map((order, index) => (
-                  <tr key={index}>
+                  <tr key={index} style={getRowStyle(order.type)}>
                     <td style={tdStyle}>{index + 1}</td>
                     <td style={tdStyle}>{order.amount}</td>
                     <td style={tdStyle}>{order.price}</td>
-                    <td style={{ ...tdStyle, ...getTypeStyle(order.type) }}>
-                      {order.type}
-                    </td>
+                    <td style={tdStyle}>{order.type}</td>
                   </tr>
                 ))}
               </tbody>
