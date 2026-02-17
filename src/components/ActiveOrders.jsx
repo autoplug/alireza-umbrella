@@ -15,7 +15,7 @@ export default function ActiveOrders() {
     try {
       const allOrders = JSON.parse(cached);
 
-      // Filter active orders
+      // Filter only active orders
       const activeOrders = allOrders.filter((o) => o.status === "Active");
 
       // Group by market
@@ -39,8 +39,7 @@ export default function ActiveOrders() {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {/* Main title */}
+    <div style={{ padding: "16px", maxHeight: "80vh", overflowY: "auto" }}>
       <h3>Active Orders</h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
@@ -48,33 +47,31 @@ export default function ActiveOrders() {
       ) : (
         Object.entries(ordersByMarket).map(([market, orders]) => (
           <div key={market} style={{ marginBottom: "24px" }}>
-            {/* Market header with H4 and left padding */}
+            {/* Market header */}
             <h4 style={{ marginBottom: "8px", paddingLeft: "10px" }}>{market}</h4>
 
-            {/* Table for orders */}
+            {/* Table for active orders */}
             <table
               style={{
                 width: "100%",
                 borderCollapse: "collapse",
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
+                backgroundColor: "#f9f9f9",
+                color: "#000",
               }}
             >
               <thead>
                 <tr>
-                  <th style={{ ...thStyle, position: "sticky", top: 0, backgroundColor: "#1e1e1e", zIndex: 2 }}>Amount</th>
-                  <th style={{ ...thStyle, position: "sticky", top: 0, backgroundColor: "#1e1e1e", zIndex: 2 }}>Price</th>
-                  <th style={{ ...thStyle, position: "sticky", top: 0, backgroundColor: "#1e1e1e", zIndex: 2 }}>Status</th>
-                  <th style={{ ...thStyle, position: "sticky", top: 0, backgroundColor: "#1e1e1e", zIndex: 2 }}>Order ID</th>
+                  <th style={{ ...thStyle, width: "30%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Amount</th>
+                  <th style={{ ...thStyle, width: "30%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Price</th>
+                  <th style={{ ...thStyle, width: "40%", position: "sticky", top: 0, backgroundColor: "#f9f9f9", zIndex: 2 }}>Type</th>
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id}>
+                {orders.map((order, index) => (
+                  <tr key={index}>
                     <td style={tdStyle}>{order.amount}</td>
                     <td style={tdStyle}>{order.price}</td>
-                    <td style={tdStyle}>{order.status}</td>
-                    <td style={tdStyle}>{order.id}</td>
+                    <td style={tdStyle}>{order.type}</td>
                   </tr>
                 ))}
               </tbody>
@@ -88,12 +85,12 @@ export default function ActiveOrders() {
 
 // Styles
 const thStyle = {
-  borderBottom: "1px solid #555",
+  borderBottom: "1px solid #aaa",
   textAlign: "left",
   padding: "8px",
 };
 
 const tdStyle = {
-  borderBottom: "1px solid #333",
+  borderBottom: "1px solid #ddd",
   padding: "8px",
 };
