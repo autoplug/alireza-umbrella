@@ -49,8 +49,9 @@ export default function WalletList() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <h3>Wallets</h3>
+    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+      <h3 style={{ marginLeft: "10px" }}>Wallets</h3>
+      
       {wallets.map((wallet) => (
         <div
           key={wallet.currency}
