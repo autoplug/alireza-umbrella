@@ -85,7 +85,6 @@ export default function ActiveOrders() {
 
     if (market) {
       const parts = market.split("-");
-      const base = parts[0] || "";
       const quote = parts[1] || "";
 
       if (quote.toUpperCase() === "RLS") {
@@ -101,6 +100,7 @@ export default function ActiveOrders() {
         display = value.toLocaleString("en-US");
       }
 
+      // USD text for quote USD (excluding USDT-RLS)
       if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
         display = "USD " + display;
       }
