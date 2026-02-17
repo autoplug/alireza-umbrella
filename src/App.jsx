@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import BottomNavigation from "./layout/BottomNavigation";
-//import Header from "./layout/Header";
+import Header from "./layout/Header";
 import { fetchAllData } from "./api/api";
 
 // Pages
@@ -22,7 +22,7 @@ export default function App() {
         {/* Routes */}
         <Routes>
           {/* Header above all pages */}
-          {/*<Header />*/}
+          <Header />
           
           <Route path="/" element={<Home />} />
           <Route path="/trades" element={<Trades />} />
