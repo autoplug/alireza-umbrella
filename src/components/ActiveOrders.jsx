@@ -1,49 +1,67 @@
 import React, { useEffect, useState } from "react";
 
-// Key must match api.js
+// Cache key must match api.js
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ActiveOrders() {
-  const [orders, setOrders] = useState([]);
+  const [ordersByPair, setOrdersByPair] = useState({});
 
   const loadOrdersFromCache = () => {
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
     if (!cached) {
-      setOrders([]);
+      setOrdersByPair({});
       return;
     }
 
     try {
       const allOrders = JSON.parse(cached);
-      // Only keep orders with Status = "Active"
+
+      // Filter orders with Status = "Active"
       const activeOrders = allOrders.filter((o) => o.status === "Active");
-      setOrders(activeOrders);
+
+      // Group by pair or symbol
+      const grouped = activeOrders.reduce((acc, order) => {
+        const key = order.pair || order.symbol || "Unknown";
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(order);
+        return acc;
+      }, {});
+
+      setOrdersByPair(grouped);
     } catch {
-      setOrders([]);
+      setOrdersByPair({});
     }
   };
 
   useEffect(() => {
     loadOrdersFromCache();
 
-    // Optional: refresh every 30 seconds in case cache updated
+    // Optional: refresh every 30s
     const interval = setInterval(loadOrdersFromCache, 30000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <h3>Active Orders</h3>
-      {orders.length === 0 ? (
+    <div style={{ padding: "16px" }}>
+      <h2>Active Orders</h2>
+      {Object.keys(ordersByPair).length === 0 ? (
         <p>No active orders.</p>
       ) : (
-        <ul>
-          {orders.map((order) => (
-            <li key={order.id}>
-              {order.pair || order.symbol} — {order.amount} @ {order.price} — {order.status}
-            </li>
-          ))}
-        </ul>
+        Object.entries(ordersByPair).map(([pair, orders]) => (
+          <div key={pair} style={{ marginBottom: "16px" }}>
+            {/* Currency title */}
+            <h4 style={{ marginBottom: "8px" }}>{pair}</h4>
+
+            {/* List of orders for this pair */}
+            <ul>
+              {orders.map((order) => (
+                <li key={order.id}>
+                  {order.amount} @ {order.price} — {order.status}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
       )}
     </div>
   );
