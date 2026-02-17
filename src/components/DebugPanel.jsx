@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+const WORKER_URL = "https://api.alireza-b83.workers.dev";
 
 function DebugPanel() {
   const [logs, setLogs] = useState([]);
@@ -21,7 +21,7 @@ function DebugPanel() {
         // --- 1 second delay ---
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const response = await fetch(`${WORKER_URL}?type=wallets`, {
+        const response = await fetch(`${WORKER_URL}/users/wallets/list`, {
           method: "GET",
           headers: {
             Authorization: `Token ${token}`,
