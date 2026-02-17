@@ -22,7 +22,7 @@ const thStyle = {
 const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
-  fontSize: "12px", // smaller font for rows
+  fontSize: "12px",
 };
 
 export default function ActiveOrders() {
@@ -76,7 +76,7 @@ export default function ActiveOrders() {
     return Number(amount).toLocaleString("en-US");
   };
 
-  // Format Price with RLS and USD icon
+  // Format Price with IRM, IRT, USD rules
   const formatPrice = (price, market) => {
     if (price == null) return "";
 
@@ -90,20 +90,19 @@ export default function ActiveOrders() {
 
       if (quote.toUpperCase() === "RLS") {
         if (market.toUpperCase() === "USDT-RLS") {
-          // USDT-RLS → divide by 10
           value = value / 10;
-          display = value.toLocaleString("en-US");
+          display = "IRT " + value.toLocaleString("en-US");
+        } else if (market.toUpperCase() === "BRC-RLS") {
+          display = Math.floor(value / 10000000).toLocaleString("en-US") + " IRM";
         } else {
-          // Other RLS → remove 7 digits + M
           display = Math.floor(value / 10000000).toLocaleString("en-US") + " M";
         }
       } else {
         display = value.toLocaleString("en-US");
       }
 
-      // Add $ icon if quote is USD
-      if (quote.toUpperCase() === "USDT") {
-        display = "$ " + display;
+      if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
+        display = "USD " + display;
       }
 
       return display;
@@ -121,7 +120,7 @@ export default function ActiveOrders() {
     return (
       <span
         style={{
-          color: isBuy ? "#568546" : "#c2191c", // Buy green updated
+          color: isBuy ? "#568546" : "#c2191c",
           display: "flex",
           alignItems: "center",
           gap: "6px",
@@ -147,7 +146,7 @@ export default function ActiveOrders() {
         <p style={{ marginLeft: "20px" }}>No active orders.</p>
       ) : (
         (() => {
-          let rowCounter = 0; // global counter for all tables
+          let rowCounter = 0;
           return Object.entries(ordersByMarket).map(([market, orders]) => (
             <div key={market} style={{ marginBottom: "20px" }}>
               {/* Market name 20px from left */}
@@ -158,17 +157,17 @@ export default function ActiveOrders() {
               <table style={tableStyle}>
                 <thead>
                   <tr>
-                    <th style={{ ...thStyle, width: "10%" }}>#</th>
-                    <th style={{ ...thStyle, width: "35%" }}>Amount</th>
-                    <th style={{ ...thStyle, width: "35%" }}>Price</th>
-                    <th style={{ ...thStyle, width: "20%" }}>Type</th>
+                    <th style={{ ...thStyle, width: "5%" }}>#</th>
+                    <th style={{ ...thStyle, width: "40%" }}>Amount</th>
+                    <th style={{ ...thStyle, width: "40%" }}>Price</th>
+                    <th style={{ ...thStyle, width: "15%" }}>Type</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orders.map((order) => {
                     rowCounter += 1;
                     const isBuy = order.type?.toLowerCase() === "buy";
-                    const rowColor = isBuy ? "#568546" : "#c2191c"; // row text color
+                    const rowColor = isBuy ? "#568546" : "#c2191c";
 
                     return (
                       <tr key={rowCounter}>
