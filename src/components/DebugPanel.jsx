@@ -28,8 +28,7 @@ function DebugPanel() {
           },
         });
 
-        // Read response text to prevent crash if not JSON
-        const text = await response.text();
+        // Read response text to prevent crash if not 
 
         try {
           const data = JSON.parse(text);
