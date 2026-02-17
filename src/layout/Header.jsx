@@ -17,7 +17,7 @@ const simpleTimeAgo = (timestamp) => {
 
   if (minutes < 1) return { text: "just now", color: "limegreen" }; // green
   if (minutes < 60) return { text: `${minutes} minute${minutes > 1 ? "s" : ""} ago`, color: "gold" }; // yellow
-  return { text: "more than an hour ago", color: "gold" }; // yellow
+  return { text: "more than an hour ago", color: "red" }; // red
 };
 
 export default function Header() {
@@ -53,15 +53,14 @@ export default function Header() {
   return (
     <div
       style={{
-        backgroundColor: "#def0dd",
+        backgroundColor: "#222",
         color: "#fff",
-        padding: "8px 1px",
+        padding: "8px 16px",
         fontFamily: "monospace",
-        textAlign: "center",
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        gap: "12px",
+        gap: "8px",
+        justifyContent: "flex-start", // align left
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
