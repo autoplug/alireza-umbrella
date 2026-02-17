@@ -23,6 +23,9 @@ export default function App() {
         {/* Header above all pages */}
         <Header />
         
+        {/* Spacer برای محتوای صفحه */}
+        <div style={{ height: "48px" }}></div> 
+        
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
