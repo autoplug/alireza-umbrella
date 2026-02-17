@@ -69,6 +69,7 @@ export default function Header() {
           padding: "8px 16px",
           zIndex: 1000,        // بالاتر از سایر المان‌ها
           fontSize: "12px",
+          paddingTop: "env(safe-area-inset-top)",
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
