@@ -39,35 +39,37 @@ const logoMap = {
   RLS: RLSLogo,
 };
 
-// Component to show overlapping currency icons
+// Component to show overlapping currency icons, base on left
 const MarketIcon = ({ market }) => {
   const [base, quote] = market.split("-");
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
   return (
-    <div style={{ position: "relative", width: "32px", height: "32px" }}>
+    <div style={{ position: "relative", width: "28px", height: "20px" }}>
+      {/* Base on left */}
       <img
-        src={quoteImg}
+        src={baseImg}
         alt=""
         style={{
-          width: "24px",
-          height: "24px",
+          width: "20px",
+          height: "20px",
           borderRadius: "50%",
           position: "absolute",
           left: 0,
           top: 0,
         }}
       />
+      {/* Quote behind, slightly right */}
       <img
-        src={baseImg}
+        src={quoteImg}
         alt=""
         style={{
-          width: "24px",
-          height: "24px",
+          width: "20px",
+          height: "20px",
           borderRadius: "50%",
           position: "absolute",
-          left: 12, // overlap base over quote
+          left: 14, // overlap behind
           top: 0,
         }}
       />
@@ -126,38 +128,38 @@ export default function ActiveOrders() {
     return Number(amount).toLocaleString("en-US");
   };
 
-  // Format Price with IRM, IRT, USD rules
+  // Format Price with IRM, IRT, USD rules (M removed)
   const formatPrice = (price, market) => {
     if (price == null) return "";
 
     let value = Number(price);
-    let display = "";
+    let unit = ""; // unit displayed on right
 
     if (market) {
       const parts = market.split("-");
+      const base = parts[0] || "";
       const quote = parts[1] || "";
 
       if (quote.toUpperCase() === "RLS") {
         if (market.toUpperCase() === "USDT-RLS") {
           value = value / 10;
-          display = "IRT " + value.toLocaleString("en-US");
+          unit = "IRT";
         } else if (market.toUpperCase() === "BRC-RLS") {
-          display = Math.floor(value / 10000000).toLocaleString("en-US") + " IRM";
+          value = Math.floor(value / 10000000);
+          unit = "IRM";
+        } else if (market.toUpperCase() === "BTC-RLS") {
+          value = Math.floor(value / 10000000);
+          unit = "IRM";
         } else {
-          display = Math.floor(value / 10000000).toLocaleString("en-US") + " M";
+          value = Math.floor(value / 10000000);
+          unit = ""; // M rule removed
         }
-      } else {
-        display = value.toLocaleString("en-US");
+      } else if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
+        unit = "USD";
       }
-
-      if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
-        display = "USD " + display;
-      }
-
-      return display;
     }
 
-    return value.toLocaleString("en-US");
+    return unit ? `${value.toLocaleString("en-US")} ${unit}` : `${value.toLocaleString("en-US")}`;
   };
 
   // Render Type with colored circle arrow
