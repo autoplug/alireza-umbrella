@@ -56,7 +56,7 @@ const MarketIcon = ({ market }) => {
           height: "20px",
           borderRadius: "50%",
           position: "absolute",
-          left: 9,   // overlap behind
+          left: 12,   // overlap behind
           top: 0,    // same vertical as base
           zIndex: 0,
         }}
