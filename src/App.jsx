@@ -5,14 +5,14 @@ import React, { useEffect, useState } from "react";
 //import Home from "./pages/Home";
 
 // Components
-import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
+//import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
 
 // API
 //import { fetchAllData } from "./api/api";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  setLoading(false);
+  setLoading(true);
   
   useEffect(() => {
     /*
@@ -35,11 +35,11 @@ export default function App() {
         </div>
       )}
 
-
+gggggggggg
       
 
       {/* Bottom navigation always visible */}
-      <BottomNavigation />
+    
     </div>
   );
 }
