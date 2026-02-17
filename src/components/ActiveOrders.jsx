@@ -22,7 +22,7 @@ const thStyle = {
 const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
-  fontSize: "13px", // 🔹 smaller font for rows
+  fontSize: "13px", // smaller font for rows
 };
 
 export default function ActiveOrders() {
@@ -58,7 +58,7 @@ export default function ActiveOrders() {
     return () => clearInterval(interval);
   }, []);
 
-  // 🔹 Format Amount
+  // Format Amount with BTC special case
   const formatAmount = (amount, market) => {
     if (amount == null) return "";
 
@@ -70,7 +70,7 @@ export default function ActiveOrders() {
     return Number(amount).toLocaleString("en-US");
   };
 
-  // 🔹 Format Price
+  // Format Price with RLS special case
   const formatPrice = (price, market) => {
     if (price == null) return "";
 
@@ -79,7 +79,7 @@ export default function ActiveOrders() {
     if (market) {
       const parts = market.split("-");
       if (parts[1] && parts[1].toUpperCase() === "RLS") {
-        const millions = Math.floor(value / 10000000);
+        const millions = Math.floor(value / 10000000); // remove 7 digits
         return millions.toLocaleString("en-US") + "M";
       }
     }
@@ -87,7 +87,7 @@ export default function ActiveOrders() {
     return value.toLocaleString("en-US");
   };
 
-  // 🔹 Render Type with colored circle arrow
+  // Render Type with colored circle arrow
   const renderType = (type) => {
     if (!type) return "";
 
@@ -119,35 +119,41 @@ export default function ActiveOrders() {
       {Object.keys(ordersByMarket).length === 0 ? (
         <p style={{ marginLeft: "20px" }}>No active orders.</p>
       ) : (
-        Object.entries(ordersByMarket).map(([market, orders]) => (
-          <div key={market} style={{ marginBottom: "20px" }}>
-            {/* Market name 20px from left */}
-            <h4 style={{ marginBottom: "6px", marginLeft: "20px" }}>
-              {market}
-            </h4>
+        (() => {
+          let rowCounter = 0; // global counter for all tables
+          return Object.entries(ordersByMarket).map(([market, orders]) => (
+            <div key={market} style={{ marginBottom: "20px" }}>
+              {/* Market name 20px from left */}
+              <h4 style={{ marginBottom: "6px", marginLeft: "20px" }}>
+                {market}
+              </h4>
 
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  <th style={{ ...thStyle, width: "10%" }}>#</th>
-                  <th style={{ ...thStyle, width: "35%" }}>Amount</th>
-                  <th style={{ ...thStyle, width: "35%" }}>Price</th>
-                  <th style={{ ...thStyle, width: "20%" }}>Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order, index) => (
-                  <tr key={index}>
-                    <td style={tdStyle}>{index + 1}</td>
-                    <td style={tdStyle}>{formatAmount(order.amount, market)}</td>
-                    <td style={tdStyle}>{formatPrice(order.price, market)}</td>
-                    <td style={tdStyle}>{renderType(order.type)}</td>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={{ ...thStyle, width: "10%" }}>#</th>
+                    <th style={{ ...thStyle, width: "35%" }}>Amount</th>
+                    <th style={{ ...thStyle, width: "35%" }}>Price</th>
+                    <th style={{ ...thStyle, width: "20%" }}>Type</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))
+                </thead>
+                <tbody>
+                  {orders.map((order) => {
+                    rowCounter += 1;
+                    return (
+                      <tr key={rowCounter}>
+                        <td style={tdStyle}>{rowCounter}</td>
+                        <td style={tdStyle}>{formatAmount(order.amount, market)}</td>
+                        <td style={tdStyle}>{formatPrice(order.price, market)}</td>
+                        <td style={tdStyle}>{renderType(order.type)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ));
+        })()
       )}
     </div>
   );
