@@ -1,46 +1,65 @@
 import React, { useEffect, useState } from "react";
-
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+import { fetchData } from "../api/api";
 
 function DebugPanel() {
-  const [markets, setMarkets] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [logs, setLogs] = useState([]);
+
+  const addLog = (msg) => setLogs((prev) => [...prev, msg]);
 
   useEffect(() => {
-    const fetchMarkets = async () => {
-      setLoading(true);
-      setError(null);
+    const runDebug = async () => {
+      addLog("Starting fetchData for wallets...");
 
       try {
-        const response = await fetch(`${WORKER_URL}?type=markets`);
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-        const data = await response.json();
-        setMarkets(data.stats || {});
+        const wallets = await fetchData("wallets");
+        addLog("Wallets result:");
+        addLog(JSON.stringify(wallets, null, 2));
       } catch (err) {
-        setError(err.message);
-        setMarkets({});
-      } finally {
-        setLoading(false);
+        addLog(`Wallets error: ${err.message}`);
       }
+
+      addLog("Starting fetchData for orders...");
+
+      try {
+        const orders = await fetchData("orders");
+        addLog("Orders result:");
+        addLog(JSON.stringify(orders, null, 2));
+      } catch (err) {
+        addLog(`Orders error: ${err.message}`);
+      }
+
+      addLog("Starting fetchData for markets...");
+
+      try {
+        const markets = await fetchData("markets");
+        addLog("Markets result:");
+        addLog(JSON.stringify(markets, null, 2));
+      } catch (err) {
+        addLog(`Markets error: ${err.message}`);
+      }
+
+      addLog("DebugPanel fetch complete!");
     };
 
-    fetchMarkets();
+    runDebug();
   }, []);
 
   return (
-    <div style={{ padding: 20, fontFamily: "monospace" }}>
-      {loading && <div>Loading markets...</div>}
-
-      {error && <div style={{ color: "red" }}>Error: {error}</div>}
-
-      <h3>Markets Data:</h3>
-      {markets && Object.keys(markets).length > 0 ? (
-        <pre>{JSON.stringify(markets, null, 2)}</pre>
-      ) : !loading ? (
-        <div>No market data available</div>
-      ) : null}
+    <div
+      style={{
+        fontFamily: "monospace",
+        backgroundColor: "#f5f5f5",
+        padding: 12,
+        borderRadius: 8,
+        maxHeight: "80vh",
+        overflowY: "auto",
+      }}
+    >
+      {logs.map((log, index) => (
+        <div key={index} style={{ marginBottom: 6, whiteSpace: "pre-wrap" }}>
+          {log}
+        </div>
+      ))}
     </div>
   );
 }
