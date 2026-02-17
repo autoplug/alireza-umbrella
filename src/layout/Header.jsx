@@ -68,5 +68,7 @@ export default function Header() {
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
       <span>Last update: {text}</span>
     </div>
+    {/* Spacer برای محتوای صفحه */}
+    <div style={{ height: "48px" }}></div> 
   );
 }
