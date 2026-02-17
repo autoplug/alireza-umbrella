@@ -33,7 +33,7 @@ export default function ActiveOrders() {
 
   return (
     <div style={{ padding: "16px" }}>
-      <h2>Active Orders</h2>
+      <h3>Active Orders</h3>
       {orders.length === 0 ? (
         <p>No active orders.</p>
       ) : (
