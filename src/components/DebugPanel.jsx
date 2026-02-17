@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const WORKER_URL = "https://api.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 function DebugPanel() {
   const [logs, setLogs] = useState([]);
