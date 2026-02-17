@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import BottomNavigation from "./layout/BottomNavigation";
@@ -11,20 +11,9 @@ import Trades from "./pages/Trades";
 import Settings from "./pages/Settings";
 
 export default function App() {
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        await fetchAllData();
-      } catch (error) {
-        console.log("App fetch error:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadData();
+    fetchAllData();
   }, []);
 
   return (
