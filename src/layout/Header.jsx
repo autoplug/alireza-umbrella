@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 // Keys from api.js
 const CACHE_TIME_KEYS = {
@@ -6,16 +8,16 @@ const CACHE_TIME_KEYS = {
   orders: "ORDERS_CACHE_TIME",
 };
 
-// Helper: simplified time ago in English
+// Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
-  if (!timestamp) return "Never";
+  if (!timestamp) return { text: "Never", color: "gray" };
 
   const diff = Date.now() - Number(timestamp);
   const minutes = Math.floor(diff / 60000);
 
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-  return "more than an hour ago";
+  if (minutes < 1) return { text: "just now", color: "limegreen" }; // green
+  if (minutes < 60) return { text: `${minutes} minute${minutes > 1 ? "s" : ""} ago`, color: "gold" }; // yellow
+  return { text: "more than an hour ago", color: "gold" }; // yellow
 };
 
 export default function Header() {
@@ -35,11 +37,8 @@ export default function Header() {
 
   useEffect(() => {
     updateTime();
-
-    // Refresh every 30 seconds for accuracy
     const interval = setInterval(updateTime, 30000);
 
-    // Listen to storage events
     const listener = () => updateTime();
     window.addEventListener("storage", listener);
 
@@ -49,6 +48,8 @@ export default function Header() {
     };
   }, []);
 
+  const { text, color } = simpleTimeAgo(lastUpdate);
+
   return (
     <div
       style={{
@@ -57,9 +58,14 @@ export default function Header() {
         padding: "8px 16px",
         fontFamily: "monospace",
         textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "8px",
       }}
     >
-      Last update: {simpleTimeAgo(lastUpdate)}
+      <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
+      <span>Last update: {text}</span>
     </div>
   );
 }
