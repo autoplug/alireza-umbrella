@@ -70,24 +70,37 @@ export default function ActiveOrders() {
     return Number(amount).toLocaleString("en-US");
   };
 
-  // Format Price with RLS special cases
+  // Format Price with RLS and USD icon
   const formatPrice = (price, market) => {
     if (price == null) return "";
 
-    const value = Number(price);
+    let value = Number(price);
+    let display = "";
 
     if (market) {
       const parts = market.split("-");
-      if (parts[1] && parts[1].toUpperCase() === "RLS") {
+      const base = parts[0] || "";
+      const quote = parts[1] || "";
+
+      if (quote.toUpperCase() === "RLS") {
         if (market.toUpperCase() === "USDT-RLS") {
-          // 🔹 USDT-RLS → divide by 10, no M
-          return (value / 10).toLocaleString("en-US");
+          // USDT-RLS → divide by 10
+          value = value / 10;
+          display = value.toLocaleString("en-US");
         } else {
-          // 🔹 Other RLS → remove 7 digits + M
-          const millions = Math.floor(value / 10000000);
-          return millions.toLocaleString("en-US") + " M";
+          // Other RLS → remove 7 digits + M
+          display = Math.floor(value / 10000000).toLocaleString("en-US") + " M";
         }
+      } else {
+        display = value.toLocaleString("en-US");
       }
+
+      // Add $ icon if quote is USD
+      if (quote.toUpperCase() === "USDT") {
+        display = "$ " + display;
+      }
+
+      return display;
     }
 
     return value.toLocaleString("en-US");
