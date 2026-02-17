@@ -36,7 +36,6 @@ function DebugPanel() {
           addLog(JSON.stringify(data, null, 2));
         } catch {
           addLog("Received invalid JSON:");
-          addLog(text);
         }
 
       } catch (err) {
