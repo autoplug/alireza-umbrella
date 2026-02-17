@@ -1,10 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+//import { HashRouter, Routes, Route } from "react-router-dom";
+
+// Pages
+//import Home from "./pages/Home";
+
+// Components
+//import BottomNavigation from "./layout/BottomNavigation"; // یا مسیر صحیح کامپوننت
+import DebugPanel from "./components/DebugPanel";
+
+// API
+//import { fetchAllData } from "./api/api";
 
 export default function Test() {
+  const [loading, setLoading] = useState(true);
+  setLoading(true);
+  
+  useEffect(() => {
+    /*
+   fetchAllData()
+      .then(() => setLoading(false))
+      .catch((err) => {
+        console.error("Failed to fetch data:", err);
+        setLoading(false);
+      });
+*/
+  }, []);
+
   return (
-    <div style={{ padding: 16, maxWidth: 800, margin: "0 auto" }}>
-      <h1>Wallets</h1>
-     
+    <div>
+      {/* Loader text at top */}
+      jfjjdjdjjdjdjjdjdjdjdj
+      {loading && (
+        <div style={{ padding: 12, textAlign: "center", fontWeight: 600 }}>
+          Loading data...
+        </div>
+      )}
+
+gggggggggg
+      
+
+      {/* Bottom navigation always visible */}
+    <DebugPanel />
     </div>
   );
 }
