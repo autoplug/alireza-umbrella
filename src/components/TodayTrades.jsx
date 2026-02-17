@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TableOrder from "./TableOrder";
+import TitleBar from "./TitleBar";
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
