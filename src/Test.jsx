@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Home() {
+export default function Test() {
   return (
     <div style={{ padding: 16, maxWidth: 800, margin: "0 auto" }}>
       <h1>Wallets</h1>
