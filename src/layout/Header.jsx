@@ -52,15 +52,17 @@ export default function Header() {
 
   return (
     <div
-      style={{
-        backgroundColor: "#706e6b",
-        color: "#fff",
-        padding: "8px 16px",
-        fontFamily: "monospace",
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
-        justifyContent: "flex-start", // align left
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          backgroundColor: "#f5e1c9",
+          borderBottom: "2px solid #d9bfae",
+          padding: "12px 10px",
+          zIndex: 1000,        // بالاتر از سایر المان‌ها
+          fontWeight: "bold",
+          fontSize: "16px",
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
