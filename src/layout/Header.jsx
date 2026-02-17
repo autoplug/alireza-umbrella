@@ -37,7 +37,7 @@ export default function Header() {
 
   useEffect(() => {
     updateTime();
-    const interval = setInterval(updateTime, 30000);
+    const interval = setInterval(updateTime, 10000);
 
     const listener = () => updateTime();
     window.addEventListener("storage", listener);
