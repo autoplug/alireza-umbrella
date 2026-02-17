@@ -58,6 +58,12 @@ export default function ActiveOrders() {
     return () => clearInterval(interval);
   }, []);
 
+  // Total active orders
+  const totalOrders = Object.values(ordersByMarket).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  );
+
   // Format Amount with BTC special case
   const formatAmount = (amount, market) => {
     if (amount == null) return "";
@@ -132,8 +138,10 @@ export default function ActiveOrders() {
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      {/* Header 10px from left */}
-      <h3 style={{ marginLeft: "10px" }}>Active Orders</h3>
+      {/* Header 10px from left with order count inside [ ] */}
+      <h3 style={{ marginLeft: "10px" }}>
+        Active Orders [{totalOrders}]
+      </h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
         <p style={{ marginLeft: "20px" }}>No active orders.</p>
