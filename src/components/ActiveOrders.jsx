@@ -46,8 +46,8 @@ const MarketIcon = ({ market }) => {
   const quoteImg = logoMap[quote] || "";
 
   return (
-    <div style={{ position: "relative", width: "28px", height: "22px" }}>
-      {/* Quote behind, slightly lower and right */}
+    <div style={{ position: "relative", width: "28px", height: "20px" }}>
+      {/* Quote behind, slightly right but same top */}
       <img
         src={quoteImg}
         alt=""
@@ -56,8 +56,8 @@ const MarketIcon = ({ market }) => {
           height: "20px",
           borderRadius: "50%",
           position: "absolute",
-          left: 6,
-          top: 2,
+          left: 6,   // overlap behind
+          top: 0,    // same vertical as base
           zIndex: 0,
         }}
       />
