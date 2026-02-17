@@ -55,13 +55,13 @@ export default function Header() {
       style={{
         backgroundColor: "#222",
         color: "#fff",
-        padding: "8px 16px",
+        padding: "8px 1px",
         fontFamily: "monospace",
         textAlign: "center",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: "8px",
+        gap: "12px",
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
