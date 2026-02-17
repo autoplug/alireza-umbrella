@@ -14,11 +14,8 @@ export default function ActiveOrders() {
 
     try {
       const allOrders = JSON.parse(cached);
-
-      // Filter only active orders
       const activeOrders = allOrders.filter((o) => o.status === "Active");
 
-      // Group by market
       const grouped = activeOrders.reduce((acc, order) => {
         const key = order.market || "Unknown";
         if (!acc[key]) acc[key] = [];
@@ -39,11 +36,11 @@ export default function ActiveOrders() {
   }, []);
 
   return (
-    <div style={{ padding: "16px", maxHeight: "80vh", overflowY: "auto" }}>
-      <h3>Active Orders</h3>
+    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+      <h3 style={{ marginLeft: "10px" }}>Active Orders</h3>
 
       {Object.keys(ordersByMarket).length === 0 ? (
-        <p>No active orders.</p>
+        <p style={{ marginLeft: "10px" }}>No active orders.</p>
       ) : (
         Object.entries(ordersByMarket).map(([market, orders]) => (
           <div key={market} style={{ marginBottom: "24px" }}>
@@ -53,10 +50,11 @@ export default function ActiveOrders() {
             {/* Table for active orders */}
             <table
               style={{
-                width: "100%",
+                width: "100%", // full width
                 borderCollapse: "collapse",
                 backgroundColor: "#f9f9f9",
                 color: "#000",
+                margin: 0, // remove any margin
               }}
             >
               <thead>
