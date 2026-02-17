@@ -60,7 +60,7 @@ export default function Header() {
           justifyContent: "flex-start",
           position: "fixed",
           fontFamily : "monospace",
-          top: 0,
+          top: 1,
           left: 0,
           height: "40px",
           width: "100%",
