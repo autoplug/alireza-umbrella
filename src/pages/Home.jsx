@@ -9,6 +9,9 @@ export default function Home() {
       <WalletList />
       <ActiveOrders />
       <TodayTrades />
+
+      {/* Spacer at the bottom to avoid overlapping with bottom menu */}
+      <div style={{ height: "60px" }}></div>
     </div>
   );
 }
