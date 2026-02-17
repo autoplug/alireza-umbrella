@@ -54,6 +54,7 @@ export default function Header() {
     <div
         style={{
           position: "fixed",
+          fontFamily : "monospace",
           top: 0,
           left: 0,
           height: "40px",
@@ -66,7 +67,7 @@ export default function Header() {
       }}
     >
       <FontAwesomeIcon icon={faCircleCheck} style={{ color }} />
-      <span>Last update: {text}</span>
+      <span> Last update: {text}</span>
     </div>
   );
 }
