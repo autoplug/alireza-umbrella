@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ActiveOrders() {
-  const [ordersByPair, setOrdersByPair] = useState({});
+  const [ordersByMarket, setOrdersByMarket] = useState({});
 
   const loadOrdersFromCache = () => {
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
     if (!cached) {
-      setOrdersByPair({});
+      setOrdersByMarket({});
       return;
     }
 
@@ -19,24 +19,23 @@ export default function ActiveOrders() {
       // Filter orders with Status = "Active"
       const activeOrders = allOrders.filter((o) => o.status === "Active");
 
-      // Group by pair or symbol
+      // Group by market
       const grouped = activeOrders.reduce((acc, order) => {
-        const key = order.pair || order.symbol || "Unknown";
+        const key = order.market || "Unknown";
         if (!acc[key]) acc[key] = [];
         acc[key].push(order);
         return acc;
       }, {});
 
-      setOrdersByPair(grouped);
+      setOrdersByMarket(grouped);
     } catch {
-      setOrdersByPair({});
+      setOrdersByMarket({});
     }
   };
 
   useEffect(() => {
     loadOrdersFromCache();
 
-    // Optional: refresh every 30s
     const interval = setInterval(loadOrdersFromCache, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -44,25 +43,58 @@ export default function ActiveOrders() {
   return (
     <div style={{ padding: "16px" }}>
       <h2>Active Orders</h2>
-      {Object.keys(ordersByPair).length === 0 ? (
+
+      {Object.keys(ordersByMarket).length === 0 ? (
         <p>No active orders.</p>
       ) : (
-        Object.entries(ordersByPair).map(([pair, orders]) => (
-          <div key={pair} style={{ marginBottom: "16px" }}>
-            {/* Currency title */}
-            <h4 style={{ marginBottom: "8px" }}>{pair}</h4>
+        Object.entries(ordersByMarket).map(([market, orders]) => (
+          <div key={market} style={{ marginBottom: "24px" }}>
+            {/* Market title */}
+            <h4 style={{ marginBottom: "8px" }}>{market}</h4>
 
-            {/* List of orders for this pair */}
-            <ul>
-              {orders.map((order) => (
-                <li key={order.id}>
-                  {order.amount} @ {order.price} — {order.status}
-                </li>
-              ))}
-            </ul>
+            {/* Table for orders */}
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                backgroundColor: "#1e1e1e",
+                color: "#fff",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th style={thStyle}>Amount</th>
+                  <th style={thStyle}>Price</th>
+                  <th style={thStyle}>Status</th>
+                  <th style={thStyle}>Order ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td style={tdStyle}>{order.amount}</td>
+                    <td style={tdStyle}>{order.price}</td>
+                    <td style={tdStyle}>{order.status}</td>
+                    <td style={tdStyle}>{order.id}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ))
       )}
     </div>
   );
 }
+
+// Common styles
+const thStyle = {
+  borderBottom: "1px solid #555",
+  textAlign: "left",
+  padding: "8px",
+};
+
+const tdStyle = {
+  borderBottom: "1px solid #333",
+  padding: "8px",
+};
