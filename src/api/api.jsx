@@ -9,14 +9,14 @@ const CACHE_KEYS = {
   wallets: "WALLETS_CACHE",
   orders: "ORDERS_CACHE",
   markets: "MARKETS_CACHE",
-  trades: "TRADES_CACHE", // ✅ NEW
+  trades: "TRADES_CACHE",
 };
 
 const CACHE_TIME_KEYS = {
   wallets: "WALLETS_CACHE_TIME",
   orders: "ORDERS_CACHE_TIME",
   markets: "MARKETS_CACHE_TIME",
-  trades: "TRADES_CACHE_TIME", // ✅ NEW
+  trades: "TRADES_CACHE_TIME",
 };
 
 // ---------------- CACHE HELPERS ----------------
@@ -73,7 +73,6 @@ export const fetchData = async (type) => {
       url = `${WORKER_URL}/market/stats`;
     }
 
-    // ✅ NEW ENDPOINT
     if (type === "trades") {
       const token = localStorage.getItem("NOBITEX_TOKEN");
       if (token) headers.Authorization = `Token ${token}`;
@@ -87,6 +86,7 @@ export const fetchData = async (type) => {
 
     let data;
 
+    // ---------------- DATA HANDLING ----------------
     if (type === "wallets") {
       data = response.data?.wallets || [];
     }
@@ -96,10 +96,16 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
-      data = response.data?.stats || {};
+      const stats = response.data?.stats || {};
+      // Convert to key-value: market -> latest price
+      data = {};
+      Object.entries(stats).forEach(([market, value]) => {
+        if (value && value.latest != null) {
+          data[market] = value.latest;
+        }
+      });
     }
 
-    // ✅ NEW DATA HANDLING
     if (type === "trades") {
       data = response.data?.trades || [];
     }
@@ -129,6 +135,7 @@ export const fetchAllData = async () => {
 
   for (const type of ["wallets", "orders", "markets", "trades"]) {
     try {
+      // Add small delay to prevent server overload
       await new Promise((resolve) => setTimeout(resolve, 1000));
       results[type] = await fetchData(type);
     } catch (err) {
