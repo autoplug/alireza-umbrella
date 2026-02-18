@@ -97,13 +97,12 @@ export const fetchData = async (type) => {
 
     if (type === "markets") {
       const stats = response.data?.stats || {};
-      // Convert to key-value: market -> latest price
-      data = {};
-      Object.entries(stats).forEach(([market, value]) => {
-        if (value && value.latest != null) {
-          data[market] = value.latest;
-        }
-      });
+      // Convert stats to key-value: market -> latest price as number
+      data = Object.fromEntries(
+        Object.entries(stats)
+          .filter(([_, value]) => value && value.latest != null)
+          .map(([market, value]) => [market, Number(value.latest)])
+      );
     }
 
     if (type === "trades") {
