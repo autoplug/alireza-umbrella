@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TitleBar from "./TitleBar";
 
 // Import local JSON (static, build-time)
-import localOrders from "../assets/localOrders.json";
+import localOrders from "../assets/nobitex.json";
 
 // Apply fee to each order
 const applyFee = (orders) => {
