@@ -70,9 +70,8 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
-      const token = localStorage.getItem("NOBITEX_TOKEN");
-      if (token) headers.Authorization = `Token ${token}`;
-      url = `${WORKER_URL}/market/stats`;
+      let s = "https://nobitex2.alireza-b83.workers.dev";
+      url = `${s}/market/stats`;
     }
 
     if (type === "trades") {
