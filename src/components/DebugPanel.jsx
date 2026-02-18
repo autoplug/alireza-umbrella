@@ -14,7 +14,7 @@ export default function DebugPanel() {
         const res = await fetch(WORKER_URL);
         if (!res.ok) throw new Error(`Network response was not ok: ${res.status}`);
         //const data = await res.json();
-        setMarketData(res);
+        setMarketData(res.status);
       } catch (err) {
         setError(err.message);
       } finally {
