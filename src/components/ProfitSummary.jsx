@@ -1,6 +1,6 @@
 import React from "react";
 
-// Helper: apply fee to each order
+// Apply fee to each order
 const applyFee = (orders) => {
   return orders.map((order) => {
     const amt = Number(order.amount);
@@ -18,10 +18,11 @@ const applyFee = (orders) => {
   });
 };
 
-// Component to show profit per market
+// ProfitSummary component
+// Props:
+// orders: array of orders with fields {market, type, amount, price, fee}
+// currentPrices: { "BTC-RLS": 1450000, "ETH-RLS": 50000, ... }
 export default function ProfitSummary({ orders, currentPrices }) {
-  // currentPrices: { "BTC-RLS": 1450000, "ETH-RLS": 50000, ... }
-
   // Group orders by market
   const ordersByMarket = {};
   orders.forEach((order) => {
@@ -31,6 +32,7 @@ export default function ProfitSummary({ orders, currentPrices }) {
   });
 
   const tableData = Object.entries(ordersByMarket)
+    .sort(([a], [b]) => a.localeCompare(b)) // Sort markets alphabetically
     .map(([market, marketOrders]) => {
       const ordersWithFee = applyFee(marketOrders);
 
@@ -41,7 +43,7 @@ export default function ProfitSummary({ orders, currentPrices }) {
 
       ordersWithFee.forEach((order) => {
         const amt = Number(order.amount);
-        const price = Number(order.feePrice);
+        const price = Number(order.feePrice); // Use fee-adjusted price
 
         if (order.type.toLowerCase() === "buy") {
           totalBuyValue += amt * price;
@@ -82,9 +84,15 @@ export default function ProfitSummary({ orders, currentPrices }) {
           <tr key={index} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9" }}>
             <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.market}</td>
             <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.remainingAmount.toLocaleString()}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.totalBuyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.totalSold.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px", fontWeight: "bold" }}>{row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+              {row.totalBuyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+              {row.totalSold.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style={{ border: "1px solid #ccc", padding: "8px", fontWeight: "bold" }}>
+              {row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
           </tr>
         ))}
       </tbody>
