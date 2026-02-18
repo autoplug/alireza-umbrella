@@ -2,43 +2,64 @@ import React, { useEffect, useState } from "react";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
-const ORDERS_CACHE_KEY = "ORDERS_CACHE";
+const TRADES_CACHE_KEY = "TRADES_CACHE";
+
+// Helper function to check if a timestamp is from today in Tehran timezone
+const isTodayTehran = (timestamp) => {
+  if (!timestamp) return false;
+
+  const dateUtc = new Date(timestamp); // timestamp from API
+  // Convert to Tehran time (UTC+3:30)
+  const dateTehran = new Date(dateUtc.getTime() + 3.5 * 60 * 60 * 1000);
+
+  const nowTehran = new Date();
+  const nowTehranOffset = new Date(nowTehran.getTime() + 3.5 * 60 * 60 * 1000);
+
+  // Get today's date in Tehran
+  const year = nowTehranOffset.getUTCFullYear();
+  const month = nowTehranOffset.getUTCMonth();
+  const day = nowTehranOffset.getUTCDate();
+
+  // Start of today in Tehran (00:00)
+  const todayStart = new Date(Date.UTC(year, month, day, 0, 0, 0));
+
+  return dateTehran >= todayStart;
+};
 
 export default function TodayTrades() {
-  const [orders, setOrders] = useState([]);
+  const [trades, setTrades] = useState([]);
 
-  const loadOrders = () => {
-    const cached = localStorage.getItem(ORDERS_CACHE_KEY);
+  // Load trades from localStorage and filter by Tehran today
+  const loadTrades = () => {
+    const cached = localStorage.getItem(TRADES_CACHE_KEY);
     if (!cached) {
-      setOrders([]);
+      setTrades([]);
       return;
     }
 
     try {
-      const allOrders = JSON.parse(cached);
-      const todayStr = new Date().toISOString().slice(0, 10);
+      const allTrades = JSON.parse(cached);
 
-      // Filter Done orders with created_at today
-      const doneToday = allOrders.filter(
-        (o) => o.status === "Done" && o.created_at && o.created_at.slice(0, 10) === todayStr
-      );
+      // Filter trades with timestamp >= 00:00 Tehran today
+      const todayTrades = allTrades.filter((t) => isTodayTehran(t.timestamp));
 
-      setOrders(doneToday);
+      setTrades(todayTrades);
     } catch {
-      setOrders([]);
+      setTrades([]);
     }
   };
 
   useEffect(() => {
-    loadOrders();
-    const interval = setInterval(loadOrders, 30000);
+    loadTrades();
+    // Update trades every 30 seconds
+    const interval = setInterval(loadTrades, 30000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div>
-      <TitleBar title="Today Trades" count={orders.length} />
-      <TableOrder orders={orders} />
+      <TitleBar title="Today Trades" count={trades.length} />
+      <TableOrder orders={trades} />
     </div>
   );
 }
