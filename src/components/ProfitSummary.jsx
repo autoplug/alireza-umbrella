@@ -84,7 +84,7 @@ export default function ProfitSummary() {
         });
 
         const remainingAmount = totalBuyAmount - totalSellAmount;
-        const currentPrice = Number(storedMarkets[market] || 0);
+        const currentPrice = Number(storedMarkets[market.toLowerCase()] || 0);
         const totalSold = totalSellValue + remainingAmount * currentPrice;
         const profit = totalSold - totalBuyValue;
 
