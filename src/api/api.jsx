@@ -66,7 +66,7 @@ export const fetchData = async (type) => {
     if (type === "orders") {
       const token = localStorage.getItem("NOBITEX_TOKEN");
       if (token) headers.Authorization = `Token ${token}`;
-      url = `${WORKER_URL}/market/orders/list?details=2&status=all`;
+      url = `${WORKER_URL}/market/orders/list&details=2&status=all`;
     }
 
     if (type === "markets") {
