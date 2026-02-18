@@ -1,3 +1,24 @@
+// src/api/utils.js
+
+// ---------------- APPLY FEE ----------------
+export const applyFee = (orders) => {
+  return orders.map((order) => {
+    const isBuy = order.type === "buy";
+    let fee = 0;
+
+    if (isBuy) {
+      fee = Number(order.fee) / Number(order.amount);
+      order.feePrice = Number(order.price) * (1 + fee);
+    } else {
+      fee = Number(order.fee) / Number(order.totalPrice);
+      order.feePrice = Number(order.price) * (1 - fee);
+    }
+
+    return order;
+  });
+};
+
+// ---------------- PROCESS SELL ----------------
 export const processSell = (sellOrder, buyOrders) => {
   let sellAmount = Number(sellOrder.amount);
 
@@ -24,7 +45,7 @@ export const processSell = (sellOrder, buyOrders) => {
       price: buy.feePrice,
       used_amount: take,
     });
-    buy.amount -= take; // decrease remaining buy amount
+    buy.amount -= take;
     amount95 -= take;
   }
 
@@ -44,12 +65,10 @@ export const processSell = (sellOrder, buyOrders) => {
   return used;
 };
 
-
-
-
+// ---------------- WEIGHTED AVERAGE PRICE ----------------
 export const weightedAveragePrice = (used) => {
-  let totalValue = 0;   // sum(price * used_amount)
-  let totalAmount = 0;  // sum(used_amount)
+  let totalValue = 0;
+  let totalAmount = 0;
 
   for (const item of used) {
     totalValue += Number(item.price) * Number(item.used_amount);
@@ -61,31 +80,13 @@ export const weightedAveragePrice = (used) => {
   return totalValue / totalAmount;
 };
 
-
-export const applyFee = (orders) => {
-  return orders.map((order) => {
-    const isBuy = order.type === "buy";
-    let fee = 0;
-
-    if (isBuy) {
-      fee = Number(order.fee) / Number(order.amount);
-      order.feePrice = Number(order.price) * (1 + fee);
-    } else {
-      fee = Number(order.fee) / Number(order.totalPrice);
-      order.feePrice = Number(order.price) * (1 - fee);
-    }
-
-    return order;
-  });
-};
-
-
+// ---------------- PREPARE ORDERS FILTERED ----------------
 export const prepareOrdersFiltered = (orders, market = null) => {
   const buyOrders = [];
   const sellOrders = [];
 
   for (const order of orders) {
-    // If a market filter is set and order does not match, skip it
+    // Filter by market if provided
     if (market && order.market !== market) continue;
 
     // Convert numeric fields
