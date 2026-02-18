@@ -1,35 +1,45 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DebugPanel() {
-  const [markets, setMarkets] = useState({});
+  const [marketData, setMarketData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const storedMarkets = localStorage.getItem("MARKETS_CACHE");
-    if (storedMarkets) {
+    const fetchMarket = async () => {
       try {
-        setMarkets(JSON.parse(storedMarkets));
-      } catch (e) {
-        console.error("Failed to parse MARKETS_CACHE:", e);
-        setMarkets({});
+        // URL Worker Cloudflare
+        const WORKER_URL = "https://nobitex.alireza-b83.workers.dev/market/stats";
+
+        const res = await fetch(WORKER_URL);
+        if (!res.ok) throw new Error(`Network response was not ok: ${res.status}`);
+        const data = await res.json();
+        setMarketData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
+    fetchMarket();
   }, []);
 
+  if (loading) return <p>Loading market data...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <div style={{ padding: "20px", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
-      <h3 style={{ marginBottom: "10px" }}>Debug Dashboard: MARKETS_CACHE</h3>
+    <div style={{ padding: "20px" }}>
+      <h2>Market Data Debug (Cloudflare Worker)</h2>
       <pre
         style={{
-          backgroundColor: "#222",
-          color: "#0f0",
+          background: "#f0f0f0",
           padding: "10px",
-          borderRadius: "4px",
+          borderRadius: "6px",
           overflowX: "auto",
-          fontFamily: "monospace",
-          fontSize: "14px",
         }}
       >
-        {JSON.stringify(markets, null, 2)}
+        {JSON.stringify(marketData, null, 2)}
       </pre>
     </div>
   );
