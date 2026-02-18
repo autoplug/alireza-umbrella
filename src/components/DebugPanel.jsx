@@ -1,48 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-export default function WorkerMarketDebugPanel() {
-  const [data, setData] = useState(null);
+export default function DebugPanel() {
+  const [markets, setMarkets] = useState(null);
   const [error, setError] = useState("");
 
-  const loadMarket = async () => {
+  useEffect(() => {
     try {
-      const response = await fetch(
-        "https://nobitex3.alireza-b83.workers.dev/market/stats",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // اگر نیاز باشد می‌توان Authorization اضافه کرد
-            // "Authorization": "Token YOUR_TOKEN"
-          },
-        }
-      );
+      const stored = localStorage.getItem("MARKETS_CACHE");
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+      if (!stored) {
+        setError("No cached market data found.");
+        return;
       }
 
-      const json = await response.json();
-      setData(json);
+      const parsed = JSON.parse(stored);
+
+      // فقط دو مورد اول برای دیباگ سبک
+      const firstTwo = Object.fromEntries(
+        Object.entries(parsed).slice(0, 2)
+      );
+
+      setMarkets(firstTwo);
     } catch (err) {
       console.error(err);
-      setError(err.message || "Failed to fetch market data");
+      setError("Failed to parse cached data.");
     }
-  };
-
-  useEffect(() => {
-    loadMarket();
   }, []);
 
   return (
     <div style={{ padding: "20px", fontFamily: "monospace" }}>
-      <h2>Worker Market Debug Panel</h2>
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {data ? (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      ) : (
-        <p>Loading market data from Worker...</p>
-      )}
+      <h2>Market Cache Debug Panel</h2>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {markets ? (
+        <pre>{JSON.stringify(markets, null, 2)}</pre>
+      ) : !error ? (
+        <p>Loading cached market data...</p>
+      ) : null}
     </div>
   );
 }
