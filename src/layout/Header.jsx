@@ -21,6 +21,7 @@ const simpleTimeAgo = (timestamp) => {
 };
 
 export default function Header() {
+  const HEADER_HEIGHT = 56;
   const [lastUpdate, setLastUpdate] = useState(null);
 
   const updateTime = () => {
@@ -61,9 +62,9 @@ export default function Header() {
           justifyContent: "flex-start",
           position: "fixed",
           fontFamily : "monospace",
-          top: 1,
+          top: 0,
           left: 0,
-          height: "40px",
+          height: `calc(${HEADER_HEIGHT}px + env(safe-area-inset-top))`,
           width: "100%",
           backgroundColor: "#858585",
           borderBottom: "2px solid #707070",
