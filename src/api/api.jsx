@@ -96,17 +96,7 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
-      const stats = response.data?.stats || {};
-      data = {};
-      Object.entries(stats).forEach(([market, value]) => {
-        if (value && value.latest != null) {
-          // Convert latest to number
-          const latestNumber = Number(value.latest);
-          if (!isNaN(latestNumber)) {
-            data[market] = latestNumber;
-          }
-        }
-      });
+      data = response.data?.stats || {};
     }
     
     if (type === "trades") {
