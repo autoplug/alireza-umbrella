@@ -98,6 +98,11 @@ export const fetchData = async (type) => {
 
     if (type === "markets") {
       data = response.data?.stats || {};
+      data = Object.fromEntries(
+        Object.entries(data)
+        .filter(([_, value]) => value && value.latest != null)
+        .map(([market, value]) => [market, Number(value.latest)])
+      );
     }
     
     if (type === "trades") {
