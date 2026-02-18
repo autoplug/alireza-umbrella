@@ -9,14 +9,15 @@ const CACHE_KEYS = {
   wallets: "WALLETS_CACHE",
   orders: "ORDERS_CACHE",
   markets: "MARKETS_CACHE",
+  trades: "TRADES_CACHE", // ✅ NEW
 };
 
 const CACHE_TIME_KEYS = {
   wallets: "WALLETS_CACHE_TIME",
   orders: "ORDERS_CACHE_TIME",
   markets: "MARKETS_CACHE_TIME",
+  trades: "TRADES_CACHE_TIME", // ✅ NEW
 };
-
 
 // ---------------- CACHE HELPERS ----------------
 
@@ -40,7 +41,6 @@ const shouldFetch = (type) => {
   if (!last) return true;
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
-
 
 // ---------------- CORE FETCH ----------------
 
@@ -73,6 +73,13 @@ export const fetchData = async (type) => {
       url = `${WORKER_URL}/market/stats`;
     }
 
+    // ✅ NEW ENDPOINT
+    if (type === "trades") {
+      const token = localStorage.getItem("NOBITEX_TOKEN");
+      if (token) headers.Authorization = `Token ${token}`;
+      url = `${WORKER_URL}/market/trades/list`;
+    }
+
     const response = await axios.get(url, {
       headers,
       validateStatus: () => true,
@@ -90,6 +97,11 @@ export const fetchData = async (type) => {
 
     if (type === "markets") {
       data = response.data?.stats || {};
+    }
+
+    // ✅ NEW DATA HANDLING
+    if (type === "trades") {
+      data = response.data?.trades || [];
     }
 
     // Save cache only if valid data received
@@ -110,13 +122,12 @@ export const fetchData = async (type) => {
   }
 };
 
-
 // ---------------- FETCH ALL ----------------
 
 export const fetchAllData = async () => {
   const results = {};
 
-  for (const type of ["wallets", "orders", "markets"]) {
+  for (const type of ["wallets", "orders", "markets", "trades"]) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       results[type] = await fetchData(type);
