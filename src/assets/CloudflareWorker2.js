@@ -16,20 +16,6 @@ export default {
     try {
       const incomingUrl = new URL(request.url);
 
-      // فقط اجازه دسترسی به مسیر مارکت
-      if (!incomingUrl.pathname.startsWith("/market/stats")) {
-        return new Response(
-          JSON.stringify({ error: "Invalid endpoint" }),
-          {
-            status: 404,
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
-        );
-      }
-
       const targetUrl =
         "https://apiv2.nobitex.ir" +
         incomingUrl.pathname +
