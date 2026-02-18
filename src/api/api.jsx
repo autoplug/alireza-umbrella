@@ -45,7 +45,6 @@ const shouldFetch = (type) => {
 // ---------------- CORE FETCH ----------------
 
 export const fetchData = async (type) => {
-  localStorage.clear();
   const cached = getCache(type);
 
   // Use cache if still valid
