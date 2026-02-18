@@ -171,7 +171,7 @@ export default function TableOrder({ orders, sortBy = "time" }) {
         <p style={{ marginLeft: "20px" }}>No orders to display.</p>
       ) : (
         Object.entries(ordersByMarket)
-          .sort(([a], [b]) => a.localeCompare(b)) // 🔹 Sort markets alphabetically
+          .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
             // 🔹 Sort inside table
             const sortedOrders = [...marketOrders].sort((a, b) => {
