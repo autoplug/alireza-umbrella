@@ -70,7 +70,8 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
-      headers.Authorization = "";
+      const token = localStorage.getItem("NOBITEX_TOKEN");
+      if (token) headers.Authorization = `Token ${token}`;
       url = `${WORKER_URL}/market/stats`;
     }
 
