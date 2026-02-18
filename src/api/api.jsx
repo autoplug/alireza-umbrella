@@ -70,6 +70,7 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
+      headers.Authorization = "";
       url = `${WORKER_URL}/market/stats`;
     }
 
