@@ -1,4 +1,5 @@
 import React from "react";
+import TitleBar from "./TitleBar"; // 🔹 استفاده از کامپوننت عنوان
 
 // Apply fee to each order
 const applyFee = (orders) => {
@@ -19,9 +20,6 @@ const applyFee = (orders) => {
 };
 
 // ProfitSummary component
-// Props:
-// orders: array of orders with fields {market, type, amount, price, fee}
-// currentPrices: { "BTC-RLS": 1450000, "ETH-RLS": 50000, ... }
 export default function ProfitSummary({ orders, currentPrices }) {
   // Group orders by market
   const ordersByMarket = {};
@@ -32,7 +30,7 @@ export default function ProfitSummary({ orders, currentPrices }) {
   });
 
   const tableData = Object.entries(ordersByMarket)
-    .sort(([a], [b]) => a.localeCompare(b)) // Sort markets alphabetically
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([market, marketOrders]) => {
       const ordersWithFee = applyFee(marketOrders);
 
@@ -43,7 +41,7 @@ export default function ProfitSummary({ orders, currentPrices }) {
 
       ordersWithFee.forEach((order) => {
         const amt = Number(order.amount);
-        const price = Number(order.feePrice); // Use fee-adjusted price
+        const price = Number(order.feePrice);
 
         if (order.type.toLowerCase() === "buy") {
           totalBuyValue += amt * price;
@@ -69,33 +67,38 @@ export default function ProfitSummary({ orders, currentPrices }) {
     });
 
   return (
-    <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
-      <thead>
-        <tr style={{ backgroundColor: "#f0f0f0" }}>
-          <th style={{ border: "1px solid #ccc", padding: "8px" }}>Market</th>
-          <th style={{ border: "1px solid #ccc", padding: "8px" }}>Remaining</th>
-          <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Buy</th>
-          <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Sold</th>
-          <th style={{ border: "1px solid #ccc", padding: "8px" }}>Profit</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tableData.map((row, index) => (
-          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9" }}>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.market}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.remainingAmount.toLocaleString()}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-              {row.totalBuyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-              {row.totalSold.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </td>
-            <td style={{ border: "1px solid #ccc", padding: "8px", fontWeight: "bold" }}>
-              {row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </td>
+    <div>
+      {/* 🔹 TitleBar استفاده شد */}
+      <TitleBar title="Profit Summary" count={tableData.length} />
+
+      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
+        <thead>
+          <tr style={{ backgroundColor: "#f0f0f0" }}>
+            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Market</th>
+            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Remaining</th>
+            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Buy</th>
+            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Sold</th>
+            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Profit</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {tableData.map((row, index) => (
+            <tr key={index} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9" }}>
+              <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.market}</td>
+              <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.remainingAmount.toLocaleString()}</td>
+              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                {row.totalBuyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                {row.totalSold.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td style={{ border: "1px solid #ccc", padding: "8px", fontWeight: "bold" }}>
+                {row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
