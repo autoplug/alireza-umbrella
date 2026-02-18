@@ -43,3 +43,66 @@ export const processSell = (sellOrder, buyOrders) => {
 
   return used;
 };
+
+
+
+
+export const weightedAveragePrice = (used) => {
+  let totalValue = 0;   // sum(price * used_amount)
+  let totalAmount = 0;  // sum(used_amount)
+
+  for (const item of used) {
+    totalValue += Number(item.price) * Number(item.used_amount);
+    totalAmount += Number(item.used_amount);
+  }
+
+  if (totalAmount === 0) return 0;
+
+  return totalValue / totalAmount;
+};
+
+
+export const applyFee = (orders) => {
+  return orders.map((order) => {
+    const isBuy = order.type === "buy";
+    let fee = 0;
+
+    if (isBuy) {
+      fee = Number(order.fee) / Number(order.amount);
+      order.feePrice = Number(order.price) * (1 + fee);
+    } else {
+      fee = Number(order.fee) / Number(order.totalPrice);
+      order.feePrice = Number(order.price) * (1 - fee);
+    }
+
+    return order;
+  });
+};
+
+
+export const prepareOrdersFiltered = (orders, market = null) => {
+  const buyOrders = [];
+  const sellOrders = [];
+
+  for (const order of orders) {
+    // If a market filter is set and order does not match, skip it
+    if (market && order.market !== market) continue;
+
+    // Convert numeric fields
+    order.amount = Number(order.amount);
+    order.price = Number(order.price);
+
+    // Separate orders by type
+    if (order.type === "buy") {
+      buyOrders.push(order);
+    } else if (order.type === "sell") {
+      sellOrders.push(order);
+    }
+  }
+
+  // Sort by created_at ascending
+  buyOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  sellOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  return { buyOrders, sellOrders };
+};
