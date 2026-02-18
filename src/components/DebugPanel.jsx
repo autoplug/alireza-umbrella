@@ -8,7 +8,6 @@ export default function DebugPanel() {
   const [trades, setTrades] = useState([]);
   const [error, setError] = useState("");
 
-  // Load all data
   const loadData = async () => {
     try {
       const walletsData = await fetchData("wallets");
@@ -16,10 +15,10 @@ export default function DebugPanel() {
       const marketsData = await fetchData("markets");
       const tradesData = await fetchData("trades");
 
-      setWallets(walletsData);
-      setOrders(ordersData);
-      setMarkets(marketsData);
-      setTrades(tradesData);
+      setWallets(walletsData.slice(0, 2));  // only first 2 rows
+      setOrders(ordersData.slice(0, 2));
+      setMarkets(Object.fromEntries(Object.entries(marketsData).slice(0, 2))); // first 2 markets
+      setTrades(tradesData.slice(0, 2));
     } catch (err) {
       console.error(err);
       setError(err.message || "Failed to load data");
