@@ -70,7 +70,7 @@ export const fetchData = async (type) => {
     }
 
     if (type === "markets") {
-      let s = "https://nobitex2.alireza-b83.workers.dev";
+      let s = "https://nobitex3.alireza-b83.workers.dev";
       url = `${s}/market/stats`;
     }
 
