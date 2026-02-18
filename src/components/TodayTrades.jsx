@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
@@ -30,7 +30,7 @@ export default function TodayTrades() {
   const [trades, setTrades] = useState([]);
 
   // Load trades from localStorage and filter by Tehran today
-  const loadTrades = () => {
+  useEffect(() => {
     const cached = localStorage.getItem(TRADES_CACHE_KEY);
     if (!cached) {
       setTrades([]);
@@ -47,14 +47,7 @@ export default function TodayTrades() {
     } catch {
       setTrades([]);
     }
-  };
-
-  useEffect(() => {
-    loadTrades();
-    // Update trades every 30 seconds
-    const interval = setInterval(loadTrades, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  }, []); // Empty dependency array → runs once on mount
 
   return (
     <div>
