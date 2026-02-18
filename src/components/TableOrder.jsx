@@ -46,7 +46,7 @@ const logoMap = {
   RLS: RLSLogo,
 };
 
-// MarketIcon component
+// Market Icon
 const MarketIcon = ({ market }) => {
   const [base, quote] = market.split("-");
   const baseImg = logoMap[base] || "";
@@ -54,7 +54,6 @@ const MarketIcon = ({ market }) => {
 
   return (
     <div style={{ position: "relative", width: "28px", height: "20px" }}>
-      {/* Quote behind, slightly right */}
       <img
         src={quoteImg}
         alt=""
@@ -68,7 +67,6 @@ const MarketIcon = ({ market }) => {
           zIndex: 0,
         }}
       />
-      {/* Base on top */}
       <img
         src={baseImg}
         alt=""
@@ -113,10 +111,10 @@ const formatPrice = (price, market) => {
       if (market.toUpperCase() === "USDT-RLS") {
         value = value / 10;
         unit = "IRT";
-      } else if (market.toUpperCase() === "BRC-RLS") {
-        value = Math.floor(value / 10000000);
-        unit = "IRM";
-      } else if (market.toUpperCase() === "BTC-RLS") {
+      } else if (
+        market.toUpperCase() === "BRC-RLS" ||
+        market.toUpperCase() === "BTC-RLS"
+      ) {
         value = Math.floor(value / 10000000);
         unit = "IRM";
       } else {
@@ -127,10 +125,12 @@ const formatPrice = (price, market) => {
     }
   }
 
-  return unit ? `${value.toLocaleString("en-US")} ${unit}` : `${value.toLocaleString("en-US")}`;
+  return unit
+    ? `${value.toLocaleString("en-US")} ${unit}`
+    : `${value.toLocaleString("en-US")}`;
 };
 
-// Render type with icon
+// Render type
 const renderType = (type) => {
   if (!type) return "";
   const isBuy = type.toLowerCase() === "buy";
@@ -144,14 +144,17 @@ const renderType = (type) => {
         gap: "6px",
       }}
     >
-      <FontAwesomeIcon icon={isBuy ? faCircleArrowUp : faCircleArrowDown} size="sm" />
+      <FontAwesomeIcon
+        icon={isBuy ? faCircleArrowUp : faCircleArrowDown}
+        size="sm"
+      />
       {type}
     </span>
   );
 };
 
-export default function TableOrder({ orders }) {
-  // Group orders by market
+export default function TableOrder({ orders, sortBy = "time" }) {
+  // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
     const key = order.market || "Unknown";
     if (!acc[key]) acc[key] = [];
@@ -166,63 +169,76 @@ export default function TableOrder({ orders }) {
       {Object.keys(ordersByMarket).length === 0 ? (
         <p style={{ marginLeft: "20px" }}>No orders to display.</p>
       ) : (
-        Object.entries(ordersByMarket).map(([market, marketOrders]) => {
-          // Sort by created_at descending
-          const sortedOrders = [...marketOrders].sort(
-            (a, b) => new Date(b.created_at || b.timestamp) - new Date(a.created_at || a.timestamp)
-          );
+        Object.entries(ordersByMarket)
+          .sort(([a], [b]) => a.localeCompare(b)) // 🔹 Sort markets alphabetically
+          .map(([market, marketOrders]) => {
+            // 🔹 Sort inside table
+            const sortedOrders = [...marketOrders].sort((a, b) => {
+              if (sortBy === "price") {
+                return Number(b.price) - Number(a.price);
+              }
 
-          return (
-            <div key={market} style={{ marginBottom: "20px" }}>
-              <h4
-                style={{
-                  marginBottom: "6px",
-                  marginLeft: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <MarketIcon market={market} />
-                {market}
-              </h4>
+              // default: time
+              return (
+                new Date(b.created_at || b.timestamp) -
+                new Date(a.created_at || a.timestamp)
+              );
+            });
 
-              <table style={tableStyle}>
-                <thead>
-                  <tr>
-                    <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
-                    <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>Amount</th>
-                    <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>Price</th>
-                    <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedOrders.map((order, index) => {
-                    rowCounter += 1;
-                    const isBuy = order.type?.toLowerCase() === "buy";
-                    const baseColor = isBuy ? "#568546" : "#c2191c";
-                    const bgColor = index % 2 === 0 ? "#ffffff" : "#f7f7f7";
+            return (
+              <div key={market} style={{ marginBottom: "20px" }}>
+                <h4
+                  style={{
+                    marginBottom: "6px",
+                    marginLeft: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <MarketIcon market={market} />
+                  {market}
+                </h4>
 
-                    return (
-                      <tr key={rowCounter} style={{ backgroundColor: bgColor }}>
-                        <td style={{ ...tdStyle, color: baseColor }}>{rowCounter}</td>
-                        <td style={{ ...tdStyle, color: baseColor }}>
-                          {formatAmount(order.amount, order.market)}
-                        </td>
-                        <td style={{ ...tdStyle, color: baseColor }}>
-                          {formatPrice(order.price, order.market)}
-                        </td>
-                        <td style={{ ...tdStyle, color: baseColor }}>
-                          {renderType(order.type)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          );
-        })
+                <table style={tableStyle}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>Amount</th>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>Price</th>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedOrders.map((order, index) => {
+                      rowCounter += 1;
+
+                      const isBuy = order.type?.toLowerCase() === "buy";
+                      const baseColor = isBuy ? "#568546" : "#c2191c";
+                      const bgColor = index % 2 === 0 ? "#ffffff" : "#f3f3f3";
+
+                      return (
+                        <tr key={rowCounter} style={{ backgroundColor: bgColor }}>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {rowCounter}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {formatAmount(order.amount, order.market)}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {formatPrice(order.price, order.market)}
+                          </td>
+                          <td style={{ ...tdStyle, color: baseColor }}>
+                            {renderType(order.type)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })
       )}
     </div>
   );
