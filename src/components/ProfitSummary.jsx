@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TitleBar from "./TitleBar";
 
 // Import local JSON (static, build-time)
-import localOrders from "../assets/nobitex.json";
+import localOrders from "../assets/localOrders.json";
 
 // Apply fee to each order
 const applyFee = (orders) => {
@@ -43,7 +43,10 @@ export default function ProfitSummary() {
     const storedMarkets = JSON.parse(localStorage.getItem("MARKETS_CACHE") || "{}");
 
     // Combine both sources: localStorage + imported JSON
-    const combinedOrders = [...storedOrders, ...localOrders];
+    let combinedOrders = [...storedOrders, ...localOrders];
+
+    // Filter only orders with status "Done"
+    combinedOrders = combinedOrders.filter((o) => o.status === "Done");
 
     // Remove duplicates
     const uniqueOrders = removeDuplicates(combinedOrders);
