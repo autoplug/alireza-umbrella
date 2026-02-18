@@ -7,7 +7,7 @@ export default function WorkerMarketDebugPanel() {
   const loadMarket = async () => {
     try {
       const response = await fetch(
-        "https://nobitex.alireza-b83.workers.dev/market/stats",
+        "https://nobitex2.alireza-b83.workers.dev/market/stats",
         {
           method: "GET",
           headers: {
