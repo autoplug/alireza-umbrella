@@ -36,6 +36,7 @@ const tdStyle = {
   borderBottom: "1px solid #ddd",
   padding: "6px 20px",
   fontSize: "12px",
+  fontFamily: "'Courier New', Courier, monospace",
 };
 
 // Logos mapping
