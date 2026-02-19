@@ -48,7 +48,8 @@ const formatAmount = (amount, market) => {
 
   if (market && market.toUpperCase().startsWith("USD")) {
     const newAmount = Number(amount) * 1000000;
-    return "USD " + newAmount.toLocaleString("en-US");
+    // Display USD with 2 decimal places
+    return "USD " + newAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   return Number(amount).toLocaleString("en-US");
