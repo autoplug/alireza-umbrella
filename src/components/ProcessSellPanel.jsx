@@ -43,7 +43,7 @@ export default function ProcessSellPanel() {
     const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
     
     setSellTable(processedSells);
-    setBuyTable(updatedBuys); // for React re-render
+    setBuyTable(updatedBuys.map(o => ({ ...o })));
 
     
     
