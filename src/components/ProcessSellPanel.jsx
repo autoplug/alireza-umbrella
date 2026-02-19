@@ -60,6 +60,7 @@ export default function ProcessSellPanel() {
           display: "flex",
           alignItems: "center",
           gap: "8px",
+          marginTop : "20px",
         }}
       >
         Process Sell
