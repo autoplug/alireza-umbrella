@@ -124,7 +124,7 @@ export default function TableOrder({ orders, sortBy = "time" }) {
   let rowCounter = 0;
 
   return (
-    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+    <div>
       {Object.keys(ordersByMarket).length === 0 ? (
         <p style={{ marginLeft: "20px" }}>No orders to display.</p>
       ) : (
