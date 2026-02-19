@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { processAllSells, removeDuplicates } from "../api/utils";
+import {
+  processAllSells,
+  removeDuplicates,
+  applyFee,
+} from "../api/utils";
+
 import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
@@ -9,12 +14,12 @@ const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 export default function ProcessSellPanel() {
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
+  const [originalBuys, setOriginalBuys] = useState([]); // Keep buy amounts persistent
 
   useEffect(() => {
-    // 🔹 Load cached orders from localStorage
+    // 🔹 Load cached orders
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
     let localData = [];
-
     if (cached) {
       try {
         localData = JSON.parse(cached);
@@ -24,34 +29,28 @@ export default function ProcessSellPanel() {
       }
     }
 
-    // 🔹 Combine localStorage orders + static JSON file
-    let combinedOrders = [...localData, ...localOrders];
-
-    // 🔹 Remove duplicates
-    combinedOrders = removeDuplicates(combinedOrders);
+    // 🔹 Combine localStorage + JSON file and remove duplicates
+    let combinedOrders = removeDuplicates([...localData, ...localOrders]);
 
     // 🔹 Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
 
-    // 🔹 Separate sell and buy orders
-    const originalBuyOrders = doneOrders.filter(
-      (o) => o.type?.toLowerCase() === "buy"
-    );
-    const originalSellOrders = doneOrders.filter(
-      (o) => o.type?.toLowerCase() === "sell"
-    );
+    // 🔹 Separate buy and sell orders (copy to avoid mutation)
+    const buyOrders = doneOrders
+      .filter((o) => o.type?.toLowerCase() === "buy")
+      .map((o) => ({ ...o }));
+    const sellOrders = doneOrders
+      .filter((o) => o.type?.toLowerCase() === "sell")
+      .map((o) => ({ ...o }));
 
-    // 🔹 Deep copy to avoid mutation issues
-    const buyOrders = originalBuyOrders.map((o) => ({ ...o }));
-    const sellOrders = originalSellOrders.map((o) => ({ ...o }));
+    // 🔹 Keep original buys in state
+    setOriginalBuys(buyOrders.map((b) => ({ ...b })));
 
-    // 🔹 Process all sells against buys (fees and allocations applied)
+    // 🔹 Apply fees and process all sells
     const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
 
-    // 🔹 Update React state
     setSellTable(processedSells);
     setBuyTable(updatedBuys);
-    
     
     
     
