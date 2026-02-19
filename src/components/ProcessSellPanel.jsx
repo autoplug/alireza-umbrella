@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { processSell, removeDuplicates } from "../api/utils";
 import localOrders from "../assets/nobitex.json"; // static JSON file
 import TableOrder from "./TableOrder"; // import the table component
+import TitleBar from "./TitleBar"; // import TitleBar
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE"; // localStorage key
 
@@ -67,7 +68,7 @@ export default function ProcessSellPanel() {
 
   return (
     <div>
-      <h3>Process Sell</h3>
+      <TitleBar title="Process Sell" count={tableData.length} />
       {tableData.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
