@@ -12,7 +12,7 @@ const logoMap = {
 };
 
 // ---------------- Market Icon Component ----------------
-const MarketIcon = ({ market }) => {
+export default const MarketIcon = ({ market }) => {
   const [base, quote] = (market || "Unknown-Unknown").split("-");
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
