@@ -37,9 +37,6 @@ export default function ProcessSellPanel() {
 
     // Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
-    
-    // Apply Commision
-    doneOrders = applyFee(doneOrders)
 
     // Sort buy & sell orders
     const sellOrders = doneOrders
