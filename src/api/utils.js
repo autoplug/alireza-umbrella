@@ -107,3 +107,15 @@ export const prepareOrdersFiltered = (orders, market = null) => {
 
   return { buyOrders, sellOrders };
 };
+
+// ---------------- REMOVE DUPLICATE ----------------
+const removeDuplicates = (orders) => {
+  const seen = new Set();
+  return orders.filter((o) => {
+    const key = o.id || o.timestamp || JSON.stringify(o);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
