@@ -23,6 +23,7 @@ const tableStyle = {
   backgroundColor: "#f9f9f9",
   margin: 0,
   fontWeight: "bold",
+  marginBottom : "10px",
 };
 
 const thStyle = {
@@ -192,7 +193,7 @@ export default function TableOrder({ orders, sortBy = "time" }) {
                   style={{
                     fontSize: "14px",
                     fontWeight: "bold",
-                    marginBottom: "20px",
+                    marginBottom: "5px",
                     marginLeft: "20px",
                     display: "flex",
                     alignItems: "center",
