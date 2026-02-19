@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  processAllSells,
-  removeDuplicates,
-} from "../api/utils";
-
+import { processAllSells, removeDuplicates } from "../api/utils";
 import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
@@ -13,8 +9,9 @@ const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 export default function ProcessSellPanel() {
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
-  
+
   useEffect(() => {
+    // 🔹 Load cached orders from localStorage
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
     let localData = [];
 
@@ -27,25 +24,33 @@ export default function ProcessSellPanel() {
       }
     }
 
-    // Combine localStorage + JSON file
+    // 🔹 Combine localStorage orders + static JSON file
     let combinedOrders = [...localData, ...localOrders];
 
-    // Remove duplicates
+    // 🔹 Remove duplicates
     combinedOrders = removeDuplicates(combinedOrders);
 
-    // Filter only completed orders
+    // 🔹 Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
 
-     // Separate buy and sell orders
-    const buyOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "buy");
-    const sellOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "sell");
+    // 🔹 Separate sell and buy orders
+    const originalBuyOrders = doneOrders.filter(
+      (o) => o.type?.toLowerCase() === "buy"
+    );
+    const originalSellOrders = doneOrders.filter(
+      (o) => o.type?.toLowerCase() === "sell"
+    );
 
+    // 🔹 Deep copy to avoid mutation issues
+    const buyOrders = originalBuyOrders.map((o) => ({ ...o }));
+    const sellOrders = originalSellOrders.map((o) => ({ ...o }));
+
+    // 🔹 Process all sells against buys (fees and allocations applied)
     const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
 
     // 🔹 Update React state
     setSellTable(processedSells);
-    setBuyTable(updatedBuys)
-    
+    setBuyTable(updatedBuys);
     
     
     
@@ -53,8 +58,7 @@ export default function ProcessSellPanel() {
   }, []);
 
   return (
-    <div>
-
+    <div style={{ width: "100%" }}>
       {/* Sell Orders Table */}
       <TitleBar title="Process Sell" count={sellTable.length} />
       {sellTable.length === 0 ? (
@@ -72,7 +76,6 @@ export default function ProcessSellPanel() {
           <TableOrder orders={buyTable} sortBy="price" />
         )}
       </div>
-
     </div>
   );
 }
