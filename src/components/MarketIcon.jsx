@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BTCLogo from "../assets/logos/btc.PNG";
 import ETHLogo from "../assets/logos/eth.PNG";
 import USDTLogo from "../assets/logos/usdt.PNG";
@@ -13,30 +13,31 @@ const logoMap = {
 };
 
 export default function MarketIcon({ market, size = "normal" }) {
-  // Split market string into base and quote assets
-  const [base, quote] = market.split("-");
+  const spanRef = useRef(null);
+  const [fontPx, setFontPx] = useState(14); // default fallback
 
-  // Show quote logo only if different from base
+  // Read parent's computed font size on mount
+  useEffect(() => {
+    if (spanRef.current) {
+      const style = window.getComputedStyle(spanRef.current);
+      setFontPx(parseFloat(style.fontSize)); // in pixels
+    }
+  }, []);
+
+  const [base, quote] = market.split("-");
   const showQuote = !!quote && quote !== base;
 
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
-  // Define icon sizes based on "size" prop
-  const iconSizes = {
-    small: 16,
-    normal: 20,
-    large: 28,
-  };
-
-  const iconHeight = iconSizes[size] || iconSizes.normal;
-  const iconWidth = iconHeight * 1.4; // proportion for overlapping
+  // Icon scales based on fontPx
+  const iconHeight = fontPx + 8;       // icons slightly larger than text
+  const iconWidth = iconHeight * 1.4;  // overlap proportion
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
       {/* Logos container */}
       <div style={{ position: "relative", width: iconWidth, height: iconHeight }}>
-        {/* Quote logo */}
         {showQuote && (
           <img
             src={quoteImg}
@@ -52,7 +53,6 @@ export default function MarketIcon({ market, size = "normal" }) {
             }}
           />
         )}
-        {/* Base logo */}
         {baseImg && (
           <img
             src={baseImg}
@@ -70,11 +70,17 @@ export default function MarketIcon({ market, size = "normal" }) {
         )}
       </div>
 
-      {/* Market name (always displayed, font controlled externally) */}
+      {/* Market name: inherit font family and size */}
       <span
+        ref={spanRef}
         style={{
+          fontWeight: "bold",
+          fontSize: "inherit",
+          fontFamily: "inherit",
           whiteSpace: "nowrap",
           overflow: "hidden",
+          textOverflow: "ellipsis",
+          maxWidth: 120,
         }}
       >
         {market}
