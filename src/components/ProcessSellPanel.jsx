@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  applyFee,
   processSell,
   removeDuplicates,
   weightedAveragePrice,
@@ -39,7 +40,7 @@ export default function ProcessSellPanel() {
     
     // Apply Commision
     doneOrders.forEach(o => {
-      o.feePrice = applyFeePrice(o);
+      o.feePrice = applyFee(o);
     });
 
     // Sort buy & sell orders
