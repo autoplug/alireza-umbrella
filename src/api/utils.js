@@ -1,83 +1,73 @@
 
 
 // ---------------- APPLY FEE ----------------
-export const applyFee = (orders) =>
-  orders.map((order) => {
-    const newOrder = { ...order }; // avoid mutating original
-    const amt = Number(newOrder.amount) || 0;
-    const price = Number(newOrder.price) || 0;
-    const fee = Number(newOrder.fee || 0);
+export const applyFee = (orders) => {
+  for (const order of orders) {
+    const amt = Number(order.amount);
+    const price = Number(order.price);
+    const fee = Number(order.fee || 0);
 
-    if (newOrder.type?.toLowerCase() === "buy" && amt > 0) {
-      newOrder.feePrice = price * (1 + fee / amt);
-    } else if (newOrder.type?.toLowerCase() === "sell" && amt > 0) {
+    if (order.type?.toLowerCase() === "buy") {
+      order.feePrice = price * (1 + fee / amt);
+    } else if (order.type?.toLowerCase() === "sell") {
       const totalPrice = price * amt;
-      newOrder.feePrice = totalPrice > 0 ? price * (1 - fee / totalPrice) : price;
+      order.feePrice = price * (1 - fee / totalPrice);
     }
-
-    return newOrder;
-  });
-  
+  }
+}; 
   
 // ---------------- PROCESS SELL ----------------
-export const processSellSingle = (sellOrder, buyOrders) => {
-  const sellAmount = Number(sellOrder.amount);
+export const processSellSingle = (sell, buyOrders) => {
+  const sellAmount = Number(sell.amount);
 
-  // Filter buy orders before this sell with remaining amount
   const relevantBuys = buyOrders.filter(
     (b) =>
-      new Date(b.created_at) < new Date(sellOrder.created_at) &&
-      Number(b.amount) > 0
+      new Date(b.created_at) < new Date(sell.created_at) &&
+      b.amount > 0
   );
 
-  if (!relevantBuys.length) {
-    return [];
-  }
+  if (!relevantBuys.length) return [];
 
-  let amount90 = sellAmount * 0.9; // 90% from lowest price buys
-  let amount10 = sellAmount * 0.1; // 10% from highest price buys
+  let amount90 = sellAmount * 0.9;
+  let amount10 = sellAmount * 0.1;
 
   const used = [];
 
-  // ===== 90% from lowest price buys =====
-  const lowestBuys = relevantBuys.sort(
-    (a, b) => Number(a.price) - Number(b.price)
+  // 90% from lowest price
+  const lowest = [...relevantBuys].sort(
+    (a, b) => a.feePrice - b.feePrice
   );
 
-  for (const buy of lowestBuys) {
+  for (const buy of lowest) {
     if (amount90 <= 0) break;
 
-    const take = Math.min(amount90, Number(buy.amount));
+    const take = Math.min(amount90, buy.amount);
 
     used.push({
-      price: Number(buy.feePrice),
+      price: buy.feePrice,
       used_amount: take,
     });
 
-    // 🔥 directly modify original buyOrders
-    buy.amount = Number(buy.amount) - take;
-
+    buy.amount -= take; // 🔥 mutate original array
     amount90 -= take;
   }
 
-  // ===== 10% from highest price buys =====
-  const highestBuys = relevantBuys.sort(
-    (a, b) => Number(b.price) - Number(a.price)
+  // 10% from highest price
+  const highest = [...relevantBuys].sort(
+    (a, b) => b.feePrice - a.feePrice
   );
 
-  for (const buy of highestBuys) {
+  for (const buy of highest) {
     if (amount10 <= 0) break;
 
-    const take = Math.min(amount10, Number(buy.amount));
+    const take = Math.min(amount10, buy.amount);
 
     used.push({
-      price: Number(buy.feePrice),
+      price: buy.feePrice,
       used_amount: take,
     });
 
-    // 🔥 directly modify original buyOrders
-    buy.amount = Number(buy.amount) - take;
-
+    buy.amount -= take;
     amount10 -= take;
   }
 
@@ -87,18 +77,16 @@ export const processSellSingle = (sellOrder, buyOrders) => {
 
 
 // ---------------- WEIGHTED AVERAGE PRICE ----------------
-export const weightedAveragePrice = (used) => {
-  let totalValue = 0;
+export const weightedAveragePrice = (usedBuys) => {
   let totalAmount = 0;
+  let totalCost = 0;
 
-  for (const item of used) {
-    totalValue += Number(item.price) * Number(item.used_amount);
-    totalAmount += Number(item.used_amount);
+  for (const u of usedBuys) {
+    totalAmount += Number(u.used_amount);
+    totalCost += Number(u.price) * Number(u.used_amount);
   }
 
-  if (totalAmount === 0) return 0;
-
-  return totalValue / totalAmount;
+  return totalAmount === 0 ? 0 : totalCost / totalAmount;
 };
 
 // ---------------- PREPARE ORDERS FILTERED ----------------
@@ -139,4 +127,45 @@ export const removeDuplicates = (orders) => {
     return true;
   });
 };
+
+
+
+
+
+
+export const processAllSells = (sellOrders, buyOrders) => {
+  // 🔥 Apply fee once
+  applyFee(buyOrders);
+  applyFee(sellOrders);
+
+  const result = [];
+
+  const sortedSells = [...sellOrders].sort(
+    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+  );
+
+  for (const sell of sortedSells) {
+    const used = processSellSingle(sell, buyOrders);
+
+    if (!used.length) continue;
+
+    const avgPrice = weightedAveragePrice(used);
+
+    const profit =
+      (Number(sell.feePrice) - avgPrice) *
+      Number(sell.amount);
+
+    result.push({
+      ...sell,
+      price: avgPrice,   // 🔥 replace price
+      amount: profit,    // 🔥 replace amount with profit
+    });
+  }
+
+  return {
+    processedSells: result,
+    updatedBuys: buyOrders, // amounts reduced
+  };
+};
+
 
