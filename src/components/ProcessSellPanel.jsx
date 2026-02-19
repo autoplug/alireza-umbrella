@@ -41,11 +41,10 @@ export default function ProcessSellPanel() {
     const sellOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "sell");
 
     const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
-    
-    setSellTable(processedSells);
-    setBuyTable(updatedBuys.map(o => ({ ...o })));
 
-    
+    // 🔹 Update React state
+    setSellTable(processedSells);
+    setBuyTable(updatedBuys)
     
     
     
