@@ -72,7 +72,7 @@ export default function ProcessSellPanel() {
       return result;
     };
 
-    setSellTable(sortedSells);
+    setSellTable(calculateProcessedSells);
     setBuyTable(buyOrders);
     
     
