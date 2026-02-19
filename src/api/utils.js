@@ -48,7 +48,7 @@ export const processSellSingle = (sell, buyOrders) => {
   const used = [];
 
   // 90% from lowest price
-  const lowest = [...relevantBuys].sort(
+  const lowest = relevantBuys.sort(
     (a, b) => a.feePrice - b.feePrice
   );
 
@@ -67,7 +67,7 @@ export const processSellSingle = (sell, buyOrders) => {
   }
 
   // 10% from highest price
-  const highest = [...relevantBuys].sort(
+  const highest = relevantBuys.sort(
     (a, b) => b.feePrice - a.feePrice
   );
 
