@@ -12,17 +12,14 @@ const logoMap = {
   RLS: RLSLogo,
 };
 
-export default function MarketIcon({ market }) {
+export default function MarketIcon({ market, showName = true }) {
   const [base, quote] = market.split("-");
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-      {/* Market name */}
-      <span style={{ fontWeight: "bold", fontSize: "12px" }}>{market}</span>
-
-      {/* Icons */}
+      {/* Logos */}
       <div style={{ position: "relative", width: "28px", height: "20px" }}>
         <img
           src={quoteImg}
@@ -51,6 +48,11 @@ export default function MarketIcon({ market }) {
           }}
         />
       </div>
+
+      {/* Market name (optional) */}
+      {showName && (
+        <span style={{ fontWeight: "bold", fontSize: "12px" }}>{market}</span>
+      )}
     </div>
   );
 }
