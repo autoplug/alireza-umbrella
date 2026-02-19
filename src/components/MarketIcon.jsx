@@ -73,11 +73,9 @@ export default function MarketIcon({ market, size = "normal" }) {
       {/* Market name (always displayed, font controlled externally) */}
       <span
         style={{
-          fontWeight: "bold",
           whiteSpace: "nowrap",
           overflow: "hidden",
-          textOverflow: "ellipsis",
-          maxWidth: 120,
+          
         }}
       >
         {market}
