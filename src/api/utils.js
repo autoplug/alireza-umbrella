@@ -20,8 +20,6 @@ export const applyFee = (orders) =>
   
   
 // ---------------- PROCESS SELL ----------------
-import { applyFee } from "./utils";
-import { weightedAveragePrice } from "./utils";
 
 export const processSell = (sellOrders, buyOrders) => {
   // Apply fee to all orders (copy to avoid mutation)
