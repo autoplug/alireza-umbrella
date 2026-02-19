@@ -115,24 +115,24 @@ export default function ProfitSummary() {
       <TitleBar title="Profit Summary" count={tableData.length} />
 
       <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+          <div
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              marginLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+                  }}
+          >
+            Current Profit
+          </div>
+        
+        
         {tableData.length === 0 ? (
           <p style={{ marginLeft: "20px" }}>No data to display.</p>
         ) : (
-          
-          }}>
-                <div
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    marginBottom: "5px",
-                    marginLeft: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                Current Profit
-                </div>
           
           <table style={tableStyle}>
             <thead>
