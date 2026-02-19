@@ -5,8 +5,8 @@ import ProfitSummary from "../components/ProfitSummary"; // if you prefer a Mark
 export default function MarketPage() {
   return (
     <div>
-      {/* ProfitSummary section */}
-      <ProfitSummary />
+      {/* ProfitSummary section 
+      <ProfitSummary />*/}
       
       {/*<ProcessSellPanel />*/}
   
