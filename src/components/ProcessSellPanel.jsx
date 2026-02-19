@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-//import {
-  //processAllSells,
-  //removeDuplicates,
-//} from "../api/utils";
+import {
+  processAllSells,
+  removeDuplicates,
+} from "../api/utils";
 
 //import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
@@ -28,8 +28,8 @@ export default function ProcessSellPanel() {
     }
 
     // 🔹 Combine localStorage + JSON file and remove duplicates
-    //let combinedOrders = removeDuplicates([...localData, ...localOrders]);
-    let combinedOrders = localData;
+    let combinedOrders = removeDuplicates([...localData, ...localOrders]);
+    
     
     // 🔹 Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
