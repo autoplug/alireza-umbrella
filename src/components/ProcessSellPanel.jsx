@@ -25,13 +25,13 @@ export default function ProcessSellPanel() {
     // Combine localStorage + JSON file
     let combinedOrders = [...localData, ...localOrders];
 
-    // Remove duplicate orders
+    // Remove duplicates
     combinedOrders = removeDuplicates(combinedOrders);
 
     // Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
 
-    // Sort both sell and buy orders by time (ascending)
+    // Separate and sort
     const sellOrders = doneOrders
       .filter((o) => o.type?.toLowerCase() === "sell")
       .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -40,31 +40,21 @@ export default function ProcessSellPanel() {
       .filter((o) => o.type?.toLowerCase() === "buy")
       .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-    // Process sells
-    const allProcessed = sellOrders.flatMap((sellOrder) => {
-      const result = processSell(sellOrder, buyOrders);
-
-      const rows = result.map((r) => ({
-        market: sellOrder.market,
-        amount: r.used_amount,
-        price: r.price,
-        type: "buy",
-        created_at: sellOrder.created_at, // add time
-      }));
-
-      // Add the sell order row
-      rows.push({
-        market: sellOrder.market,
-        amount: sellOrder.amount,
-        price: sellOrder.price,
-        type: "sell",
-        created_at: sellOrder.created_at, // add time
-      });
-
-      return rows;
+    // Still run processSell for each sell (logic preserved)
+    sellOrders.forEach((sell) => {
+      processSell(sell, buyOrders);
     });
 
-    setTableData(allProcessed);
+    // Only send sell orders to table
+    const sellRows = sellOrders.map((sell) => ({
+      market: sell.market,
+      amount: sell.amount,
+      price: sell.price,
+      type: "sell",
+      created_at: sell.created_at,
+    }));
+
+    setTableData(sellRows);
   }, []);
 
   return (
