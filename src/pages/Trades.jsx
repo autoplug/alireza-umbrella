@@ -10,6 +10,7 @@ export default function MarketPage() {
       
       <ProcessSellPanel />
   
+      <div style={{ height: "60px" }}></div>
     </div>
   );
 }
