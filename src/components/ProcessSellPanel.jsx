@@ -13,9 +13,9 @@ import TitleBar from "./TitleBar";
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ProcessSellPanel() {
-  const [sellData, setSellData] = useState([]);
-  const [remainBuyData, setRemainBuyData] = useState([]);
-
+  const [processedSells, setProcessedSells] = useState([]);
+  const [updatedBuys, setUpdatedBuys] = useState([]);
+  
   useEffect(() => {
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
     let localData = [];
@@ -50,38 +50,19 @@ export default function ProcessSellPanel() {
       .filter((o) => o.type?.toLowerCase() === "buy")
       .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-    // Process each sell and calculate profit
-    const sellRows = sellOrders.map((sell) => {
-      const used = processSell(sell, buyOrders);
 
-      // Apply weighted average calculation
-      const avgBuyPrice = weightedAveragePrice(used);
+    // Process sell orders against buys
+    const { updatedBuys, processedSells } = processSell(sellOrders, buyOrders);
 
-      // Example profit calculation
-      const profit =
-        avgBuyPrice != null
-          ? (Number(sell.price) - Number(avgBuyPrice)) *
-            Number(sell.amount)
-          : 0;
+    // Add profit to each processed sell
+    const sellsWithProfit = processedSells.map((s) => ({
+      ...s.sellOrder,
+      usedBuys: s.usedBuys,
+      profit: weightedAveragePrice(s.usedBuys),
+    }));
 
-      return {
-        market: sell.market,
-        amount: sell.amount,
-        price: sell.price,
-        type: "sell",
-        created_at: sell.created_at,
-        profit: profit,
-      };
-    });
-
-    setSellData(sellRows);
-    
-    // Filter remaining buy orders with amount > 0
-    const remainingBuys = buyOrders
-      //.filter((buy) => Number(buy.amount) > 0)
-      //.sort((a, b) => Number(a.price) - Number(b.price)); // مرتب بر اساس قیمت
-
-    setRemainBuyData(remainingBuys)
+    setProcessedSells(sellsWithProfit);
+    setUpdatedBuys(updatedBuys);
     
     
     
@@ -94,20 +75,20 @@ export default function ProcessSellPanel() {
     <div>
 
       {/* Sell Orders Table */}
-      <TitleBar title="Process Sell" count={sellData.length} />
-      {sellData.length === 0 ? (
+      <TitleBar title="Process Sell" count={processedSells.length} />
+      {processedSells.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={sellData} sortBy="time" />
+        <TableOrder orders={processedSells} sortBy="time" />
       )}
 
       {/* Remaining Buy Orders Table */}
       <div style={{ marginTop: "30px" }}>
-        <TitleBar title="Remain Buy" count={remainBuyData.length} />
-        {remainBuyData.length === 0 ? (
+        <TitleBar title="Remain Buy" count={updatedBuys.length} />
+        {updatedBuys.length === 0 ? (
           <p>No remaining buy orders.</p>
         ) : (
-          <TableOrder orders={remainBuyData} sortBy="price" />
+          <TableOrder orders={updatedBuys} sortBy="price" />
         )}
       </div>
 
