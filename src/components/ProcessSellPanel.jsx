@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   processSell,
-  removeDuplicates,
-  weightedAveragePrice,
+  removeDuplicates
 } from "../api/utils";
 
 import localOrders from "../assets/nobitex.json";
