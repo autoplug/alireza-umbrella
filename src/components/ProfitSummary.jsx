@@ -104,37 +104,41 @@ export default function ProfitSummary() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
-      <TitleBar title="Profit Summary" count={tableData.length} />
+  <div>
+    <TitleBar title="Profit Summary" count={tableData.length} />
 
-      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
-        <thead>
-          <tr style={{ backgroundColor: "#f0f0f0" }}>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Market</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Remaining</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Buy</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Sold</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>Profit</th>
+    <table className="today-trades-table">
+      <thead>
+        <tr>
+          <th>Market</th>
+          <th>Remaining</th>
+          <th>Profit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {tableData.map((row, index) => (
+          <tr key={index}>
+            <td>{row.market}</td>
+
+            <td>
+              {row.remainingAmount.toLocaleString()}
+            </td>
+
+            <td
+              className={
+                row.profit >= 0 ? "profit-positive" : "profit-negative"
+              }
+            >
+              {row.profit.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {tableData.map((row, index) => (
-            <tr key={index} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9" }}>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.market}</td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>{row.remainingAmount.toLocaleString()}</td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                {row.totalBuyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                {row.totalSold.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px", fontWeight: "bold" }}>
-                {row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 }
