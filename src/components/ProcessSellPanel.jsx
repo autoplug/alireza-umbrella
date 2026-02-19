@@ -47,31 +47,10 @@ export default function ProcessSellPanel() {
     const sells = JSON.parse(JSON.stringify(sellOrders));
 
     // 🔹 Apply fees and process all sells
-    //const { processedSells, updatedBuys } = processAllSells(sells, buys);
+    const { processedSells, updatedBuys } = processAllSells(sells, buys);
 
-
-const decrementOrders = (orders) => {
-  return orders.map(order => {
-    return {
-      ...order,
-      amount: Number(order.amount) + 1
-    };
-  });
-};
-decrementOrders(sells);
-
-const decrementOrdersInPlace = (orders) => {
-  orders.forEach(order => {
-    order.amount = Number(order.amount) + 25;
-  });
-  return orders;
-};
-
-decrementOrdersInPlace(sells);
-decrementOrdersInPlace(sells);
-
-    setSellTable(sells);
-    setBuyTable(buys);
+    setSellTable(processedSells);
+    setBuyTable(updatedBuys);
     
     
     
