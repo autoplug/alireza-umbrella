@@ -40,7 +40,6 @@ export default function ProcessSellPanel() {
     const buyOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "buy");
     const sellOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "sell");
 
-
     const { processedSells, updatedBuys } =
       processAllSells(sellOrders, buyOrders);
     
