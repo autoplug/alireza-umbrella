@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  processAllSells,
+//import {
+  //processAllSells,
   //removeDuplicates,
-} from "../api/utils";
+//} from "../api/utils";
 
 //import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
@@ -47,10 +47,10 @@ export default function ProcessSellPanel() {
     const sells = JSON.parse(JSON.stringify(sellOrders));
 
     // 🔹 Apply fees and process all sells
-    const { processedSells, updatedBuys } = processAllSells(sells, buys);
+    //const { processedSells, updatedBuys } = processAllSells(sells, buys);
 
-    setSellTable(processedSells);
-    setBuyTable(updatedBuys);
+    setSellTable(sells);
+    setBuyTable(buys);
     
     
     
