@@ -3,13 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 // Import MarketIcon from your centralized component
-import MarketIcon from "./MarketIcon"; 
-
-// Logos
-import BTCLogo from "../assets/logos/btc.PNG";
-import ETHLogo from "../assets/logos/eth.PNG";
-import USDTLogo from "../assets/logos/usdt.PNG";
-import RLSLogo from "../assets/logos/rls.jpg";
+import MarketIcon from "./MarketIcon";
 
 // Column widths
 const COLUMN_WIDTHS = {
@@ -41,14 +35,6 @@ const tdStyle = {
   padding: "6px 20px",
   fontSize: "12px",
   fontFamily: "monospace",
-};
-
-// Logos mapping
-const logoMap = {
-  BTC: BTCLogo,
-  ETH: ETHLogo,
-  USDT: USDTLogo,
-  RLS: RLSLogo,
 };
 
 // Format amount
