@@ -54,11 +54,21 @@ const decrementOrders = (orders) => {
   return orders.map(order => {
     return {
       ...order,
-      amount: Number(order.amount) - 1
+      amount: Number(order.amount) + 1
     };
   });
 };
 decrementOrders(sells);
+
+const decrementOrdersInPlace = (orders) => {
+  orders.forEach(order => {
+    order.amount = Number(order.amount) + 25;
+  });
+  return orders;
+};
+
+decrementOrdersInPlace(sells);
+decrementOrdersInPlace(sells);
 
     setSellTable(sells);
     setBuyTable(buys);
