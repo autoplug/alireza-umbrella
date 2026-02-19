@@ -32,9 +32,9 @@ const tdStyle = {
 };
 
 const COLUMN_WIDTHS = {
-  market: "40%",
+  market: "30%",
   amount: "30%",
-  profit: "30%",
+  profit: "40%",
 };
 
 // ----------------- Helper Functions -----------------
