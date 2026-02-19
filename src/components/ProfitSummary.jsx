@@ -32,9 +32,8 @@ const tdStyle = {
 };
 
 const COLUMN_WIDTHS = {
-  index: "10%",
-  market: "35%",
-  remaining: "25%",
+  market: "40%",
+  amount: "30%",
   profit: "30%",
 };
 
@@ -44,7 +43,6 @@ export default function ProfitSummary() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load orders from localStorage + local JSON
     const storedOrders = JSON.parse(localStorage.getItem("ORDERS_CACHE") || "[]");
     const storedMarkets = JSON.parse(localStorage.getItem("MARKETS_CACHE") || "{}");
 
@@ -53,7 +51,6 @@ export default function ProfitSummary() {
 
     const uniqueOrders = removeDuplicates(combinedOrders);
 
-    // Group by market
     const ordersByMarket = {};
     uniqueOrders.forEach((order) => {
       const market = order.market || "Unknown";
@@ -61,7 +58,6 @@ export default function ProfitSummary() {
       ordersByMarket[market].push(order);
     });
 
-    // Compute table data
     const data = Object.entries(ordersByMarket)
       .sort(([a], [b]) => b.localeCompare(a))
       .map(([market, marketOrders]) => {
@@ -89,7 +85,21 @@ export default function ProfitSummary() {
         const totalSold = totalSellValue + remainingAmount * currentPrice;
         const profit = totalSold - totalBuyValue;
 
-        return { market, remainingAmount, profit };
+        // Adjust amount for BTC and USDT
+        let amount = remainingAmount;
+        let unit = "";
+        const base = market.split("-")[0].toUpperCase();
+        const quote = market.split("-")[1]?.toUpperCase() || "";
+
+        if (base === "BTC") {
+          amount = remainingAmount * 1e6;
+          unit = "BTC";
+        } else if (base === "USDT") {
+          amount = Math.floor(remainingAmount);
+          unit = "USD";
+        }
+
+        return { market, amount, unit, profit };
       });
 
     setTableData(data);
@@ -98,7 +108,6 @@ export default function ProfitSummary() {
 
   if (loading) return <p>Loading...</p>;
 
-  // ---------------- Render Table -----------------
   return (
     <div>
       <TitleBar title="Profit Summary" count={tableData.length} />
@@ -110,9 +119,8 @@ export default function ProfitSummary() {
           <table style={tableStyle}>
             <thead>
               <tr>
-                <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
                 <th style={{ ...thStyle, width: COLUMN_WIDTHS.market }}>Market</th>
-                <th style={{ ...thStyle, width: COLUMN_WIDTHS.remaining }}>Remaining</th>
+                <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>Remaining</th>
                 <th style={{ ...thStyle, width: COLUMN_WIDTHS.profit }}>Profit</th>
               </tr>
             </thead>
@@ -123,7 +131,6 @@ export default function ProfitSummary() {
 
                 return (
                   <tr key={index} style={{ backgroundColor: bgColor }}>
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS.index }}>{index + 1}</td>
                     <td
                       style={{
                         ...tdStyle,
@@ -135,8 +142,8 @@ export default function ProfitSummary() {
                       <MarketIcon market={row.market} />
                       {row.market}
                     </td>
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS.remaining }}>
-                      {Number(row.remainingAmount).toLocaleString("en-US")}
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS.amount }}>
+                      {row.amount.toLocaleString("en-US")} {row.unit}
                     </td>
                     <td
                       style={{
