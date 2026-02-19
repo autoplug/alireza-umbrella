@@ -45,20 +45,6 @@ export default function ProcessSellPanel() {
     // Process sells using updated processSell function
     const { processedSells, updatedBuys } = processSell(sellOrders, buyOrders);
 
-    // Map processed sells to table format
-    const sellRows = processedSells.map((s) => {
-      const avgPrice = s.usedBuys.length > 0 ? weightedAveragePrice(s.usedBuys) : 0;
-      const profit = (s.sellOrder.feePrice - avgPrice) * Number(s.sellOrder.amount);
-
-      return {
-        market: s.sellOrder.market,
-        price: avgPrice,      // weighted average price
-        amount: profit,       // profit
-        type: "sell",
-        created_at: s.sellOrder.created_at,
-      };
-    });
-
     // Map remaining buys to table format
     const buyRows = updatedBuys.map((b) => ({
       market: b.market,
