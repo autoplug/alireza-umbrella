@@ -7,7 +7,6 @@ export default function Home() {
   return (
     <div>
       
-      fffffffffffffff
       <WalletList />
       <ActiveOrders />
       <TodayTrades />
