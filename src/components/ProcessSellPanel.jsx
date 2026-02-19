@@ -45,17 +45,8 @@ export default function ProcessSellPanel() {
     // Process sells using updated processSell function
     const { processedSells, updatedBuys } = processSell(sellOrders, buyOrders);
 
-    // Map remaining buys to table format
-    const buyRows = updatedBuys.map((b) => ({
-      market: b.market,
-      amount: b.amount,
-      price: b.price,
-      type: "buy",
-      created_at: b.created_at,
-    }));
-
     setSellTable(processedSells);
-    setBuyTable(buyRows);
+    setBuyTable(updatedBuys);
     
     
     
