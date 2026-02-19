@@ -18,50 +18,76 @@ export const applyFee = (orders) =>
   });
 
 // ---------------- PROCESS SELL ----------------
-export const processSell = (sellOrder, buyOrders) => {
-  let sellAmount = Number(sellOrder.amount);
 
-  // Filter buy orders before this sell with remaining amount
-  const relevantBuys = buyOrders.filter(
-    (b) =>
-      new Date(b.created_at) < new Date(sellOrder.created_at) &&
-      Number(b.amount) > 0
+/**
+ * Process sell orders against buy orders with 90%-10% allocation
+ * @param {Array} sellOrders - list of sell orders
+ * @param {Array} buyOrders - list of buy orders
+ * @returns {Object} { updatedBuys, processedSells }
+ */
+export const processSell = (sellOrders, buyOrders) => {
+  // Apply fee to all orders
+  const buys = applyFee([...buyOrders]); // copy to avoid mutation
+  const sells = applyFee([...sellOrders]);
+
+  // Sort sell orders by creation time ascending
+  const sortedSells = sells.sort(
+    (a, b) => new Date(a.created_at) - new Date(b.created_at)
   );
 
-  if (relevantBuys.length === 0) return [];
+  const processedSells = [];
 
-  let amount95 = sellAmount * 0.9; // 95% from lowest price buys
-  let amount5 = sellAmount * 0.1;  // 5% from highest price buys
+  for (const sell of sortedSells) {
+    let remainingSell = Number(sell.amount);
 
-  const used = [];
+    // Filter buys that occurred before this sell and still have remaining amount
+    const relevantBuys = buys
+      .filter((b) => new Date(b.created_at) < new Date(sell.created_at) && b.amount > 0);
 
-  // ===== 95% from lowest price buys =====
-  const lowestBuys = [...relevantBuys].sort((a, b) => a.price - b.price);
-  for (const buy of lowestBuys) {
-    if (amount95 <= 0) break;
-    const take = Math.min(amount95, buy.amount);
-    used.push({
-      price: buy.feePrice,
-      used_amount: take,
+    if (relevantBuys.length === 0) {
+      processedSells.push({ sellOrder: sell, usedBuys: [], remainingSell });
+      continue;
+    }
+
+    const usedBuys = [];
+
+    // ===== 90% from lowest price buys =====
+    let amount90 = remainingSell * 0.9;
+    const lowestBuys = [...relevantBuys].sort((a, b) => a.price - b.price);
+    for (const buy of lowestBuys) {
+      if (amount90 <= 0) break;
+      const take = Math.min(amount90, buy.amount);
+      usedBuys.push({ price: buy.feePrice, used_amount: take });
+      buy.amount -= take;
+      amount90 -= take;
+    }
+
+    // ===== 10% from highest price buys =====
+    let amount10 = remainingSell * 0.1;
+    const highestBuys = [...relevantBuys].sort((a, b) => b.price - a.price);
+    for (const buy of highestBuys) {
+      if (amount10 <= 0) break;
+      const take = Math.min(amount10, buy.amount);
+      usedBuys.push({ price: buy.feePrice, used_amount: take });
+      buy.amount -= take;
+      amount10 -= take;
+    }
+
+    // Update remainingSell (optional, could be 0)
+    remainingSell = 0;
+
+    // Save processed sell
+    processedSells.push({
+      sellOrder: sell,
+      usedBuys,
+      remainingSell,
     });
-    buy.amount -= take;
-    amount95 -= take;
   }
 
-  // ===== 5% from highest price buys =====
-  const highestBuys = [...relevantBuys].sort((a, b) => b.price - a.price);
-  for (const buy of highestBuys) {
-    if (amount5 <= 0) break;
-    const take = Math.min(amount5, buy.amount);
-    used.push({
-      price: buy.feePrice,
-      used_amount: take,
-    });
-    buy.amount -= take;
-    amount5 -= take;
-  }
-
-  return used;
+  return {
+    updatedBuys: buys,       // updated buy orders with remaining amounts
+    processedSells,          // sell orders with allocation details
+  };
 };
 
 // ---------------- WEIGHTED AVERAGE PRICE ----------------
