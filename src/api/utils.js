@@ -15,6 +15,20 @@ export const applyFee = (orders) => {
     }
   }
 }; 
+
+// ---------------- WEIGHTED AVERAGE PRICE ----------------
+export const weightedAveragePrice = (usedBuys) => {
+  let totalAmount = 0;
+  let totalCost = 0;
+
+  for (const u of usedBuys) {
+    totalAmount += Number(u.used_amount);
+    totalCost += Number(u.price) * Number(u.used_amount);
+  }
+
+  return totalAmount === 0 ? 0 : totalCost / totalAmount;
+};
+
   
 // ---------------- PROCESS SELL ----------------
 export const processSellSingle = (sell, buyOrders) => {
@@ -74,49 +88,6 @@ export const processSellSingle = (sell, buyOrders) => {
   return used;
 };
 
-
-
-// ---------------- WEIGHTED AVERAGE PRICE ----------------
-export const weightedAveragePrice = (usedBuys) => {
-  let totalAmount = 0;
-  let totalCost = 0;
-
-  for (const u of usedBuys) {
-    totalAmount += Number(u.used_amount);
-    totalCost += Number(u.price) * Number(u.used_amount);
-  }
-
-  return totalAmount === 0 ? 0 : totalCost / totalAmount;
-};
-
-// ---------------- PREPARE ORDERS FILTERED ----------------
-export const prepareOrdersFiltered = (orders, market = null) => {
-  const buyOrders = [];
-  const sellOrders = [];
-
-  for (const order of orders) {
-    // Filter by market if provided
-    if (market && order.market !== market) continue;
-
-    // Convert numeric fields
-    order.amount = Number(order.amount);
-    order.price = Number(order.price);
-
-    // Separate orders by type
-    if (order.type === "buy") {
-      buyOrders.push(order);
-    } else if (order.type === "sell") {
-      sellOrders.push(order);
-    }
-  }
-
-  // Sort by created_at ascending
-  buyOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-  sellOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-  return { buyOrders, sellOrders };
-};
-
 // ---------------- REMOVE DUPLICATE ----------------
 export const removeDuplicates = (orders) => {
   const seen = new Set();
@@ -128,11 +99,7 @@ export const removeDuplicates = (orders) => {
   });
 };
 
-
-
-
-
-
+// ---------------- PREPARE ORDERS FILTERED ----------------
 export const processAllSells = (sellOrders, buyOrders) => {
   // 🔥 Apply fee once
   applyFee(buyOrders);
