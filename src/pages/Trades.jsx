@@ -5,7 +5,6 @@ import DebugPanel from "../components/DebugPanel";
 export default function MarketPage() {
   return (
     <div>
-      <DebugPanel />
       {/* ProfitSummary section */}
       <ProfitSummary />
   
