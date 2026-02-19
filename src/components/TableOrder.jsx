@@ -43,7 +43,12 @@ const formatAmount = (amount, market) => {
 
   if (market && market.toUpperCase().startsWith("BTC")) {
     const newAmount = Number(amount) * 1000000;
-    return newAmount.toLocaleString("en-US") + " e-6";
+    return "BTC " + newAmount.toLocaleString("en-US");
+  }
+
+  if (market && market.toUpperCase().startsWith("USD")) {
+    const newAmount = Number(amount) * 1000000;
+    return "USD " + newAmount.toLocaleString("en-US");
   }
 
   return Number(amount).toLocaleString("en-US");
@@ -79,7 +84,7 @@ const formatPrice = (price, market) => {
   }
 
   return unit
-    ? `${value.toLocaleString("en-US")} ${unit}`
+    ? `${unit} ${value.toLocaleString("en-US")}`
     : `${value.toLocaleString("en-US")}`;
 };
 
