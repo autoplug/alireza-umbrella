@@ -37,6 +37,20 @@ const COLUMN_WIDTHS = {
   profit: "30%",
 };
 
+// ----------------- Helper Functions -----------------
+const formatAmount = (amount, base) => {
+  if (base === "BTC") return (amount * 1e6).toLocaleString("en-US") + " BTC";
+  if (base === "USDT") return Math.floor(amount).toLocaleString("en-US") + " USD";
+  return Number(amount).toLocaleString("en-US");
+};
+
+const formatProfit = (profit, market) => {
+  const quote = market.split("-")[1]?.toUpperCase() || "";
+  if (quote === "USDT") return Math.floor(profit).toLocaleString("en-US") + " USD";
+  if (quote === "RLS") return Math.floor(profit / 10).toLocaleString("en-US") + " IRT";
+  return Number(profit).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+
 // ---------------- ProfitSummary Component -----------------
 export default function ProfitSummary() {
   const [tableData, setTableData] = useState([]);
@@ -85,21 +99,9 @@ export default function ProfitSummary() {
         const totalSold = totalSellValue + remainingAmount * currentPrice;
         const profit = totalSold - totalBuyValue;
 
-        // Adjust amount for BTC and USDT
-        let amount = remainingAmount;
-        let unit = "";
         const base = market.split("-")[0].toUpperCase();
-        const quote = market.split("-")[1]?.toUpperCase() || "";
 
-        if (base === "BTC") {
-          amount = remainingAmount * 1e6;
-          unit = "BTC";
-        } else if (base === "USDT") {
-          amount = Math.floor(remainingAmount);
-          unit = "USD";
-        }
-
-        return { market, amount, unit, profit };
+        return { market, amount: remainingAmount, base, profit };
       });
 
     setTableData(data);
@@ -143,7 +145,7 @@ export default function ProfitSummary() {
                       {row.market}
                     </td>
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS.amount }}>
-                      {row.amount.toLocaleString("en-US")} {row.unit}
+                      {formatAmount(row.amount, row.base)}
                     </td>
                     <td
                       style={{
@@ -153,10 +155,7 @@ export default function ProfitSummary() {
                         fontWeight: "bold",
                       }}
                     >
-                      {Number(row.profit).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {formatProfit(row.profit, row.market)}
                     </td>
                   </tr>
                 );
