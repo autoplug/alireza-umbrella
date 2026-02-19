@@ -41,8 +41,12 @@ export default function ProcessSellPanel() {
       .filter((o) => o.type?.toLowerCase() === "sell")
       .map((o) => ({ ...o }));
 
+    // Deep copy inside processAllSells
+    const buys = JSON.parse(JSON.stringify(buyOrders));
+    const sells = JSON.parse(JSON.stringify(sellOrders));
+
     // 🔹 Apply fees and process all sells
-    const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
+    const { processedSells, updatedBuys } = processAllSells(sells, buys);
 
     setSellTable(processedSells);
     setBuyTable(updatedBuys);
