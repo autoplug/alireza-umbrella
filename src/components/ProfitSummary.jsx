@@ -142,7 +142,7 @@ export default function ProfitSummary() {
                       }}
                     >
                       <MarketIcon market={row.market} />
-                      {row.market}
+                  
                     </td>
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS.amount }}>
                       {formatAmount(row.amount, row.base)}
