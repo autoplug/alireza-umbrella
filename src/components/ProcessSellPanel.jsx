@@ -53,7 +53,7 @@ export default function ProcessSellPanel() {
     
       for (const sell of sortedSells) {
         // 🔥 this will MODIFY buyOrders directly
-        const used = processSellSingle(sell, buyOrders);
+        const used = processSell(sell, buyOrders);
     
         if (!used.length) continue;
     
