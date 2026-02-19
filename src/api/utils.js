@@ -102,8 +102,9 @@ export const removeDuplicates = (orders) => {
 // ---------------- PREPARE ORDERS FILTERED ----------------
 export const processAllSells = (sellOrders, buyOrders) => {
   // 🔥 Copy arrays to avoid mutation
-  const buys = [...buyOrders];
-  const sells = [...sellOrders];
+  const buys = JSON.parse(JSON.stringify(buyOrders));
+  const sells = JSON.parse(JSON.stringify(sellOrders));
+
 
   // 🔥 Apply fee once
   applyFee(buys);
