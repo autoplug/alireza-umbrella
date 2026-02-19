@@ -190,7 +190,9 @@ export default function TableOrder({ orders, sortBy = "time" }) {
               <div key={market} style={{ marginBottom: "20px" }}>
                 <div
                   style={{
-                    marginBottom: "6px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    marginBottom: "20px",
                     marginLeft: "20px",
                     display: "flex",
                     alignItems: "center",
