@@ -1,5 +1,5 @@
 import React from "react";
-import ProfitSummary from "../components/ProfitSummary"; // if you prefer a Markets component
+//import ProfitSummary from "../components/ProfitSummary"; // if you prefer a Markets component
 //import ProcessSellPanel from "../components/ProcessSellPanel"; 
 
 export default function MarketPage() {
