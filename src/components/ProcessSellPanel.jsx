@@ -12,8 +12,8 @@ import TitleBar from "./TitleBar";
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ProcessSellPanel() {
-  const [processedSells, setProcessedSells] = useState([]);
-  const [updatedBuys, setUpdatedBuys] = useState([]);
+  const [sellTable, setSellTable] = useState([]);
+  const [buyTable, setBuyTable] = useState([]);
   
   useEffect(() => {
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
@@ -37,39 +37,39 @@ export default function ProcessSellPanel() {
     // Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
 
-    // Sort buy & sell orders
-    const sellOrders = doneOrders
-      .filter((o) => o.type?.toLowerCase() === "sell")
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-    const buyOrders = doneOrders
-      .filter((o) => o.type?.toLowerCase() === "buy")
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+     // Separate buy and sell orders
+    const buyOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "buy");
+    const sellOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "sell");
 
 
-    // Process sell orders against buys
-    const { updatedBuys, processedSells } = processSell(sellOrders, buyOrders);
+    // Process sells using updated processSell function
+    const { processedSells, updatedBuys } = processSell(sellOrders, buyOrders);
 
-    // After processing sell orders
-    const sellsWithProfit = processedSells.map((s) => {
-      const avgPrice = weightedAveragePrice(s.usedBuys); // weighted average price
-      const totalProfit = s.usedBuys.reduce(
-        (sum, u) => sum + u.used_amount * (s.sellOrder.price - u.price),
-        0
-      );
-    
+    // Map processed sells to table format
+    const sellRows = processedSells.map((s) => {
+      const avgPrice = s.usedBuys.length > 0 ? weightedAveragePrice(s.usedBuys) : 0;
+      const profit = (s.sellOrder.feePrice - avgPrice) * Number(s.sellOrder.amount);
+
       return {
         market: s.sellOrder.market,
-        amount: totalProfit,       // profit replaces amount
-        price: avgPrice,           // weighted avg replaces price
+        price: avgPrice,      // weighted average price
+        amount: profit,       // profit
         type: "sell",
         created_at: s.sellOrder.created_at,
-        usedBuys: s.usedBuys,
       };
     });
 
-    setProcessedSells(sellsWithProfit);
-    setUpdatedBuys(updatedBuys);
+    // Map remaining buys to table format
+    const buyRows = updatedBuys.map((b) => ({
+      market: b.market,
+      amount: b.amount,
+      price: b.price,
+      type: "buy",
+      created_at: b.created_at,
+    }));
+
+    setSellTable(sellRows);
+    setBuyTable(buyRows);
     
     
     
@@ -82,20 +82,20 @@ export default function ProcessSellPanel() {
     <div>
 
       {/* Sell Orders Table */}
-      <TitleBar title="Process Sell" count={processedSells.length} />
-      {processedSells.length === 0 ? (
+      <TitleBar title="Process Sell" count={sellTable.length} />
+      {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={processedSells} sortBy="time" />
+        <TableOrder orders={sellTable} sortBy="time" />
       )}
 
       {/* Remaining Buy Orders Table */}
       <div style={{ marginTop: "30px" }}>
-        <TitleBar title="Remain Buy" count={updatedBuys.length} />
-        {updatedBuys.length === 0 ? (
+        <TitleBar title="Remain Buy" count={buyTable.length} />
+        {buyTable.length === 0 ? (
           <p>No remaining buy orders.</p>
         ) : (
-          <TableOrder orders={updatedBuys} sortBy="price" />
+          <TableOrder orders={buyTable} sortBy="price" />
         )}
       </div>
 
