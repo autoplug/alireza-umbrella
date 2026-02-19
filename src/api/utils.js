@@ -1,7 +1,7 @@
 // src/api/utils.js
 
 // ---------------- APPLY FEE ----------------
-const applyFee = (orders) =>
+export const applyFee = (orders) =>
   orders.map((order) => {
     const amt = Number(order.amount);
     const price = Number(order.price);
@@ -108,7 +108,7 @@ export const prepareOrdersFiltered = (orders, market = null) => {
 };
 
 // ---------------- REMOVE DUPLICATE ----------------
-const removeDuplicates = (orders) => {
+export const removeDuplicates = (orders) => {
   const seen = new Set();
   return orders.filter((o) => {
     const key = o.id || o.timestamp || JSON.stringify(o);
