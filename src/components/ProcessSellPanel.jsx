@@ -72,7 +72,7 @@ export default function ProcessSellPanel() {
 
     setTableData(sellRows);
     
-    // Cal Buy Amount > 0
+    // Filter remaining buy orders with amount > 0
     const remainingBuys = buyOrders
       //.filter((buy) => Number(buy.amount) > 0)
       .sort((a, b) => Number(a.price) - Number(b.price)); // مرتب بر اساس قیمت
