@@ -8,8 +8,8 @@ import MarketIcon from "./MarketIcon"; // <-- make sure path is correct
 // Column widths
 const COLUMN_WIDTHS = {
   index: "5%",
-  amount: "40%",
-  price: "40%",
+  amount: "35%",
+  price: "45%",
   type: "15%",
 };
 
