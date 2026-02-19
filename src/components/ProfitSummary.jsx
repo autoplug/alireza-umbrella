@@ -141,7 +141,7 @@ export default function ProfitSummary() {
                         alignItems: "center",
                       }}
                     >
-                      <MarketIcon market={row.market} />
+                      <MarketIcon market={row.market} size={"small"} />
                   
                     </td>
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS.amount }}>
