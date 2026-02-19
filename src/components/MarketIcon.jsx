@@ -4,7 +4,7 @@ import ETHLogo from "../assets/logos/eth.PNG";
 import USDTLogo from "../assets/logos/usdt.PNG";
 import RLSLogo from "../assets/logos/rls.jpg";
 
-// Logos mapping
+// Mapping of asset symbols to logos
 const logoMap = {
   BTC: BTCLogo,
   ETH: ETHLogo,
@@ -13,50 +13,56 @@ const logoMap = {
 };
 
 export default function MarketIcon({ market, size = "normal" }) {
-  // جدا کردن پایه و ارز دوم
+  // Split market string into base and quote assets
   const [base, quote] = market.split("-");
 
-  // اگر مارکت فقط یک ارز باشد، فقط لوگوی اول نمایش داده شود
+  // Show quote logo only if different from base
   const showQuote = !!quote && quote !== base;
 
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
-  // تنظیم اندازه‌ها بر اساس سایز
-  const dimensions = {
-    small: { width: 20, height: 14, fontSize: 10 },
-    normal: { width: 28, height: 20, fontSize: 12 },
-    large: { width: 40, height: 28, fontSize: 16 },
+  // Define font sizes
+  const fontSizes = {
+    small: 12,
+    normal: 14,
+    large: 16,
   };
 
-  const { width, height, fontSize } = dimensions[size] || dimensions.normal;
+  const fontSize = fontSizes[size] || fontSizes.normal;
+
+  // Icon dimensions proportional to font size
+  const iconHeight = fontSize + 8; // e.g., 20px for small, 22px normal, 24px large
+  const iconWidth = iconHeight * 1.4; // proportion for overlap
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-      {/* Logos */}
-      <div style={{ position: "relative", width: width, height: height }}>
+      {/* Logos container */}
+      <div style={{ position: "relative", width: iconWidth, height: iconHeight }}>
+        {/* Quote logo */}
         {showQuote && (
           <img
             src={quoteImg}
             alt=""
             style={{
-              width: height,
-              height: height,
+              width: iconHeight,
+              height: iconHeight,
               borderRadius: "50%",
               position: "absolute",
-              left: width - height,
+              left: iconWidth - iconHeight,
               top: 0,
               zIndex: 0,
             }}
           />
         )}
+        {/* Base logo */}
         {baseImg && (
           <img
             src={baseImg}
             alt=""
             style={{
-              width: height,
-              height: height,
+              width: iconHeight,
+              height: iconHeight,
               borderRadius: "50%",
               position: "absolute",
               left: 0,
@@ -67,7 +73,7 @@ export default function MarketIcon({ market, size = "normal" }) {
         )}
       </div>
 
-      {/* Market name همیشه نمایش داده می‌شود */}
+      {/* Market name */}
       <span
         style={{
           fontWeight: "bold",
