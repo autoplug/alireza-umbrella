@@ -14,13 +14,13 @@ const logoMap = {
 
 export default function MarketIcon({ market, size = "normal" }) {
   const spanRef = useRef(null);
-  const [fontPx, setFontPx] = useState(14); // default fallback
+  const [fontPx, setFontPx] = useState(14); // fallback if parent font not ready
 
   // Read parent's computed font size on mount
   useEffect(() => {
     if (spanRef.current) {
       const style = window.getComputedStyle(spanRef.current);
-      setFontPx(parseFloat(style.fontSize)); // in pixels
+      setFontPx(parseFloat(style.fontSize));
     }
   }, []);
 
@@ -30,14 +30,23 @@ export default function MarketIcon({ market, size = "normal" }) {
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
-  // Icon scales based on fontPx
-  const iconHeight = fontPx + 8;       // icons slightly larger than text
-  const iconWidth = iconHeight * 1.4;  // overlap proportion
+  // Optional size modifier for icons
+  const sizeModifiers = {
+    small: 0.8,   // 80% of fontPx
+    normal: 1,    // 100% of fontPx
+    large: 1.4,   // 140% of fontPx
+  };
+  const scale = sizeModifiers[size] || 1;
+
+  // Calculate icon dimensions proportional to fontPx
+  const iconHeight = (fontPx + 8) * scale;  // slightly larger than text
+  const iconWidth = iconHeight * 1.4;       // overlap proportion
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
       {/* Logos container */}
       <div style={{ position: "relative", width: iconWidth, height: iconHeight }}>
+        {/* Quote logo */}
         {showQuote && (
           <img
             src={quoteImg}
@@ -53,6 +62,7 @@ export default function MarketIcon({ market, size = "normal" }) {
             }}
           />
         )}
+        {/* Base logo */}
         {baseImg && (
           <img
             src={baseImg}
@@ -70,7 +80,7 @@ export default function MarketIcon({ market, size = "normal" }) {
         )}
       </div>
 
-      {/* Market name: inherit font family and size */}
+      {/* Market name: inherit font size and family */}
       <span
         ref={spanRef}
         style={{
