@@ -188,18 +188,10 @@ export default function TableOrder({ orders, sortBy = "time" }) {
 
             return (
               <div key={market} style={{ marginBottom: "20px" }}>
-                <h4
-                  style={{
-                    marginBottom: "6px",
-                    marginLeft: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <MarketIcon market={market} />
-                  {market}
-                </h4>
+                
+                  <MarketIcon market={market} size={"normal"}/>
+    
+              
 
                 <table style={tableStyle}>
                   <thead>
