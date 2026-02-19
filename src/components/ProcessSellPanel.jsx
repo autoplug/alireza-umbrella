@@ -12,7 +12,7 @@ import TitleBar from "./TitleBar";
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ProcessSellPanel() {
-  const [tableData, setTableData] = useState([]);
+  const [sellData, setSellData] = useState([]);
   const [remainBuyData, setRemainBuyData] = useState([]);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function ProcessSellPanel() {
       };
     });
 
-    setTableData(sellRows);
+    setSellData(sellRows);
     
     // Filter remaining buy orders with amount > 0
     const remainingBuys = buyOrders
