@@ -75,9 +75,6 @@ export const processSell = (sellOrders, buyOrders) => {
       amount10 -= take;
     }
 
-    // Update remainingSell (optional, could be 0)
-    remainingSell = 0;
-
     // Save processed sell
     processedSells.push({
       sellOrder: sell,
@@ -87,8 +84,8 @@ export const processSell = (sellOrders, buyOrders) => {
   }
 
   return {
-    updatedBuys: buys,       // updated buy orders with remaining amounts
     processedSells,          // sell orders with allocation details
+    updatedBuys: buys,       // updated buy orders with remaining amounts
   };
 };
 
