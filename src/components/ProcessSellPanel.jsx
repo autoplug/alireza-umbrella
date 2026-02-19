@@ -59,7 +59,23 @@ export default function ProcessSellPanel() {
 
   return (
     <div>
-      <TitleBar title="Process Sell" count={tableData.length} />
+      
+           <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+          <div
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              marginLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+                  }}
+          >
+            Process Sell
+          </div>
+      
+      
       {tableData.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
