@@ -75,7 +75,6 @@ export default function MarketIcon({ market, size = "normal" }) {
         style={{
           whiteSpace: "nowrap",
           overflow: "hidden",
-          
         }}
       >
         {market}
