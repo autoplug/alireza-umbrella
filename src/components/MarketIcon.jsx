@@ -13,13 +13,13 @@ const logoMap = {
 };
 
 export default function MarketIcon({ market, size = "normal" }) {
-  const spanRef = useRef(null);
+  const divRef = useRef(null); // changed from spanRef
   const [fontPx, setFontPx] = useState(14); // fallback if parent font not ready
 
   // Read parent's computed font size on mount
   useEffect(() => {
-    if (spanRef.current) {
-      const style = window.getComputedStyle(spanRef.current);
+    if (divRef.current) {
+      const style = window.getComputedStyle(divRef.current);
       setFontPx(parseFloat(style.fontSize));
     }
   }, []);
@@ -80,9 +80,9 @@ export default function MarketIcon({ market, size = "normal" }) {
         )}
       </div>
 
-      {/* Market name: inherit font size and family */}
-      <span
-        ref={spanRef}
+      {/* Market name: now using div */}
+      <div
+        ref={divRef}
         style={{
           fontWeight: "bold",
           fontSize: "inherit",
@@ -94,7 +94,7 @@ export default function MarketIcon({ market, size = "normal" }) {
         }}
       >
         {market}
-      </span>
+      </div>
     </div>
   );
 }
