@@ -8,8 +8,8 @@ export default function Home() {
     <div>
       
       <WalletList />
-      <ActiveOrders />
       <TodayTrades />
+      <ActiveOrders />
 
       {/* Spacer at the bottom to avoid overlapping with bottom menu */}
       <div style={{ height: "60px" }}></div>
