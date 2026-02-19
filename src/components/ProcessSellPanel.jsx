@@ -4,7 +4,7 @@ import {
   removeDuplicates,
 } from "../api/utils";
 
-//import localOrders from "../assets/nobitex.json";
+import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
