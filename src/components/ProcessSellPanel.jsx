@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { processSell, removeDuplicates } from "../api/utils";
 import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
-import TitleBar from "./TitleBar";
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
@@ -22,16 +21,11 @@ export default function ProcessSellPanel() {
       }
     }
 
-    // Combine localStorage + JSON file
     let combinedOrders = [...localData, ...localOrders];
-
-    // Remove duplicates
     combinedOrders = removeDuplicates(combinedOrders);
 
-    // Filter only completed orders
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
 
-    // Separate and sort
     const sellOrders = doneOrders
       .filter((o) => o.type?.toLowerCase() === "sell")
       .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -40,12 +34,10 @@ export default function ProcessSellPanel() {
       .filter((o) => o.type?.toLowerCase() === "buy")
       .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-    // Still run processSell for each sell (logic preserved)
     sellOrders.forEach((sell) => {
       processSell(sell, buyOrders);
     });
 
-    // Only send sell orders to table
     const sellRows = sellOrders.map((sell) => ({
       market: sell.market,
       amount: sell.amount,
@@ -59,23 +51,20 @@ export default function ProcessSellPanel() {
 
   return (
     <div>
-      
-           <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-          <div
-            style={{
-              fontSize: "14px",
-              fontWeight: "bold",
-              marginBottom: "5px",
-              marginLeft: "20px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-                  }}
-          >
-            Process Sell
-          </div>
-      
-      
+      <div
+        style={{
+          fontSize: "14px",
+          fontWeight: "bold",
+          marginBottom: "5px",
+          marginLeft: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        Process Sell
+      </div>
+
       {tableData.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
