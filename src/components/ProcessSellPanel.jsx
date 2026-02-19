@@ -42,38 +42,12 @@ export default function ProcessSellPanel() {
     const sellOrders = doneOrders.filter((o) => o.type?.toLowerCase() === "sell");
 
 
-    // Process sells using updated processSell function
-    const calculateProcessedSells = (sellOrders, buyOrders) => {
-      const result = [];
+    const { processedSells, updatedBuys } =
+      processAllSells(sellOrders, buyOrders);
     
-      // Sort sells by time ascending
-      const sortedSells = [...sellOrders].sort(
-        (a, b) => new Date(a.created_at) - new Date(b.created_at)
-      );
-    
-      for (const sell of sortedSells) {
-        // 🔥 this will MODIFY buyOrders directly
-        const used = processSell(sell, buyOrders);
-    
-        if (!used.length) continue;
-    
-        const avgPrice = weightedAveragePrice(used);
-    
-        const profit =
-          (Number(sell.feePrice) - avgPrice) * Number(sell.amount);
-    
-        result.push({
-          ...sell,                 // keep all original sell fields
-          price: avgPrice,         // replace price with weighted average
-          amount: profit,          // replace amount with profit
-        });
-      }
-    
-      return result;
-    };
+    setSellTable(processedSells);
+    setBuyTable([...updatedBuys]); // for React re-render
 
-    setSellTable(calculateProcessedSells);
-    setBuyTable(buyOrders);
     
     
     
