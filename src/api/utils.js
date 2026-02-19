@@ -20,82 +20,70 @@ export const applyFee = (orders) =>
   
   
 // ---------------- PROCESS SELL ----------------
+export const processSellSingle = (sellOrder, buyOrders) => {
+  const sellAmount = Number(sellOrder.amount);
 
-export const processSell = (sellOrders, buyOrders) => {
-  // Apply fee to all orders (copy to avoid mutation)
-  const buys = applyFee([...buyOrders]);
-  const sells = applyFee([...sellOrders]);
-
-  // Sort sell orders by creation time ascending
-  const sortedSells = sells.sort(
-    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+  // Filter buy orders before this sell with remaining amount
+  const relevantBuys = buyOrders.filter(
+    (b) =>
+      new Date(b.created_at) < new Date(sellOrder.created_at) &&
+      Number(b.amount) > 0
   );
 
-  const processedSells = [];
-
-  for (const sell of sortedSells) {
-    let remainingSell = Number(sell.amount);
-
-    // Filter buys that occurred before this sell and still have remaining amount
-    const relevantBuys = buys
-      .filter((b) => new Date(b.created_at) < new Date(sell.created_at) && b.amount > 0);
-
-    if (relevantBuys.length === 0) {
-      processedSells.push({
-        market: sell.market,
-        amount: 0,          // no profit if no buys
-        price: sell.feePrice,
-        type: "sell",
-        created_at: sell.created_at,
-        profit: 0,
-      });
-      continue;
-    }
-
-    const usedBuys = [];
-
-    // ===== 90% from lowest price buys =====
-    let amount90 = remainingSell * 0.9;
-    const lowestBuys = [...relevantBuys].sort((a, b) => a.price - b.price);
-    for (const buy of lowestBuys) {
-      if (amount90 <= 0) break;
-      const take = Math.min(amount90, buy.amount);
-      usedBuys.push({ price: buy.feePrice, used_amount: take });
-      buy.amount -= take;
-      amount90 -= take;
-    }
-
-    // ===== 10% from highest price buys =====
-    let amount10 = remainingSell * 0.1;
-    const highestBuys = [...relevantBuys].sort((a, b) => b.price - a.price);
-    for (const buy of highestBuys) {
-      if (amount10 <= 0) break;
-      const take = Math.min(amount10, buy.amount);
-      usedBuys.push({ price: buy.feePrice, used_amount: take });
-      buy.amount -= take;
-      amount10 -= take;
-    }
-
-    // ===== Calculate weighted average price and profit =====
-    const avgPrice = weightedAveragePrice(usedBuys);
-    const profit = (sell.feePrice - avgPrice) * Number(sell.amount);
-
-    // Save processed sell with avg price as 'price' and profit in 'amount'
-    processedSells.push({
-      market: sell.market,
-      amount: profit,     // replace amount with profit
-      price: avgPrice,    // weighted average price
-      type: "sell",
-      created_at: sell.created_at,
-      profit,             // original profit as well (optional)
-    });
+  if (!relevantBuys.length) {
+    return [];
   }
 
-  return {
-    processedSells,    // sell orders ready for table
-    updatedBuys: buys, // updated buy orders
-  };
+  let amount90 = sellAmount * 0.9; // 90% from lowest price buys
+  let amount10 = sellAmount * 0.1; // 10% from highest price buys
+
+  const used = [];
+
+  // ===== 90% from lowest price buys =====
+  const lowestBuys = relevantBuys.sort(
+    (a, b) => Number(a.price) - Number(b.price)
+  );
+
+  for (const buy of lowestBuys) {
+    if (amount90 <= 0) break;
+
+    const take = Math.min(amount90, Number(buy.amount));
+
+    used.push({
+      price: Number(buy.feePrice),
+      used_amount: take,
+    });
+
+    // 🔥 directly modify original buyOrders
+    buy.amount = Number(buy.amount) - take;
+
+    amount90 -= take;
+  }
+
+  // ===== 10% from highest price buys =====
+  const highestBuys = relevantBuys.sort(
+    (a, b) => Number(b.price) - Number(a.price)
+  );
+
+  for (const buy of highestBuys) {
+    if (amount10 <= 0) break;
+
+    const take = Math.min(amount10, Number(buy.amount));
+
+    used.push({
+      price: Number(buy.feePrice),
+      used_amount: take,
+    });
+
+    // 🔥 directly modify original buyOrders
+    buy.amount = Number(buy.amount) - take;
+
+    amount10 -= take;
+  }
+
+  return used;
 };
+
 
 
 // ---------------- WEIGHTED AVERAGE PRICE ----------------
