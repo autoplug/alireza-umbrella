@@ -3,20 +3,22 @@
 // ---------------- APPLY FEE ----------------
 export const applyFee = (orders) =>
   orders.map((order) => {
-    const amt = Number(order.amount);
-    const price = Number(order.price);
-    const fee = Number(order.fee || 0);
+    const newOrder = { ...order }; // avoid mutating original
+    const amt = Number(newOrder.amount) || 0;
+    const price = Number(newOrder.price) || 0;
+    const fee = Number(newOrder.fee || 0);
 
-    if (order.type?.toLowerCase() === "buy") {
-      order.feePrice = price * (1 + fee / amt);
-    } else if (order.type?.toLowerCase() === "sell") {
+    if (newOrder.type?.toLowerCase() === "buy" && amt > 0) {
+      newOrder.feePrice = price * (1 + fee / amt);
+    } else if (newOrder.type?.toLowerCase() === "sell" && amt > 0) {
       const totalPrice = price * amt;
-      order.feePrice = price * (1 - fee / totalPrice);
+      newOrder.feePrice = totalPrice > 0 ? price * (1 - fee / totalPrice) : price;
     }
 
-    return order;
+    return newOrder;
   });
-
+  
+  
 // ---------------- PROCESS SELL ----------------
 
 /**
