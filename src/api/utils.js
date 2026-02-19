@@ -1,22 +1,21 @@
 // src/api/utils.js
 
 // ---------------- APPLY FEE ----------------
-export const applyFee = (orders) => {
-  return orders.map((order) => {
-    const isBuy = order.type === "buy";
-    let fee = 0;
+const applyFee = (orders) =>
+  orders.map((order) => {
+    const amt = Number(order.amount);
+    const price = Number(order.price);
+    const fee = Number(order.fee || 0);
 
-    if (isBuy) {
-      fee = Number(order.fee) / Number(order.amount);
-      order.feePrice = Number(order.price) * (1 + fee);
-    } else {
-      fee = Number(order.fee) / Number(order.totalPrice);
-      order.feePrice = Number(order.price) * (1 - fee);
+    if (order.type?.toLowerCase() === "buy") {
+      order.feePrice = price * (1 + fee / amt);
+    } else if (order.type?.toLowerCase() === "sell") {
+      const totalPrice = price * amt;
+      order.feePrice = price * (1 - fee / totalPrice);
     }
 
     return order;
   });
-};
 
 // ---------------- PROCESS SELL ----------------
 export const processSell = (sellOrder, buyOrders) => {
