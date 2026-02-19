@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   processAllSells,
   removeDuplicates,
-  applyFee,
 } from "../api/utils";
 
 import localOrders from "../assets/nobitex.json";
@@ -14,7 +13,6 @@ const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 export default function ProcessSellPanel() {
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
-  const [originalBuys, setOriginalBuys] = useState([]); // Keep buy amounts persistent
 
   useEffect(() => {
     // 🔹 Load cached orders
@@ -42,9 +40,6 @@ export default function ProcessSellPanel() {
     const sellOrders = doneOrders
       .filter((o) => o.type?.toLowerCase() === "sell")
       .map((o) => ({ ...o }));
-
-    // 🔹 Keep original buys in state
-    setOriginalBuys(buyOrders.map((b) => ({ ...b })));
 
     // 🔹 Apply fees and process all sells
     const { processedSells, updatedBuys } = processAllSells(sellOrders, buyOrders);
