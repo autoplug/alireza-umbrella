@@ -50,12 +50,23 @@ export default function ProcessSellPanel() {
     // Process sell orders against buys
     const { updatedBuys, processedSells } = processSell(sellOrders, buyOrders);
 
-    // Add profit to each processed sell
-    const sellsWithProfit = processedSells.map((s) => ({
-      ...s.sellOrder,
-      usedBuys: s.usedBuys,
-      profit: weightedAveragePrice(s.usedBuys),
-    }));
+    // After processing sell orders
+    const sellsWithProfit = processedSells.map((s) => {
+      const avgPrice = weightedAveragePrice(s.usedBuys); // weighted average price
+      const totalProfit = s.usedBuys.reduce(
+        (sum, u) => sum + u.used_amount * (s.sellOrder.price - u.price),
+        0
+      );
+    
+      return {
+        market: s.sellOrder.market,
+        amount: totalProfit,       // profit replaces amount
+        price: avgPrice,           // weighted avg replaces price
+        type: "sell",
+        created_at: s.sellOrder.created_at,
+        usedBuys: s.usedBuys,
+      };
+    });
 
     setProcessedSells(sellsWithProfit);
     setUpdatedBuys(updatedBuys);
