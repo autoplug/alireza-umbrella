@@ -39,9 +39,7 @@ export default function ProcessSellPanel() {
     const doneOrders = combinedOrders.filter((o) => o.status === "Done");
     
     // Apply Commision
-    doneOrders.forEach(o => {
-      o.feePrice = applyFee(o);
-    });
+    doneOrders = applyFee(doneOrders)
 
     // Sort buy & sell orders
     const sellOrders = doneOrders
