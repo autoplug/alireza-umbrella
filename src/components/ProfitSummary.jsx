@@ -117,7 +117,7 @@ export default function ProfitSummary() {
       <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
           <div
             style={{
-              fontSize: "14px",
+              fontSize: "16px",
               fontWeight: "bold",
               marginBottom: "5px",
               marginLeft: "20px",
