@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   processSell,
-  removeDuplicates
+  removeDuplicates,
+  weightedAveragePrice,
 } from "../api/utils";
 
 import localOrders from "../assets/nobitex.json";
@@ -42,10 +43,37 @@ export default function ProcessSellPanel() {
 
 
     // Process sells using updated processSell function
-    const { processedSells, updatedBuys } = processSell(sellOrders, buyOrders);
+    const calculateProcessedSells = (sellOrders, buyOrders) => {
+      const result = [];
+    
+      // Sort sells by time ascending
+      const sortedSells = [...sellOrders].sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at)
+      );
+    
+      for (const sell of sortedSells) {
+        // 🔥 this will MODIFY buyOrders directly
+        const used = processSellSingle(sell, buyOrders);
+    
+        if (!used.length) continue;
+    
+        const avgPrice = weightedAveragePrice(used);
+    
+        const profit =
+          (Number(sell.feePrice) - avgPrice) * Number(sell.amount);
+    
+        result.push({
+          ...sell,                 // keep all original sell fields
+          price: avgPrice,         // replace price with weighted average
+          amount: profit,          // replace amount with profit
+        });
+      }
+    
+      return result;
+    };
 
-    setSellTable(processedSells);
-    setBuyTable(updatedBuys);
+    setSellTable(sortedSells);
+    setBuyTable(buyOrders);
     
     
     
