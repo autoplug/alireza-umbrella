@@ -101,37 +101,44 @@ export const removeDuplicates = (orders) => {
 
 // ---------------- PREPARE ORDERS FILTERED ----------------
 export const processAllSells = (sellOrders, buyOrders) => {
+  // 🔥 Copy arrays to avoid mutation
+  const buys = [...buyOrders];
+  const sells = [...sellOrders];
+
   // 🔥 Apply fee once
-  applyFee(buyOrders);
-  applyFee(sellOrders);
+  applyFee(buys);
+  applyFee(sells);
 
-  const result = [];
+  const processedSells = [];
 
-  const sortedSells = [...sellOrders].sort(
+  // 🔹 Sort sell orders by creation time ascending
+  const sortedSells = sells.sort(
     (a, b) => new Date(a.created_at) - new Date(b.created_at)
   );
 
   for (const sell of sortedSells) {
-    const used = processSellSingle(sell, buyOrders);
+    // 🔹 Process this sell against current buy orders
+    const used = processSellSingle(sell, buys);
 
     if (!used.length) continue;
 
     const avgPrice = weightedAveragePrice(used);
+    const sellPrice = Number(sell.feePrice || sell.price || 0);
 
-    const profit =
-      (Number(sell.feePrice) - avgPrice) *
-      Number(sell.amount);
+    // 🔹 Profit = (sell price after fee - weighted average of buys) * amount sold
+    const profit = (sellPrice - avgPrice) * Number(sell.amount);
 
-    result.push({
+    processedSells.push({
       ...sell,
-      price: avgPrice,   // 🔥 replace price
-      amount: profit,    // 🔥 replace amount with profit
+      price: avgPrice,   // replace price with weighted average
+      amount: profit,    // replace amount with profit
+      usedBuys: used,    // optional: store which buys were used
     });
   }
 
   return {
-    processedSells: result,
-    updatedBuys: buyOrders, // amounts reduced
+    processedSells,
+    updatedBuys: buys,  // buy amounts reduced by consumption
   };
 };
 
