@@ -88,12 +88,25 @@ export default function ProcessSellPanel() {
 
   return (
     <div>
-      <TitleBar title="Process Sell" count={tableData.length} />
-      {tableData.length === 0 ? (
+
+      {/* Sell Orders Table */}
+      <TitleBar title="Process Sell" count={sellData.length} />
+      {sellData.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={tableData} sortBy="time" />
+        <TableOrder orders={sellData} sortBy="time" />
       )}
+
+      {/* Remaining Buy Orders Table */}
+      <div style={{ marginTop: "30px" }}>
+        <TitleBar title="Remain Buy" count={remainBuyData.length} />
+        {remainBuyData.length === 0 ? (
+          <p>No remaining buy orders.</p>
+        ) : (
+          <TableOrder orders={remainBuyData} sortBy="price" />
+        )}
+      </div>
+
     </div>
   );
 }
