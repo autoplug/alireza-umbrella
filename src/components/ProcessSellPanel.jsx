@@ -13,6 +13,7 @@ const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 export default function ProcessSellPanel() {
   const [tableData, setTableData] = useState([]);
+  const [remainBuyData, setRemainBuyData] = useState([]);
 
   useEffect(() => {
     const cached = localStorage.getItem(ORDERS_CACHE_KEY);
@@ -70,6 +71,19 @@ export default function ProcessSellPanel() {
     });
 
     setTableData(sellRows);
+    
+    // Cal Buy Amount > 0
+    const remainingBuys = buyOrders
+      //.filter((buy) => Number(buy.amount) > 0)
+      .sort((a, b) => Number(a.price) - Number(b.price)); // مرتب بر اساس قیمت
+
+    setRemainBuyData(remainingBuys)
+    
+    
+    
+    
+    
+    
   }, []);
 
   return (
