@@ -39,15 +39,15 @@ const COLUMN_WIDTHS = {
 
 // ----------------- Helper Functions -----------------
 const formatAmount = (amount, base) => {
-  if (base === "BTC") return (amount * 1e6).toLocaleString("en-US") + " BTC";
-  if (base === "USDT") return Math.floor(amount).toLocaleString("en-US") + " USD";
+  if (base === "BTC") return "BTC " + (amount * 1e6).toLocaleString("en-US") ;
+  if (base === "USDT") return "USD " + Math.floor(amount).toLocaleString("en-US");
   return Number(amount).toLocaleString("en-US");
 };
 
 const formatProfit = (profit, market) => {
   const quote = market.split("-")[1]?.toUpperCase() || "";
-  if (quote === "USDT") return Math.floor(profit).toLocaleString("en-US") + " USD";
-  if (quote === "RLS") return Math.floor(profit / 10).toLocaleString("en-US") + " IRT";
+  if (quote === "USDT") return "USD " + Math.floor(profit).toLocaleString("en-US");
+  if (quote === "RLS") return "IRT " + Math.floor(profit / 10).toLocaleString("en-US");
   return Number(profit).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
