@@ -54,7 +54,7 @@ export default function ProcessSellPanel() {
       created_at: b.created_at,
     }));
 
-    setSellTable(sellRows);
+    setSellTable(processedSells);
     setBuyTable(buyRows);
     
     
