@@ -22,18 +22,15 @@ export default function MarketIcon({ market, size = "normal" }) {
   const baseImg = logoMap[base] || "";
   const quoteImg = logoMap[quote] || "";
 
-  // Define font sizes
-  const fontSizes = {
-    small: 12,
-    normal: 14,
-    large: 16,
+  // Define icon sizes based on "size" prop
+  const iconSizes = {
+    small: 16,
+    normal: 20,
+    large: 28,
   };
 
-  const fontSize = fontSizes[size] || fontSizes.normal;
-
-  // Icon dimensions proportional to font size
-  const iconHeight = fontSize + 8; // e.g., 20px for small, 22px normal, 24px large
-  const iconWidth = iconHeight * 1.4; // proportion for overlap
+  const iconHeight = iconSizes[size] || iconSizes.normal;
+  const iconWidth = iconHeight * 1.4; // proportion for overlapping
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -73,11 +70,10 @@ export default function MarketIcon({ market, size = "normal" }) {
         )}
       </div>
 
-      {/* Market name */}
+      {/* Market name (always displayed, font controlled externally) */}
       <span
         style={{
           fontWeight: "bold",
-          fontSize: fontSize,
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
