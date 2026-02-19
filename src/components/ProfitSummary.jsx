@@ -118,6 +118,22 @@ export default function ProfitSummary() {
         {tableData.length === 0 ? (
           <p style={{ marginLeft: "20px" }}>No data to display.</p>
         ) : (
+          
+          }}>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    marginBottom: "5px",
+                    marginLeft: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                Current Profit
+                </div>
+          
           <table style={tableStyle}>
             <thead>
               <tr>
