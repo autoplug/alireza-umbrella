@@ -1,4 +1,4 @@
-// src/api/utils.js
+
 
 // ---------------- APPLY FEE ----------------
 export const applyFee = (orders) =>
@@ -20,16 +20,12 @@ export const applyFee = (orders) =>
   
   
 // ---------------- PROCESS SELL ----------------
+import { applyFee } from "./utils";
+import { weightedAveragePrice } from "./utils";
 
-/**
- * Process sell orders against buy orders with 90%-10% allocation
- * @param {Array} sellOrders - list of sell orders
- * @param {Array} buyOrders - list of buy orders
- * @returns {Object} { updatedBuys, processedSells }
- */
 export const processSell = (sellOrders, buyOrders) => {
-  // Apply fee to all orders
-  const buys = applyFee([...buyOrders]); // copy to avoid mutation
+  // Apply fee to all orders (copy to avoid mutation)
+  const buys = applyFee([...buyOrders]);
   const sells = applyFee([...sellOrders]);
 
   // Sort sell orders by creation time ascending
@@ -47,7 +43,14 @@ export const processSell = (sellOrders, buyOrders) => {
       .filter((b) => new Date(b.created_at) < new Date(sell.created_at) && b.amount > 0);
 
     if (relevantBuys.length === 0) {
-      processedSells.push({ sellOrder: sell, usedBuys: [], remainingSell });
+      processedSells.push({
+        market: sell.market,
+        amount: 0,          // no profit if no buys
+        price: sell.feePrice,
+        type: "sell",
+        created_at: sell.created_at,
+        profit: 0,
+      });
       continue;
     }
 
@@ -75,19 +78,27 @@ export const processSell = (sellOrders, buyOrders) => {
       amount10 -= take;
     }
 
-    // Save processed sell
+    // ===== Calculate weighted average price and profit =====
+    const avgPrice = weightedAveragePrice(usedBuys);
+    const profit = (sell.feePrice - avgPrice) * Number(sell.amount);
+
+    // Save processed sell with avg price as 'price' and profit in 'amount'
     processedSells.push({
-      sellOrder: sell,
-      usedBuys,
-      remainingSell,
+      market: sell.market,
+      amount: profit,     // replace amount with profit
+      price: avgPrice,    // weighted average price
+      type: "sell",
+      created_at: sell.created_at,
+      profit,             // original profit as well (optional)
     });
   }
 
   return {
-    processedSells,          // sell orders with allocation details
-    updatedBuys: buys,       // updated buy orders with remaining amounts
+    processedSells,    // sell orders ready for table
+    updatedBuys: buys, // updated buy orders
   };
 };
+
 
 // ---------------- WEIGHTED AVERAGE PRICE ----------------
 export const weightedAveragePrice = (used) => {
