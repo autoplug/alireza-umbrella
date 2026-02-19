@@ -75,7 +75,7 @@ export default function ProcessSellPanel() {
     // Filter remaining buy orders with amount > 0
     const remainingBuys = buyOrders
       //.filter((buy) => Number(buy.amount) > 0)
-      .sort((a, b) => Number(a.price) - Number(b.price)); // مرتب بر اساس قیمت
+      //.sort((a, b) => Number(a.price) - Number(b.price)); // مرتب بر اساس قیمت
 
     setRemainBuyData(remainingBuys)
     
