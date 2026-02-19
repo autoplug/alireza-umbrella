@@ -49,6 +49,17 @@ export default function ProcessSellPanel() {
     // 🔹 Apply fees and process all sells
     //const { processedSells, updatedBuys } = processAllSells(sells, buys);
 
+
+const decrementOrders = (orders) => {
+  return orders.map(order => {
+    return {
+      ...order,
+      amount: Number(order.amount) - 1
+    };
+  });
+};
+decrementOrders(sells);
+
     setSellTable(sells);
     setBuyTable(buys);
     
