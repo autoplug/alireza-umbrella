@@ -86,7 +86,10 @@ export default function ProcessSellPanel() {
     finalSells = keepLastTenPerMarket(finalSells);
     setSellTable(finalSells);
     
+    finalBuys = finalBuys.filter((order) => Number(order.amount) > 0);
     setBuyTable(finalBuys);
+    
+    
     
   }, []);
 
