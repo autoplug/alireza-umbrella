@@ -100,9 +100,15 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
   let titleCounter = 0;
 
   // Columns from first row keys AND DEFAULT KEYS 
-  let columns = { "#":0, "Amount":0, "Price":0, "Type":0};
+  let columns = { 
+    "#": COLUMN_WIDTHS.index, 
+    "Amount": COLUMN_WIDTHS.amount, 
+    "Price": COLUMN_WIDTHS.price, 
+    "Type": COLUMN_WIDTHS.type
+   };
+  
   const hasTotal = total && typeof total === "object";
-  if(!hasTotal) total = columns;
+
 
   return (
     <div>
@@ -113,6 +119,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
           .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
             // 🔹 Sort inside table
+            titleCounter = 0;
             const sortedOrders = [...marketOrders].sort((a, b) => {
               if (sortBy === "price") {
                 return Number(a.price) - Number(b.price);
@@ -153,18 +160,19 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
 
                     <tr>
                       {total.map((col) => (
+                        { titleCounter += 1; }
                         <th
                           key={col}
                           style={{
                             ...thStyle,
-                            width: {hasTotal? columns[col]},
+                            width: {columns[Object.keys(columns)[titleCounter]]},
                             textAlign: "left",
                             padding: "8px 12px",
                             borderBottom: "1px solid #aaa",
                             backgroundColor: "#f3f3f3",
                           }}
                         >
-                          {col}
+                          {hasTotal ? col : Object.keys(columns)[titleCounter]}
                         </th>
                       ))}
                     </tr>
