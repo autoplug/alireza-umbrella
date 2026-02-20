@@ -88,7 +88,7 @@ const renderType = (type) => {
 };
 
 export default function TableOrder({ orders, sortBy = "time", total = null }) {
-  total = COLUMN_WIDTHS;
+
   // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
     const key = order.market || "Unknown";
