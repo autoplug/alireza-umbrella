@@ -8,7 +8,7 @@ import {formatPrice} from "../api/utils";
 
 // Column widths
 const COLUMN_WIDTHS = {
-  "#": "5%",
+  id: "5%",
   Amount: "35%",
   Price: "45%",
   Type: "15%",
