@@ -56,8 +56,8 @@ function BottomNavigation() {
       </button>
 
       <button
-        onClick={() => navigate("/trades")}
-        style={buttonStyle(currentPath === "/trades")}
+        onClick={() => navigate("/chart")}
+        style={buttonStyle(currentPath === "/chart")}
       >
         <i className="fas fa-chart-line" style={{ fontSize: 20, marginBottom: 2 }}></i>
         Chart
