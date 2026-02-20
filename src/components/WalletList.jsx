@@ -108,7 +108,7 @@ export default function WalletList() {
               alignItems: "center",
               justifyContent: "flex-start", 
               transition: "transform 0.15s",
-              gap : 30,
+              gap : 10,
             }}
           >
             {/* Left: Market Icon */}
