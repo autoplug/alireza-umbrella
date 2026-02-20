@@ -1,60 +1,65 @@
 import React, { useEffect, useState } from "react";
-
 import TitleBar from "./TitleBar";
+import MarketIcon from "./MarketIcon"; // import MarketIcon
 
-// Import local logos (place your images in src/assets/logos/)
-import BTCLogo from "../assets/logos/btc.PNG";
-import ETHLogo from "../assets/logos/eth.PNG";
-import USDTLogo from "../assets/logos/usdt.PNG";
-import RLSLogo from "../assets/logos/rls.jpg";
+const WALLETS_CACHE_KEY = "WALLETS_CACHE";
 
-// Map currency symbol to local logo
-const currencyLogos = {
-  BTC: BTCLogo,
-  ETH: ETHLogo,
-  USDT: USDTLogo,
-  RLS: RLSLogo,
-  // Add more currencies as needed
+// Load wallet data from localStorage
+const getWalletsFromCache = () => {
+  try {
+    const data = localStorage.getItem(WALLETS_CACHE_KEY);
+    if (!data) return [];
+    return JSON.parse(data) || [];
+  } catch (err) {
+    console.error("Error parsing WALLETS_CACHE:", err);
+    return [];
+  }
 };
 
-// Helper to get cached data
-const getCache = (key) => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
+// Format balance based on currency
+const formatBalance = (value, currency) => {
+  const number = Number(value);
+  if (isNaN(number) || number === 0) return null;
+
+  const c = currency.toUpperCase();
+
+  if (c === "RLS") {
+    if (number < 100_000_000) {
+      return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
+    } else {
+      return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
+    }
+  }
+
+  if (c === "USD" || c === "USDT") {
+    if (number < 10) {
+      return number.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+      return Math.floor(number).toLocaleString("en-US");
+    }
+  }
+
+  if (number >= 1) return number.toLocaleString("en-US");
+  return number.toFixed(6);
 };
 
 export default function WalletList() {
   const [wallets, setWallets] = useState([]);
 
-  // Load wallets from localStorage/cache on mount
   useEffect(() => {
-    const cachedWallets = getCache("WALLETS_CACHE");
-    setWallets(cachedWallets);
+    const cached = getWalletsFromCache();
+    setWallets(cached);
   }, []);
 
-  if (!wallets.length) return <div>No wallets available</div>;
+  const visibleWallets = wallets.filter((w) => Number(w.balance) > 0);
 
-  // Format balances for readability
-  const formatBalance = (value, currency) => {
-    if (currency.toLowerCase() === "rls") {
-      const toman = Math.floor(Number(value) / 10);
-      return `${toman.toLocaleString()}`;
-    }
-    const number = Number(value);
-    if (isNaN(number)) return value;
-
-    // Large numbers → commas
-    if (number >= 1) return number.toLocaleString();
-
-    // Small crypto → limit decimals
-    return number.toFixed(6);
-  };
+  if (!visibleWallets.length) return <div>No wallets available</div>;
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-    <TitleBar title="Wallets" count={0} />
-      
-      {wallets.map((wallet) => (
+      <TitleBar title="Wallets" count={visibleWallets.length} />
+
+      {visibleWallets.map((wallet) => (
         <div
           key={wallet.currency}
           style={{
@@ -65,24 +70,15 @@ export default function WalletList() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            marginBottom: 10,
           }}
         >
-          {/* Left side: Logo + Currency */}
+          {/* Left side: MarketIcon + Currency */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* Currency logo */}
-            <img
-              src={currencyLogos[wallet.currency.toUpperCase()]}
-              alt={wallet.currency}
-              style={{ width: 36, height: 36, borderRadius: "50%" }}
-            />
-
-            {/* Currency symbol */}
-            <div style={{ fontWeight: 600 }}>
-              {wallet.currency.toUpperCase()}
-            </div>
+            <MarketIcon market={wallet.currency} size="large" />
           </div>
 
-          {/* Right side: Balance */}
+          {/* Right side: Formatted balance */}
           <div style={{ fontWeight: 500, textAlign: "left" }}>
             {formatBalance(wallet.balance, wallet.currency)}
           </div>
