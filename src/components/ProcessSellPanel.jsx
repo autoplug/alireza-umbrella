@@ -49,11 +49,8 @@ export default function ProcessSellPanel() {
 
     // ===== Process each market separately =====
     Object.entries(ordersByMarket).forEach(([market, { buys, sells }]) => {
-
-      // Run processAllSells for this market
       const { processedSells, updatedBuys } = processAllSells(sells, buys);
 
-      // Collect results
       finalSells.push(...processedSells);
       finalBuys.push(...updatedBuys);
     });
