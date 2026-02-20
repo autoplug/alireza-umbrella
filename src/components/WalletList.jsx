@@ -87,13 +87,14 @@ export default function WalletList() {
               alignItems: "center",
               justifyContent: "flex-start", 
               transition: "transform 0.15s",
+              gap : 50,
             }}
           >
             {/* Left: Market Icon */}
             <MarketIcon market={wallet.currency.toUpperCase()} size="large" />
 
             {/* Right: Amounts */}
-            <div style={{ display: "flex", flexDirection: "column", marginLeft: "50px"}}>
+            <div style={{ display: "flex", flexDirection: "column"}}>
               <div style={{ fontWeight: 700, fontSize: 16  }}>
                 {formatBalance(wallet.balance, wallet.currency)}
               </div>
