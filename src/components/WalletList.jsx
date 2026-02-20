@@ -71,6 +71,48 @@ export default function WalletList() {
 
 
   return (
+    <div style={{ maxHeight: "80vh", overflowY: "auto", padding: "0 16px" }}>
+      <TitleBar title="Wallets" count={0} />
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+        {wallets.map((wallet) => (
+          <div
+            key={wallet.currency}
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: 16,
+              padding: "16px 20px",
+              boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              transition: "transform 0.15s",
+            }}
+          >
+            {/* Left: Market Icon */}
+            <MarketIcon market={wallet.currency} size="large" />
+
+            {/* Right: Amounts */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+              <div style={{ fontWeight: 700, fontSize: 18 }}>
+                {formatBalance(wallet.balance, wallet.currency)}
+              </div>
+              <div style={{ fontWeight: 500, fontSize: 14, color: "#555" }}>
+                {calcRialValue(wallet.balance, wallet.currency, markets)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
     <TitleBar title="Wallets" count={0} />
       
