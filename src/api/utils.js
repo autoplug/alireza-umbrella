@@ -149,11 +149,9 @@ export const formatPrice = (price, market) => {
   if (!value || isNaN(value)) return "0";
 
   // Extract quote currency from market string (e.g. BTC-IRT → IRT)
-  if(market.includes("-")){
-    const quoteCurrency = market?.split("-")[1]?.toUpperCase();
-  }else{
-    const quoteCurrency = market;
-  }
+  let quoteCurrency = market.includes("-") ?
+    market?.split("-")[1]?.toUpperCase():market;
+
   // ===== IRT (Iranian Rial) =====
   if (quoteCurrency === "RLS") {
     if (value < 100_000_000) {
