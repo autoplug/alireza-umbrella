@@ -182,7 +182,7 @@ export const formatPrice = (price, market) => {
   // ===== BTC =====
   if (quoteCurrency === "BTC") {
       // Show two decimal places if below 10
-      return "USD " + Math.floor(value * 1_000_000);
+      return "BTC " + Math.floor(value * 1_000_000);
   }
 
 
