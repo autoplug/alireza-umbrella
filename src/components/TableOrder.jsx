@@ -186,8 +186,8 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                     {hasTotal && (
                       <tr style={{ backgroundColor: "#eef2f7", fontWeight: "bold", borderTop: "2px solid #bbb"}}>
                         {cols.map((col, cidx) => (
-                          <td key={col} style={{ ...tdStyle, padding: "6px 20px" }}>
-                            {cidx === 0 ? "Total" : total[col] ?? ""}
+                          <td key={col} style={{ ...tdStyle}}>
+                            {cidx === 0 ? "T" : total[col] ?? ""}
                           </td>
                         ))}
                       </tr>
