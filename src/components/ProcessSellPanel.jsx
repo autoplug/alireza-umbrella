@@ -73,7 +73,7 @@ export default function ProcessSellPanel() {
       {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={sellTable} sortBy="time" />
+        <TableOrder orders={sellTable} sortBy="time" profit={true}/>
       )}
 
       {/* ===== Remaining Buy Orders Table ===== */}
