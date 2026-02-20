@@ -32,7 +32,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/trades" element={<Trades />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/chart" element={<chart />} />
+          <Route path="/chart" element={<Chart />} />
         </Routes>
 
         {/* Bottom Navigation */}
