@@ -5,6 +5,7 @@ import MarketIcon from "./MarketIcon";
 const WALLETS_CACHE_KEY = "WALLETS_CACHE";
 const MARKETS_CACHE_KEY = "MARKETS_CACHE";
 
+// Helper: load JSON from localStorage safely
 const getCache = (key) => {
   try {
     const data = localStorage.getItem(key);
@@ -23,12 +24,17 @@ const formatBalance = (value, currency) => {
   const c = currency.toUpperCase();
 
   if (c === "RLS") {
-    if (number < 100_000_000) return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
+    if (number < 100_000_000)
+      return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
     else return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
   }
 
   if (c === "USD" || c === "USDT") {
-    if (number < 10) return number.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (number < 10)
+      return number.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
     else return Math.floor(number).toLocaleString("en-US");
   }
 
@@ -36,15 +42,21 @@ const formatBalance = (value, currency) => {
   return number.toFixed(6);
 };
 
-// Calculate Rial value using MARKETS_CACHE object
+// Calculate Rial value using MARKETS_CACHE
 const calcRialValue = (currency, amount, markets) => {
-  if (!amount || amount === 0) return "-";
+  if (!amount || Number(amount) === 0) return "-";
 
-  const key = `${currency.toLowerCase()}-rls`;
-  const rate = markets[key];
+  // Case-insensitive search for market key
+  const searchKey = Object.keys(markets).find(
+    (k) => k.toLowerCase() === `${currency}-rls`.toLowerCase()
+  );
+
+  if (!searchKey) return "-";
+
+  const rate = Number(markets[searchKey]);
   if (!rate) return "-";
 
-  return formatBalance(amount * rate, "RLS");
+  return formatBalance(Number(amount) * rate, "RLS");
 };
 
 export default function WalletList() {
@@ -52,11 +64,11 @@ export default function WalletList() {
   const [markets, setMarkets] = useState({});
 
   useEffect(() => {
-    setWallets(getCache(WALLETS_CACHE_KEY)); // { USDT: 5, BTC: 0.02 }
-    setMarkets(getCache(MARKETS_CACHE_KEY));  // { "usdt-rls": 1357, "btc-rls": 1200000000 }
+    setWallets(getCache(WALLETS_CACHE_KEY)); // e.g., { USDT: 5, BTC: 0.02 }
+    setMarkets(getCache(MARKETS_CACHE_KEY));  // e.g., { "Usdt-rls": 1357, "Btc-rls": 1200000000 }
   }, []);
 
-  const currencies = Object.keys(wallets).filter((c) => wallets[c] > 0);
+  const currencies = Object.keys(wallets).filter((c) => Number(wallets[c]) > 0);
 
   if (!currencies.length) return <div>No wallets available</div>;
 
