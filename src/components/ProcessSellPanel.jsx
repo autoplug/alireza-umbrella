@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   processAllSells,
-  removeDuplicates,
-  applyFee,
+  removeDuplicates
 } from "../api/utils";
 
 import localOrders from "../assets/nobitex.json";
@@ -50,9 +49,6 @@ export default function ProcessSellPanel() {
 
     // ===== Process each market separately =====
     Object.entries(ordersByMarket).forEach(([market, { buys, sells }]) => {
-      // Apply fee once per market
-      applyFee(buys);
-      applyFee(sells);
 
       // Run processAllSells for this market
       const { processedSells, updatedBuys } = processAllSells(sells, buys);
