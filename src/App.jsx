@@ -9,6 +9,7 @@ import { fetchAllData } from "./api/api";
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
 import Settings from "./pages/Settings";
+import Chart from "./pages/Chart";
 
 export default function App() {
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/trades" element={<Trades />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/chart" element={<chart />} />
         </Routes>
 
         {/* Bottom Navigation */}
