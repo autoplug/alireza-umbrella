@@ -75,7 +75,7 @@ export default function WalletList() {
       <div
         style={{
           textAlign: "center",
-          marginBottom: 20,
+          marginBottom: 10,
           padding: "20px 0",
         }}
       >
