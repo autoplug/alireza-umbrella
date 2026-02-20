@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TokenInput from "../components/TokenInput";
+import CandleStick from "../components/CandleStick";
 
 export default function Chart() {
   const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
@@ -12,7 +12,7 @@ export default function Chart() {
   return (
     <div style={{ padding: 16 }}>
       <h2>Chart</h2>
-      <TokenInput initialToken={token} onSave={handleTokenSave} />
+      <CandleStick />
       {/* Additional settings can be added here */}
     </div>
   );
