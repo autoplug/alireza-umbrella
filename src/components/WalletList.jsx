@@ -15,18 +15,24 @@ const getCache = (key) => {
 const calcTotalRial = (wallets, markets) => {
   if (!wallets || !markets) return 0;
 
-  let total = 0;
+  const total = wallets.map((wallet) => {
+    const balance = Number(wallet.currency);
+    if (!balance) return 0;
 
-  Object.keys(wallets).forEach((currency) => {
-    const balance = Number(wallets[currency]);
+    const marketKey = `${wallet.currency.toUpperCase()}-RLS`;
+    const rate = markets[marketKey];
+
+    if (!rate) return 0;
+
+    return balance * Number(rate);
+    const balance = Number(wallet.currency);
     if (!balance) return;
 
     const marketKey = `${currency.toUpperCase()}-RLS`;
     const rate = markets[marketKey];
 
-    if (rate) {
-      total += balance * Number(rate);
-    }
+    if (rate) total += balance * Number(rate);
+    
   });
 
   return total;
