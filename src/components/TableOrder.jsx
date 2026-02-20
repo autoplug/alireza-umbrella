@@ -180,6 +180,21 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                         </tr>
                       );
                     })}
+                    
+                    
+                    {/* Total row */}
+                    {hasTotal && (
+                      <tr style={{ backgroundColor: "#eef2f7", fontWeight: "bold", borderTop: "2px solid #bbb" }}>
+                        {cols.map((col, cidx) => (
+                          <td key={col} style={{ padding: "6px 20px" }}>
+                            {cidx === 0 ? "Total" : total[col] ?? ""}
+                          </td>
+                        ))}
+                      </tr>
+                    )}
+                  </tbo
+                    
+                    
                   </tbody>
                 </table>
               </div>
