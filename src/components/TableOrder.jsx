@@ -192,7 +192,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                         ))}
                       </tr>
                     )}
-                  </tbo
+                
                     
                     
                   </tbody>
