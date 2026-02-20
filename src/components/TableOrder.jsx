@@ -149,13 +149,13 @@ export default function TableOrder({ orders, sortBy = "time", profit = false }) 
             // 🔹 Sort inside table
             const sortedOrders = [...marketOrders].sort((a, b) => {
               if (sortBy === "price") {
-                return Number(b.price) - Number(a.price);
+                return Number(a.price) - Number(b.price);
               }
 
               // default: time
               return (
-                new Date(b.created_at || b.timestamp) -
-                new Date(a.created_at || a.timestamp)
+                new Date(a.created_at || a.timestamp) -
+                new Date(b.created_at || b.timestamp)
               );
             });
 
