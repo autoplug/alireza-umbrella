@@ -98,6 +98,11 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
 
   let rowCounter = 0;
 
+  // Columns from first row keys AND DEFAULT KEYS 
+  let columns = { "#":0, "Amount":0, "Price":0, "Type":0};
+  const hasTotal = total && typeof total === "object";
+  if(hasTotal) columns = total;
+
   return (
     <div>
       {Object.keys(ordersByMarket).length === 0 ? (
