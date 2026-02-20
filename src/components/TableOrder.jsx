@@ -181,7 +181,7 @@ export default function TableOrder({ orders, sortBy = "time", profit = false }) 
                     <tr>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>{profit ? "Profit" : "Amount" }</th>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>Price</th>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>{profit ? "Avg Price" : "Price" }</th>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
                     </tr>
                   </thead>
