@@ -8,10 +8,10 @@ import {formatPrice} from "../api/utils";
 
 // Column widths
 const COLUMN_WIDTHS = {
-  index: "5%",
-  amount: "35%",
-  price: "45%",
-  type: "15%",
+  "#": "5%",
+  Amount: "35%",
+  Price: "45%",
+  Type: "15%",
 };
 
 // Table styles
