@@ -19,7 +19,7 @@ const calcTotalRial = (wallets, markets) => {
     const balance = Number(wallet.balance);
     if (!balance) return 0;
     if( wallet.currency.toLowerCase() === "rls") 
-      return formatPrice(balance,"RLS")
+      return balance
     
     
     const marketKey = `${wallet.currency.toLowerCase()}-rls`;
@@ -29,8 +29,9 @@ const calcTotalRial = (wallets, markets) => {
 
     return balance * Number(rate);
   });
-
-  return values.reduce((sum, value) => sum + value, 0);
+  
+  result = values.reduce((sum, value) => sum + value, 0);
+  return formatPrice(result);
 };
 
 //////////////////////////////////////////////
