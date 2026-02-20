@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import TitleBar from "./TitleBar";
-import MarketIcon from "./MarketIcon"; // import MarketIcon
+import MarketIcon from "./MarketIcon";
 
 const WALLETS_CACHE_KEY = "WALLETS_CACHE";
+const MARKETS_CACHE_KEY = "MARKETS_CACHE";
 
-// Load wallet data from localStorage
-const getWalletsFromCache = () => {
+const getCache = (key) => {
   try {
-    const data = localStorage.getItem(WALLETS_CACHE_KEY);
-    if (!data) return [];
-    return JSON.parse(data) || [];
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : {};
   } catch (err) {
-    console.error("Error parsing WALLETS_CACHE:", err);
-    return [];
+    console.error(`Error parsing ${key}:`, err);
+    return {};
   }
 };
 
-// Format balance based on currency
+// Format balance for display
 const formatBalance = (value, currency) => {
   const number = Number(value);
   if (isNaN(number) || number === 0) return null;
@@ -24,44 +23,50 @@ const formatBalance = (value, currency) => {
   const c = currency.toUpperCase();
 
   if (c === "RLS") {
-    if (number < 100_000_000) {
-      return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
-    } else {
-      return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
-    }
+    if (number < 100_000_000) return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
+    else return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
   }
 
   if (c === "USD" || c === "USDT") {
-    if (number < 10) {
-      return number.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    } else {
-      return Math.floor(number).toLocaleString("en-US");
-    }
+    if (number < 10) return number.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    else return Math.floor(number).toLocaleString("en-US");
   }
 
   if (number >= 1) return number.toLocaleString("en-US");
   return number.toFixed(6);
 };
 
+// Calculate Rial value using MARKETS_CACHE object
+const calcRialValue = (currency, amount, markets) => {
+  if (!amount || amount === 0) return "-";
+
+  const key = `${currency.toLowerCase()}-rls`;
+  const rate = markets[key];
+  if (!rate) return "-";
+
+  return formatBalance(amount * rate, "RLS");
+};
+
 export default function WalletList() {
-  const [wallets, setWallets] = useState([]);
+  const [wallets, setWallets] = useState({});
+  const [markets, setMarkets] = useState({});
 
   useEffect(() => {
-    const cached = getWalletsFromCache();
-    setWallets(cached);
+    setWallets(getCache(WALLETS_CACHE_KEY)); // { USDT: 5, BTC: 0.02 }
+    setMarkets(getCache(MARKETS_CACHE_KEY));  // { "usdt-rls": 1357, "btc-rls": 1200000000 }
   }, []);
 
-  const visibleWallets = wallets.filter((w) => Number(w.balance) > 0);
+  const currencies = Object.keys(wallets).filter((c) => wallets[c] > 0);
 
-  if (!visibleWallets.length) return <div>No wallets available</div>;
+  if (!currencies.length) return <div>No wallets available</div>;
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      <TitleBar title="Wallets" count={visibleWallets.length} />
+      <TitleBar title="Wallets" count={currencies.length} />
 
-      {visibleWallets.map((wallet) => (
+      {currencies.map((currency) => (
         <div
-          key={wallet.currency}
+          key={currency}
           style={{
             backgroundColor: "#ffffff",
             borderRadius: 16,
@@ -73,14 +78,17 @@ export default function WalletList() {
             marginBottom: 10,
           }}
         >
-          {/* Left side: MarketIcon + Currency */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <MarketIcon market={wallet.currency} size="large" />
-          </div>
+          {/* Left: MarketIcon */}
+          <MarketIcon market={currency} size="large" />
 
-          {/* Right side: Formatted balance */}
-          <div style={{ fontWeight: 500, textAlign: "left" }}>
-            {formatBalance(wallet.balance, wallet.currency)}
+          {/* Right: Amount + Rial equivalent */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+            <div style={{ fontWeight: 600, fontSize: 16 }}>
+              {formatBalance(wallets[currency], currency)}
+            </div>
+            <div style={{ fontWeight: 500, fontSize: 14, color: "#555" }}>
+              {calcRialValue(currency, wallets[currency], markets)}
+            </div>
           </div>
         </div>
       ))}
