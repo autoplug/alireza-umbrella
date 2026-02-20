@@ -36,7 +36,7 @@ const formatBalance = (value, currency) => {
 };
 
 // Calculate Rial value using MARKETS_CACHE
-const calcRialValue = (currency, amount, markets) => {
+const calcRialValue = (amount, currency, markets) => {
   if (!amount || Number(amount) === 0) return "-";
 
   // Case-insensitive search for market key
@@ -95,6 +95,7 @@ export default function WalletList() {
           {/* Right side: Balance */}
           <div style={{ fontWeight: 500, textAlign: "left" }}>
             {formatBalance(wallet.balance, wallet.currency)}
+            {calcRialValue(wallet.balance, wallet.currency, markets)}
           </div>
         </div>
       ))}
