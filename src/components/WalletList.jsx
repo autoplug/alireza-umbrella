@@ -56,9 +56,9 @@ export default function WalletList() {
             key={wallet.currency}
             style={{
               backgroundColor: "#ffffff",
-              borderRadius: 16,
+              borderRadius: 0,
               padding: "16px 20px",
-              boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+              borderBottom: "1px solid #eee", 
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start", 
