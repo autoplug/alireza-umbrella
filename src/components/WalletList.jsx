@@ -105,43 +105,5 @@ export default function WalletList() {
         ))}
       </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-    <TitleBar title="Wallets" count={0} />
-      
-      {wallets.map((wallet) => (
-        <div
-          key={wallet.currency}
-          style={{
-            backgroundColor: "#ffffff",
-            borderRadius: 16,
-            padding: 16,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          {/* Left side: Logo + Currency */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* Currency logo */}
-            <MarketIcon market={wallet.currency.toUpperCase()} size="large"/>
-          </div>
-
-          {/* Right side: Balance */}
-          <div style={{ fontWeight: 500, textAlign: "left" }}>
-            {formatBalance(wallet.balance, wallet.currency)}
-            {calcRialValue(wallet.balance, wallet.currency, markets)}
-          </div>
-        </div>
-      ))}
-    </div>
   );
 }
