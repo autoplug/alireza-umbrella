@@ -85,7 +85,7 @@ export default function WalletList() {
               boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start", 
               transition: "transform 0.15s",
             }}
           >
