@@ -127,7 +127,7 @@ const renderType = (type) => {
   );
 };
 
-export default function TableOrder({ orders, sortBy = "time" }) {
+export default function TableOrder({ orders, sortBy = "time", profit = false }) {
   // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
     const key = order.market || "Unknown";
@@ -180,7 +180,7 @@ export default function TableOrder({ orders, sortBy = "time" }) {
                   <thead>
                     <tr>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>Amount</th>
+                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>{profit ? "Profit" : "Amount" }</th>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>Price</th>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
                     </tr>
@@ -199,7 +199,7 @@ export default function TableOrder({ orders, sortBy = "time" }) {
                             {rowCounter}
                           </td>
                           <td style={{ ...tdStyle, color: baseColor }}>
-                            {formatAmount(order.amount, order.market)}
+                            {profit ? formatPrice(order.amount, order.market) : formatAmount(order.amount, order.market)}
                           </td>
                           <td style={{ ...tdStyle, color: baseColor }}>
                             {formatPrice(order.price, order.market)}
