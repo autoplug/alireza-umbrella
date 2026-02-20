@@ -37,7 +37,7 @@ const formatBalance = (value, currency) => {
 
 // Calculate Rial value using MARKETS_CACHE
 const calcRialValue = (amount, currency, markets) => {
-  if( currency.toLowerCase() == "rls") return amount;
+  if( currency.toLowerCase() === "rls") return amount;
   if (!amount || Number(amount) === 0) return "-";
 
   // Case-insensitive search for market key
