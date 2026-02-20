@@ -94,10 +94,10 @@ export default function WalletList() {
 
             {/* Right: Amounts */}
             <div style={{ display: "flex", flexDirection: "column" marginLeft: "50px"}}>
-              <div style={{ fontWeight: 700, fontSize: 18 }}>
+              <div style={{ fontWeight: 700, fontSize: 16  }}>
                 {formatBalance(wallet.balance, wallet.currency)}
               </div>
-              <div style={{ fontWeight: 500, fontSize: 14, color: "#555" }}>
+              <div style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>
                 {calcRialValue(wallet.balance, wallet.currency, markets)}
               </div>
             </div>
