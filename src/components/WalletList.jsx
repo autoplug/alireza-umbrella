@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
+import {formatPrice} from "../api/utils";
 
 // Helper to get cached data
 const getCache = (key) => {
@@ -9,31 +10,6 @@ const getCache = (key) => {
   return data ? JSON.parse(data) : [];
 };
 
-// Format balance for display
-const formatBalance = (value, currency) => {
-  const number = Number(value);
-  if (isNaN(number) || number === 0) return null;
-
-  const c = currency.toUpperCase();
-
-  if (c === "RLS") {
-    if (number < 100_000_000)
-      return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
-    else return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
-  }
-
-  if (c === "USD" || c === "USDT") {
-    if (number < 10)
-      return number.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    else return Math.floor(number).toLocaleString("en-US");
-  }
-
-  if (number >= 1) return number.toLocaleString("en-US");
-  return number.toFixed(6);
-};
 
 // Calculate Rial value using MARKETS_CACHE
 const calcRialValue = (amount, currency, markets) => {
@@ -96,7 +72,7 @@ export default function WalletList() {
             {/* Right: Amounts */}
             <div style={{ display: "flex", flexDirection: "column"}}>
               <div style={{ fontWeight: 700, fontSize: 16  }}>
-                {formatBalance(wallet.balance, wallet.currency)}
+                {formatPrice(wallet.balance, wallet.currency)}
               </div>
               <div style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>
                 {calcRialValue(wallet.balance, wallet.currency, markets)}
