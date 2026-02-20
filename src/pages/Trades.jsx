@@ -5,8 +5,8 @@ import ProcessSellPanel from "../components/ProcessSellPanel";
 export default function MarketPage() {
   return (
     <div>
-      {/* ProfitSummary section */}
-      <ProfitSummary />  
+      {/* ProfitSummary section 
+      <ProfitSummary />  */}
       
       <ProcessSellPanel />
   
