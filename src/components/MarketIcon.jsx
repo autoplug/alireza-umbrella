@@ -84,13 +84,14 @@ export default function MarketIcon({ market, size = "normal" }) {
       <div
         ref={divRef}
         style={{
+          display: "inline-block",
           fontWeight: "bold",
           fontSize: "inherit",
           fontFamily: "inherit",
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          maxWidth: 120,
+          width: 100,
         }}
       >
         {market.padEnd(4," ")}
