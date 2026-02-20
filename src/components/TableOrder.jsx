@@ -88,6 +88,7 @@ const renderType = (type) => {
 };
 
 export default function TableOrder({ orders, sortBy = "time", total = null }) {
+  total = null;
   // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
     const key = order.market || "Unknown";
@@ -97,18 +98,6 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
   }, {});
 
   let rowCounter = 0;
-  let titleCounter = 0;
-
-  // Columns from first row keys AND DEFAULT KEYS 
-  let columns = { 
-    "#": COLUMN_WIDTHS.index, 
-    "Amount": COLUMN_WIDTHS.amount, 
-    "Price": COLUMN_WIDTHS.price, 
-    "Type": COLUMN_WIDTHS.type
-   };
-  
-  const hasTotal = total && typeof total === "object";
-
 
   return (
     <div>
@@ -119,7 +108,6 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
           .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
             // 🔹 Sort inside table
-            titleCounter = 0;
             const sortedOrders = [...marketOrders].sort((a, b) => {
               if (sortBy === "price") {
                 return Number(a.price) - Number(b.price);
@@ -131,6 +119,12 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                 new Date(b.created_at || b.timestamp)
               );
             });
+
+
+            // Determine columns: total keys or COLUMN_WIDTHS keys
+            const cols = total ? Object.keys(total) : Object.keys(COLUMN_WIDTHS);
+            const hasTotal = !!total
+
 
             return (
               <div key={market} style={{ marginBottom: "20px" }}>
@@ -150,39 +144,17 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
               </div>
 
                 <table style={tableStyle}>
-                  <thead>
+                 <thead>
                     <tr>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.index }}>#</th>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.amount }}>{profit ? "Profit" : "Amount" }</th>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>{profit ? "Avg Price" : "Price" }</th>
-                      <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
-                    </tr>
-
-                    <tr>
-                      {total.map((col) => ({ 
-                        titleCounter += 1 
-                        return 
-                        (
-                        <th
-                          key={col}
-                          style={{
-                            ...thStyle,
-                            width: {columns[Object.keys(columns)[titleCounter]]},
-                            textAlign: "left",
-                            padding: "8px 12px",
-                            borderBottom: "1px solid #aaa",
-                            backgroundColor: "#f3f3f3",
-                          }}
-                        >
-                          {hasTotal ? col : Object.keys(columns)[titleCounter]}
+                      {cols.map((col) => (
+                        <th key={col} style={{ ...thStyle, width: COLUMN_WIDTHS[col] || "auto" }}>
+                          {col}
                         </th>
-                        );
                       ))}
                     </tr>
-                    
-                    
-                    
                   </thead>
+      
+      
                   <tbody>
                     {sortedOrders.map((order, index) => {
                       rowCounter += 1;
