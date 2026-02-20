@@ -147,8 +147,8 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                  <thead>
                     <tr>
                       {cols.map((col, idx) => (
-                        <th key={col} style={{ ...thStyle, width: COLUMN_WIDTHS[Object.keys(COLUMN_WIDTHS)[idx]] }}>
-                          {COLUMN_WIDTHS[Object.keys(COLUMN_WIDTHS)[idx]]}
+                        <th key={idx} style={{ ...thStyle, width: COLUMN_WIDTHS[Object.keys(COLUMN_WIDTHS)[idx]] }}>
+                          {col}
                         </th>
                       ))}
                     </tr>
