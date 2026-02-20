@@ -1,21 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import TitleBar from "./TitleBar";
-
-// Import local logos (place your images in src/assets/logos/)
-import BTCLogo from "../assets/logos/btc.PNG";
-import ETHLogo from "../assets/logos/eth.PNG";
-import USDTLogo from "../assets/logos/usdt.PNG";
-import RLSLogo from "../assets/logos/rls.jpg";
-
-// Map currency symbol to local logo
-const currencyLogos = {
-  BTC: BTCLogo,
-  ETH: ETHLogo,
-  USDT: USDTLogo,
-  RLS: RLSLogo,
-  // Add more currencies as needed
-};
+import MarketIcon from "./MarketIcon";
 
 // Helper to get cached data
 const getCache = (key) => {
@@ -70,12 +56,8 @@ export default function WalletList() {
           {/* Left side: Logo + Currency */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {/* Currency logo */}
-            <img
-              src={currencyLogos[wallet.currency.toUpperCase()]}
-              alt={wallet.currency}
-              style={{ width: 36, height: 36, borderRadius: "50%" }}
-            />
-
+            <MarketIcon market={wallet.currency} size="large" />
+  
             {/* Currency symbol */}
             <div style={{ fontWeight: 600 }}>
               {wallet.currency.toUpperCase()}
