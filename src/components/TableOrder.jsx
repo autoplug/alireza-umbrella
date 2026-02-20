@@ -97,11 +97,12 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
   }, {});
 
   let rowCounter = 0;
+  let titleCounter = 0;
 
   // Columns from first row keys AND DEFAULT KEYS 
   let columns = { "#":0, "Amount":0, "Price":0, "Type":0};
   const hasTotal = total && typeof total === "object";
-  if(hasTotal) columns = total;
+  if(!hasTotal) total = columns;
 
   return (
     <div>
@@ -149,6 +150,27 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.price }}>{profit ? "Avg Price" : "Price" }</th>
                       <th style={{ ...thStyle, width: COLUMN_WIDTHS.type }}>Type</th>
                     </tr>
+
+                    <tr>
+                      {total.map((col) => (
+                        <th
+                          key={col}
+                          style={{
+                            ...thStyle,
+                            width: {hasTotal? columns[col]},
+                            textAlign: "left",
+                            padding: "8px 12px",
+                            borderBottom: "1px solid #aaa",
+                            backgroundColor: "#f3f3f3",
+                          }}
+                        >
+                          {col}
+                        </th>
+                      ))}
+                    </tr>
+                    
+                    
+                    
                   </thead>
                   <tbody>
                     {sortedOrders.map((order, index) => {
