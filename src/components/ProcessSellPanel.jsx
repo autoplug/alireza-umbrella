@@ -28,7 +28,7 @@ const keepLastTenPerMarket = (orders) => {
     );
 
     // Keep only last 10
-    result.push(...sorted.slice(-10));
+    result.push(...sorted.slice(-5));
   });
 
   return result;
