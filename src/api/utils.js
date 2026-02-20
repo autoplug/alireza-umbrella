@@ -1,5 +1,3 @@
-
-
 // ---------------- APPLY FEE ----------------
 export const applyFee = (orders) => {
   for (const order of orders) {
@@ -143,4 +141,44 @@ export const processAllSells = (sellOrders, buyOrders) => {
   };
 };
 
+// ---------------- FORMAT PRICE ----------------
+export const formatPrice = (price, market) => {
+  let value = Number(price);
+
+  // Return zero if value is invalid
+  if (!value || isNaN(value)) return "0";
+
+  // Extract quote currency from market string (e.g. BTC-IRT → IRT)
+  const quoteCurrency = market?.split("-")[1]?.toUpperCase();
+
+  // ===== IRT (Iranian Rial) =====
+  if (quoteCurrency === "RLS") {
+    if (value < 100_000_000) {
+      // Remove one zero (divide by 10)
+      value = value / 10;
+      return "IRT " + Math.floor(value).toLocaleString("en-US");
+    } else {
+      // Remove seven zeros (divide by 10,000,000)
+      value = value / 10_000_000;
+      return "IRM " + Math.floor(value).toLocaleString("en-US");
+    }
+  }
+
+  // ===== USD / USDT =====
+  if (quoteCurrency === "USD" || quoteCurrency === "USDT") {
+    if (value < 10) {
+      // Show two decimal places if below 10
+      return "USD " + value.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    } else {
+      // No decimals if 10 or above
+      return "USD " + Math.floor(value).toLocaleString("en-US");
+    }
+  }
+
+  // ===== Default fallback =====
+  return value.toLocaleString("en-US");
+};
 
