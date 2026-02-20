@@ -1,84 +1,62 @@
 import React, { useEffect, useState } from "react";
+
 import TitleBar from "./TitleBar";
-import MarketIcon from "./MarketIcon";
 
-const WALLETS_CACHE_KEY = "WALLETS_CACHE";
-const MARKETS_CACHE_KEY = "MARKETS_CACHE";
+// Import local logos (place your images in src/assets/logos/)
+import BTCLogo from "../assets/logos/btc.PNG";
+import ETHLogo from "../assets/logos/eth.PNG";
+import USDTLogo from "../assets/logos/usdt.PNG";
+import RLSLogo from "../assets/logos/rls.jpg";
 
-// Helper: load JSON from localStorage safely
+// Map currency symbol to local logo
+const currencyLogos = {
+  BTC: BTCLogo,
+  ETH: ETHLogo,
+  USDT: USDTLogo,
+  RLS: RLSLogo,
+  // Add more currencies as needed
+};
+
+// Helper to get cached data
 const getCache = (key) => {
-  try {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : {};
-  } catch (err) {
-    console.error(`Error parsing ${key}:`, err);
-    return {};
-  }
-};
-
-// Format balance for display
-const formatBalance = (value, currency) => {
-  const number = Number(value);
-  if (isNaN(number) || number === 0) return null;
-
-  const c = currency.toUpperCase();
-
-  if (c === "RLS") {
-    if (number < 100_000_000)
-      return "IRT " + Math.floor(number / 10).toLocaleString("en-US");
-    else return "IRM " + Math.floor(number / 10_000_000).toLocaleString("en-US");
-  }
-
-  if (c === "USD" || c === "USDT") {
-    if (number < 10)
-      return number.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    else return Math.floor(number).toLocaleString("en-US");
-  }
-
-  if (number >= 1) return number.toLocaleString("en-US");
-  return number.toFixed(6);
-};
-
-// Calculate Rial value using MARKETS_CACHE
-const calcRialValue = (currency, amount, markets) => {
-  if (!amount || Number(amount) === 0) return "-";
-
-  // Case-insensitive search for market key
-  const searchKey = Object.keys(markets).find(
-    (k) => k.toLowerCase() === `${currency}-rls`.toLowerCase()
-  );
-
-  if (!searchKey) return "-";
-
-  const rate = Number(markets[searchKey]);
-  if (!rate) return "-";
-
-  return formatBalance(Number(amount) * rate, "RLS");
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
 };
 
 export default function WalletList() {
-  const [wallets, setWallets] = useState({});
-  const [markets, setMarkets] = useState({});
+  const [wallets, setWallets] = useState([]);
 
+  // Load wallets from localStorage/cache on mount
   useEffect(() => {
-    setWallets(getCache(WALLETS_CACHE_KEY)); // e.g., { USDT: 5, BTC: 0.02 }
-    setMarkets(getCache(MARKETS_CACHE_KEY));  // e.g., { "Usdt-rls": 1357, "Btc-rls": 1200000000 }
+    const cachedWallets = getCache("WALLETS_CACHE");
+    setWallets(cachedWallets);
   }, []);
 
-  const currencies = Object.keys(wallets).filter((c) => Number(wallets[c]) > 0);
+  if (!wallets.length) return <div>No wallets available</div>;
 
-  if (!currencies.length) return <div>No wallets available</div>;
+  // Format balances for readability
+  const formatBalance = (value, currency) => {
+    if (currency.toLowerCase() === "rls") {
+      const toman = Math.floor(Number(value) / 10);
+      return `${toman.toLocaleString()}`;
+    }
+    const number = Number(value);
+    if (isNaN(number)) return value;
+
+    // Large numbers → commas
+    if (number >= 1) return number.toLocaleString();
+
+    // Small crypto → limit decimals
+    return number.toFixed(6);
+  };
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
-      <TitleBar title="Wallets" count={currencies.length} />
-
-      {currencies.map((currency) => (
+    <TitleBar title="Wallets" count={0} />
+      
+      {wallets.map((wallet) => (
         <div
-          key={currency}
+          key={wallet.currency}
           style={{
             backgroundColor: "#ffffff",
             borderRadius: 16,
@@ -87,20 +65,26 @@ export default function WalletList() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: 10,
           }}
         >
-          {/* Left: MarketIcon */}
-          <MarketIcon market={currency} size="large" />
+          {/* Left side: Logo + Currency */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Currency logo */}
+            <img
+              src={currencyLogos[wallet.currency.toUpperCase()]}
+              alt={wallet.currency}
+              style={{ width: 36, height: 36, borderRadius: "50%" }}
+            />
 
-          {/* Right: Amount + Rial equivalent */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-            <div style={{ fontWeight: 600, fontSize: 16 }}>
-              {formatBalance(wallets[currency], currency)}
+            {/* Currency symbol */}
+            <div style={{ fontWeight: 600 }}>
+              {wallet.currency.toUpperCase()}
             </div>
-            <div style={{ fontWeight: 500, fontSize: 14, color: "#555" }}>
-              {calcRialValue(currency, wallets[currency], markets)}
-            </div>
+          </div>
+
+          {/* Right side: Balance */}
+          <div style={{ fontWeight: 500, textAlign: "left" }}>
+            {formatBalance(wallet.balance, wallet.currency)}
           </div>
         </div>
       ))}
