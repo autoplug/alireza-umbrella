@@ -71,7 +71,7 @@ export default function WalletList() {
 
 
   return (
-    <div style={{ maxHeight: "80vh", overflowY: "auto", padding: "0 16px" }}>
+    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
       <TitleBar title="Wallets" count={0} />
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
