@@ -169,7 +169,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                             {rowCounter}
                           </td>
                           <td style={{ ...tdStyle, color: baseColor }}>
-                            {hasTotal ? formatPrice(order.amount, order.market) : formatAmount(order.amount, order.market)}
+                            {hasTotal ? formatAmount(order.amount, order.market) : formatPrice(order.amount, order.market)}
                           </td>
                           <td style={{ ...tdStyle, color: baseColor }}>
                             {formatPrice(order.price, order.market)}
