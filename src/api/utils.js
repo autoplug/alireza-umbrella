@@ -175,14 +175,14 @@ export const formatPrice = (price, market) => {
       });
     } else {
       // No decimals if 10 or above
-      return "BTC " + Math.floor(value).toLocaleString("en-US");
+      return "USD " + Math.floor(value).toLocaleString("en-US");
     }
   }
 
   // ===== BTC =====
   if (quoteCurrency === "BTC") {
       // Show two decimal places if below 10
-      return "BTC " + Math.floor(value * 1_000_000);
+      return "BTC " + Math.floor(value * 1_000_000).toLocaleString("en-US");
   }
 
 
