@@ -13,8 +13,6 @@ const getCache = (key) => {
 
 //////////////////////////////////////////////
 const calcTotalRial = (wallets, markets) => {
-
-
   const values = wallets.map((wallet) => {
     const balance = Number(wallet.balance);
     if (!balance) return 0;
@@ -92,7 +90,7 @@ export default function WalletList() {
             marginTop: 6,
           }}
         >
-          {calcTotalRial(wallets, markets).toLocaleString()} IRT
+          {calcTotalRial(wallets, markets)}
         </div>
       </div>
 
