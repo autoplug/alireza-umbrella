@@ -28,7 +28,7 @@ const calcTotalRial = (wallets, markets) => {
     return balance * Number(rate);
   });
   
-  result = values.reduce((sum, value) => sum + value, 0);
+  const result = values.reduce((sum, value) => sum + value, 0);
   return formatPrice(result, "RLS");
 };
 
