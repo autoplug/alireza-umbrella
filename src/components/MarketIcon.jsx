@@ -34,7 +34,7 @@ export default function MarketIcon({ market, size = "normal" }) {
   const sizeModifiers = {
     small: 0.8,   // 80% of fontPx
     normal: 1,    // 100% of fontPx
-    large: 1.4,   // 140% of fontPx
+    large: 3,   // 140% of fontPx
   };
   const scale = sizeModifiers[size] || 1;
 
