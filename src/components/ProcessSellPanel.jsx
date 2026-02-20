@@ -10,6 +10,33 @@ import TitleBar from "./TitleBar";
 
 const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
+const keepLastTenPerMarket = (orders) => {
+  // Group orders by market
+  const grouped = orders.reduce((acc, order) => {
+    const key = order.market;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(order);
+    return acc;
+  }, {});
+
+  const result = [];
+
+  // For each market
+  Object.keys(grouped).forEach((market) => {
+    const sorted = [...grouped[market]].sort(
+      (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    );
+
+    // Keep only last 10
+    result.push(...sorted.slice(-10));
+  });
+
+  return result;
+};
+
+
+
+
 export default function ProcessSellPanel() {
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
@@ -55,8 +82,12 @@ export default function ProcessSellPanel() {
       finalBuys.push(...updatedBuys);
     });
 
+
+    finalSells = keepLastTenPerMarket(finalSells);
     setSellTable(finalSells);
+    
     setBuyTable(finalBuys);
+    
   }, []);
 
   return (
