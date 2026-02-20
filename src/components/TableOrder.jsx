@@ -87,7 +87,7 @@ const renderType = (type) => {
   );
 };
 
-export default function TableOrder({ orders, sortBy = "time", profit = false }) {
+export default function TableOrder({ orders, sortBy = "time", total = null }) {
   // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
     const key = order.market || "Unknown";
