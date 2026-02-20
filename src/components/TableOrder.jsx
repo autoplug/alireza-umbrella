@@ -159,8 +159,10 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                     </tr>
 
                     <tr>
-                      {total.map((col) => (
-                        { titleCounter += 1 }
+                      {total.map((col) => ({ 
+                        titleCounter += 1 
+                        return 
+                        (
                         <th
                           key={col}
                           style={{
@@ -174,6 +176,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
                         >
                           {hasTotal ? col : Object.keys(columns)[titleCounter]}
                         </th>
+                        );
                       ))}
                     </tr>
                     
