@@ -71,8 +71,8 @@ export default function ProcessSellPanel() {
       return acc;
     }, {});
 
-    const finalSells = [];
-    const finalBuys = [];
+    let finalSells = [];
+    let finalBuys = [];
 
     // ===== Process each market separately =====
     Object.entries(ordersByMarket).forEach(([market, { buys, sells }]) => {
