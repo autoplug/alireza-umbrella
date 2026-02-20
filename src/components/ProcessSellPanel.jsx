@@ -90,7 +90,9 @@ export default function ProcessSellPanel() {
     
     
   }, []);
-  const total = { "": 0, Profit: 1200, "Avg Price": 30, Type: 10}; 
+  
+  const total = { "id": 0, Profit: 1200, "Avg Price": 30, Type: 10}; 
+  
   return (
     <div>
       {/* ===== Sell Orders Table ===== */}
