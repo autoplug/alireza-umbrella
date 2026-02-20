@@ -4,13 +4,35 @@ import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
 import {formatPrice} from "../api/utils";
 
+//////////////////////////////////////////////
 // Helper to get cached data
 const getCache = (key) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 };
 
+//////////////////////////////////////////////
+const calcTotalRial = (wallets, markets) => {
+  if (!wallets || !markets) return 0;
 
+  let total = 0;
+
+  Object.keys(wallets).forEach((currency) => {
+    const balance = Number(wallets[currency]);
+    if (!balance) return;
+
+    const marketKey = `${currency.toUpperCase()}-RLS`;
+    const rate = markets[marketKey];
+
+    if (rate) {
+      total += balance * Number(rate);
+    }
+  });
+
+  return total;
+};
+
+//////////////////////////////////////////////
 // Calculate Rial value using MARKETS_CACHE
 const calcRialValue = (amount, currency, markets) => {
   if( currency.toLowerCase() === "rls") return formatPrice(amount,"RLS");
@@ -49,6 +71,29 @@ export default function WalletList() {
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
       <TitleBar title="Wallets" count={0} />
+      
+      <div
+        style={{
+          textAlign: "center",
+          marginBottom: 20,
+          padding: "20px 0",
+        }}
+      >
+        <div style={{ fontSize: 14, color: "#777" }}>
+          Total Balance
+        </div>
+      
+        <div
+          style={{
+            fontSize: 24,
+            fontWeight: 700,
+            marginTop: 6,
+          }}
+        >
+          {calcTotalRial(wallets, markets).toLocaleString()} IRT
+        </div>
+      </div>
+
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
         {wallets.map((wallet) => (
