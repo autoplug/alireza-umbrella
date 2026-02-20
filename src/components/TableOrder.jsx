@@ -40,9 +40,10 @@ const tdStyle = {
 // Format amount
 const formatAmount = (amount, market) => {
   if (amount == null) return "";
+  let value = Number(amount);
 
   if (market && market.toUpperCase().startsWith("BTC")) {
-    const newAmount = Number(amount) * 1_000_000;
+    const newAmount = value * 1_000_000;
     return "BTC " + newAmount.toLocaleString("en-US");
   }
 
