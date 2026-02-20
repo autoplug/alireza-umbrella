@@ -160,7 +160,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
 
                     <tr>
                       {total.map((col) => (
-                        { titleCounter += 1; }
+                        { titleCounter += 1 }
                         <th
                           key={col}
                           style={{
