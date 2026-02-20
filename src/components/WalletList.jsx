@@ -13,7 +13,7 @@ const getCache = (key) => {
 
 // Calculate Rial value using MARKETS_CACHE
 const calcRialValue = (amount, currency, markets) => {
-  if( currency.toLowerCase() === "rls") return amount;
+  if( currency.toLowerCase() === "rls") return formatPrice(amount,"RLS");
   if (!amount || Number(amount) === 0) return "-";
 
   // Case-insensitive search for market key
@@ -72,7 +72,7 @@ export default function WalletList() {
             {/* Right: Amounts */}
             <div style={{ display: "flex", flexDirection: "column"}}>
               <div style={{ fontWeight: 700, fontSize: 16  }}>
-                {formatPrice(wallet.balance, wallet.currency)}
+                {formatPrice(wallet.balance, wallet.currency.toUpperCase())}
               </div>
               <div style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>
                 {calcRialValue(wallet.balance, wallet.currency, markets)}
