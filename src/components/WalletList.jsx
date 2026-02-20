@@ -26,7 +26,7 @@ const calcRialValue = (amount, currency, markets) => {
   const rate = Number(markets[searchKey]);
   if (!rate) return "-";
 
-  return formatBalance(Number(amount) * rate, "RLS");
+  return formatPrice(Number(amount) * rate, "RLS");
 };
 
 
