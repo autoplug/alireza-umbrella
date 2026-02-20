@@ -4,7 +4,7 @@ import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-
 
 // Import MarketIcon from your centralized component
 import MarketIcon from "./MarketIcon";
-import {fornmatPrice} from "../api/utils";
+import {formatPrice} from "../api/utils";
 
 // Column widths
 const COLUMN_WIDTHS = {
