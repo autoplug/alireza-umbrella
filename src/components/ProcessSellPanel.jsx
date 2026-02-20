@@ -90,7 +90,7 @@ export default function ProcessSellPanel() {
     
     
   }, []);
-
+  const total = { "": 0, Profit: 1200, "Avg Price": 30, Type: 10}; 
   return (
     <div>
       {/* ===== Sell Orders Table ===== */}
@@ -98,7 +98,7 @@ export default function ProcessSellPanel() {
       {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={sellTable} sortBy="time" profit={true}/>
+        <TableOrder orders={sellTable} sortBy="time" total={total}/>
       )}
 
       {/* ===== Remaining Buy Orders Table ===== */}
