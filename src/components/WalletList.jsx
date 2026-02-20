@@ -90,7 +90,7 @@ export default function WalletList() {
             }}
           >
             {/* Left: Market Icon */}
-            <MarketIcon market={wallet.currency} size="large" />
+            <MarketIcon market={wallet.currency.toUpperCase()} size="large" />
 
             {/* Right: Amounts */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
