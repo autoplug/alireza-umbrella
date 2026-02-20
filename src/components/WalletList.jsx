@@ -13,12 +13,15 @@ const getCache = (key) => {
 
 //////////////////////////////////////////////
 const calcTotalRial = (wallets, markets) => {
-  if (!wallets || !markets) return 0;
+
 
   const values = wallets.map((wallet) => {
     const balance = Number(wallet.balance);
     if (!balance) return 0;
-
+    if( wallet.currency.toLowerCase() === "rls") 
+      return formatPrice(balance,"RLS")
+    
+    
     const marketKey = `${wallet.currency.toLowerCase()}-rls`;
     const rate = markets[marketKey];
 
