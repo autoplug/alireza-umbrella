@@ -42,14 +42,21 @@ const formatAmount = (amount, market) => {
   if (amount == null) return "";
 
   if (market && market.toUpperCase().startsWith("BTC")) {
-    const newAmount = Number(amount) * 1000000;
+    const newAmount = Number(amount) * 1_000_000;
     return "BTC " + newAmount.toLocaleString("en-US");
   }
 
   if (market && market.toUpperCase().startsWith("USD")) {
-    const newAmount = Number(amount);
-    // Display USD with 2 decimal places
-    return "USD " + newAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (value < 10) {
+      // Show two decimal places if below 10
+      return "USD " + value.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    } else {
+      // No decimals if 10 or above
+      return "USD " + Math.floor(value).toLocaleString("en-US");
+    }
   }
 
   return Number(amount).toLocaleString("en-US");
@@ -57,36 +64,43 @@ const formatAmount = (amount, market) => {
 
 // Format price
 const formatPrice = (price, market) => {
-  if (price == null) return "";
-
   let value = Number(price);
-  let unit = "";
 
-  if (market) {
-    const parts = market.split("-");
-    const quote = parts[1] || "";
+  // Return zero if value is invalid
+  if (!value || isNaN(value)) return "0";
 
-    if (quote.toUpperCase() === "RLS") {
-      if (market.toUpperCase() === "USDT-RLS") {
-        value = value / 10;
-        unit = "IRT";
-      } else if (
-        market.toUpperCase() === "BRC-RLS" ||
-        market.toUpperCase() === "BTC-RLS"
-      ) {
-        value = Math.floor(value / 10000000);
-        unit = "IRM";
-      } else {
-        value = Math.floor(value / 10000000);
-      }
-    } else if (quote.toUpperCase() === "USDT" && market.toUpperCase() !== "USDT-RLS") {
-      unit = "USD";
+  // Extract quote currency from market string (e.g. BTC-IRT → IRT)
+  const quoteCurrency = market?.split("-")[1]?.toUpperCase();
+
+  // ===== IRT (Iranian Rial) =====
+  if (quoteCurrency === "RLS") {
+    if (value < 100_000_000) {
+      // Remove one zero (divide by 10)
+      value = value / 10;
+      return "IRT " + Math.floor(value).toLocaleString("en-US");
+    } else {
+      // Remove seven zeros (divide by 10,000,000)
+      value = value / 10_000_000;
+      return "IRM " + Math.floor(value).toLocaleString("en-US");
     }
   }
 
-  return unit
-    ? `${unit} ${value.toLocaleString("en-US")}`
-    : `${value.toLocaleString("en-US")}`;
+  // ===== USD / USDT =====
+  if (quoteCurrency === "USD" || quoteCurrency === "USDT") {
+    if (value < 10) {
+      // Show two decimal places if below 10
+      return "USD " + value.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    } else {
+      // No decimals if 10 or above
+      return "USD " + Math.floor(value).toLocaleString("en-US");
+    }
+  }
+
+  // ===== Default fallback =====
+  return value.toLocaleString("en-US");
 };
 
 // Render type
