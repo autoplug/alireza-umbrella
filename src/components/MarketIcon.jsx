@@ -93,7 +93,7 @@ export default function MarketIcon({ market, size = "normal" }) {
           maxWidth: 120,
         }}
       >
-        {market.padEnd(4)}
+        {market.padEnd(4,"&nbsp;")}
       </div>
     </div>
   );
