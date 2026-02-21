@@ -1,15 +1,12 @@
+// src/api/fetchHistory.jsx
 import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
-
-// Generate cache key based on symbol & resolution
-const getCacheKey = (symbol, resolution) =>
-  `HISTORY_CACHE_${symbol}_${resolution}`;
-const getCacheTimeKey = (symbol, resolution) =>
-  `HISTORY_CACHE_TIME_${symbol}_${resolution}`;
 
 // ---------------- CACHE HELPERS ----------------
+const getCacheKey = (symbol, resolution) => `HISTORY_CACHE_${symbol}_${resolution}`;
+const getCacheTimeKey = (symbol, resolution) => `HISTORY_CACHE_TIME_${symbol}_${resolution}`;
+
 const getCache = (symbol, resolution) => {
   const data = localStorage.getItem(getCacheKey(symbol, resolution));
   if (!data) return null;
@@ -27,40 +24,41 @@ const setCache = (symbol, resolution, value) => {
 
 // ---------------- FETCH HISTORY ----------------
 /**
- * Fetch historical candlestick data with "stale-while-revalidate" and optional callback
+ * Fetch candlestick history from Nobitex API
+ * Stale-while-revalidate: returns cached data immediately if available, then updates cache
+ *
  * @param {Object} options
  * @param {string} options.symbol - Market symbol e.g., "BTCIRT"
- * @param {string} options.resolution - "1H" or "D" etc.
+ * @param {string} options.resolution - "1H" or "D" (default: "1H")
  * @param {number} options.from - Unix timestamp start (seconds)
  * @param {number} options.to - Unix timestamp end (seconds)
- * @param {number} options.page - Page number for pagination
- * @param {function} options.onUpdate - Optional callback called with new data
+ * @param {function} options.onUpdate - optional callback when new data arrives
  */
 export const fetchHistory = async ({
   symbol = "BTCIRT",
   resolution = "1H",
-  from = Math.floor(Date.now() / 1000) - 86400, // default: 1 day ago
+  from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
   to = Math.floor(Date.now() / 1000),
-  page = 1,
-  onUpdate = null, // callback for updated data
+  onUpdate = null,
 } = {}) => {
   const cached = getCache(symbol, resolution);
 
-  // Async fetch function
+  // Internal function to fetch fresh data
   const fetchNewData = async () => {
     try {
       const url =
         `${WORKER_URL}/market/udf/history?` +
-        new URLSearchParams({ symbol, resolution, from, to, page });
+        new URLSearchParams({ symbol, resolution, from, to });
 
       const response = await axios.get(url, { validateStatus: () => true });
       const raw = response.data;
 
       let data = [];
 
+      // Parse response if status is ok
       if (raw?.s === "ok" && Array.isArray(raw.t)) {
         data = raw.t.map((time, i) => ({
-          time,
+          time,                // unix timestamp in seconds
           open: raw.o[i],
           high: raw.h[i],
           low: raw.l[i],
@@ -69,7 +67,7 @@ export const fetchHistory = async ({
         }));
       }
 
-      // Update cache and call callback if provided
+      // Update cache and trigger callback if provided
       if (data.length > 0) {
         setCache(symbol, resolution, data);
         if (typeof onUpdate === "function") onUpdate(data);
@@ -79,3 +77,15 @@ export const fetchHistory = async ({
     } catch (err) {
       console.error(`Fetch history failed (${symbol}, ${resolution}):`, err);
       return cached || [];
+    }
+  };
+
+  // If cache exists, return it immediately and refresh in background
+  if (cached) {
+    fetchNewData(); // background refresh
+    return cached;
+  }
+
+  // Otherwise, fetch and return immediately
+  return await fetchNewData();
+};
