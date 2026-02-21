@@ -1,7 +1,7 @@
 // src/api/fetchHistory.jsx
 import axios from "axios";
 
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
 
 // ---------------- CACHE HELPERS ----------------
 const getCacheKey = (symbol, resolution) => `HISTORY_CACHE_${symbol}_${resolution}`;
