@@ -36,7 +36,7 @@ const setCache = (symbol, resolution, value) => {
  */
 export const fetchHistory = async ({
   symbol = "BTCIRT",
-  resolution = "1H",
+  resolution = "60",
   from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
   to = Math.floor(Date.now() / 1000),
   onUpdate = null,
