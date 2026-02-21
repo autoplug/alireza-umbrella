@@ -1,18 +1,16 @@
-// src/components/CandleChart.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import { fetchHistory } from "../api/fetchHistory";
 
-export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 300, debug = true }) {
+export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 300 }) {
   const chartContainerRef = useRef();
   const [data, setData] = useState([]);
-  const [resolution, setResolution] = useState("60"); // default hourly
-  const [rawData, setRawData] = useState(null); // for debug
+  const [resolution, setResolution] = useState("1H"); // default hourly
 
   // Compute "from" timestamp based on resolution
   const computeFrom = (res) => {
     const now = Math.floor(Date.now() / 1000);
-    if (res === "60") return now - 24 * 3600;         // last 24 hours
+    if (res === "1H") return now - 24 * 3600;         // last 24 hours
     if (res === "D") return now - 30 * 24 * 3600;    // last 30 days
     return now - 24 * 3600;
   };
@@ -27,20 +25,14 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
         from: computeFrom(resolution),
         to: Math.floor(Date.now() / 1000),
         onUpdate: (newData) => {
-          if (mounted) {
-            setData(newData);
-            if (debug) setRawData(newData);
-          }
+          if (mounted) setData(newData);
         },
       });
-      if (mounted) {
-        setData(cachedData);
-        if (debug) setRawData(cachedData);
-      }
+      if (mounted) setData(cachedData);
     };
     loadData();
     return () => { mounted = false; };
-  }, [symbol, resolution, debug]);
+  }, [symbol, resolution]);
 
   // Render chart
   useEffect(() => {
@@ -67,7 +59,7 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
 
     candleSeries.setData(
       data.map((d) => ({
-        time: d.time,
+        time: d.time,   // unix timestamp (seconds)
         open: d.open,
         high: d.high,
         low: d.low,
@@ -87,8 +79,8 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
       {/* Buttons for selecting resolution */}
       <div style={{ marginBottom: "10px" }}>
         <button
-          style={{ marginRight: 6, padding: "4px 12px", fontWeight: resolution === "60" ? "bold" : "normal" }}
-          onClick={() => setResolution("60")}
+          style={{ marginRight: 6, padding: "4px 12px", fontWeight: resolution === "1H" ? "bold" : "normal" }}
+          onClick={() => setResolution("1H")}
         >
           Hourly
         </button>
@@ -99,24 +91,6 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
           Daily
         </button>
       </div>
-
-      {/* Debug box */}
-      {debug && rawData && (
-        <div
-          style={{
-            marginBottom: "10px",
-            padding: "8px",
-            border: "1px solid #ccc",
-            backgroundColor: "#f9f9f9",
-            fontFamily: "monospace",
-            fontSize: "12px",
-            maxHeight: "150px",
-            overflowY: "scroll",
-          }}
-        >
-          <pre>{JSON.stringify(rawData, null, 2)}</pre>
-        </div>
-      )}
 
       {/* Chart container */}
       <div ref={chartContainerRef} style={{ width, height }} />
