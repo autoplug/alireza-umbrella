@@ -10,6 +10,7 @@ const CACHE_KEYS = {
   orders: "ORDERS_CACHE",
   markets: "MARKETS_CACHE",
   trades: "TRADES_CACHE",
+  history: "HISTORY_CACHE", 
 };
 
 const CACHE_TIME_KEYS = {
@@ -17,6 +18,7 @@ const CACHE_TIME_KEYS = {
   orders: "ORDERS_CACHE_TIME",
   markets: "MARKETS_CACHE_TIME",
   trades: "TRADES_CACHE_TIME",
+  history: "HISTORY_CACHE_TIME",
 };
 
 // ---------------- CACHE HELPERS ----------------
