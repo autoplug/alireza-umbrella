@@ -27,19 +27,26 @@ const setCache = (symbol, resolution, value) => {
 
 // ---------------- FETCH HISTORY ----------------
 /**
- * Fetch historical candlestick data from Nobitex API
- * Implements "stale-while-revalidate": returns cache immediately if available, then updates cache
+ * Fetch historical candlestick data with "stale-while-revalidate" and optional callback
+ * @param {Object} options
+ * @param {string} options.symbol - Market symbol e.g., "BTCIRT"
+ * @param {string} options.resolution - "1H" or "D" etc.
+ * @param {number} options.from - Unix timestamp start (seconds)
+ * @param {number} options.to - Unix timestamp end (seconds)
+ * @param {number} options.page - Page number for pagination
+ * @param {function} options.onUpdate - Optional callback called with new data
  */
 export const fetchHistory = async ({
   symbol = "BTCIRT",
-  resolution = "1H", // default hourly
-  from = Math.floor(Date.now() / 1000) - 86400, // 1 day ago
+  resolution = "1H",
+  from = Math.floor(Date.now() / 1000) - 86400, // default: 1 day ago
   to = Math.floor(Date.now() / 1000),
   page = 1,
+  onUpdate = null, // callback for updated data
 } = {}) => {
   const cached = getCache(symbol, resolution);
 
-  // Start async fetch in background regardless of cache
+  // Async fetch function
   const fetchNewData = async () => {
     try {
       const url =
@@ -62,21 +69,13 @@ export const fetchHistory = async ({
         }));
       }
 
-      if (data.length > 0) setCache(symbol, resolution, data);
+      // Update cache and call callback if provided
+      if (data.length > 0) {
+        setCache(symbol, resolution, data);
+        if (typeof onUpdate === "function") onUpdate(data);
+      }
 
       return data;
     } catch (err) {
       console.error(`Fetch history failed (${symbol}, ${resolution}):`, err);
       return cached || [];
-    }
-  };
-
-  // If cache exists, return it immediately, then update in background
-  if (cached) {
-    fetchNewData(); // async background refresh
-    return cached;
-  }
-
-  // Otherwise, fetch and return data immediately
-  return await fetchNewData();
-};
