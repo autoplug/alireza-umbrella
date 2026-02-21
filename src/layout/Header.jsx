@@ -27,13 +27,16 @@ export default function Header() {
   const updateTime = () => {
     const walletTs = localStorage.getItem(CACHE_TIME_KEYS.wallets);
     const ordersTs = localStorage.getItem(CACHE_TIME_KEYS.orders);
-
-    const latest = [walletTs, ordersTs]
+  
+    const timestamps = [walletTs, ordersTs]
       .filter(Boolean)
-      .map(Number)
-      .sort((a, b) => b - a)[0];
-
-    setLastUpdate(latest || null);
+      .map(Number);
+  
+    const oldest = timestamps.length
+      ? Math.min(...timestamps)
+      : null;
+  
+    setLastUpdate(oldest);
   };
 
   useEffect(() => {
