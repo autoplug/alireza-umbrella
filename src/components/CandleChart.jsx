@@ -5,12 +5,12 @@ import { fetchHistory } from "../api/fetchHistory";
 export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 300 }) {
   const chartContainerRef = useRef();
   const [data, setData] = useState([]);
-  const [resolution, setResolution] = useState("1H"); // default hourly
+  const [resolution, setResolution] = useState("60"); // default hourly
 
   // Compute "from" timestamp based on resolution
   const computeFrom = (res) => {
     const now = Math.floor(Date.now() / 1000);
-    if (res === "1H") return now - 24 * 3600;         // last 24 hours
+    if (res === "60") return now - 24 * 3600;         // last 24 hours
     if (res === "D") return now - 30 * 24 * 3600;    // last 30 days
     return now - 24 * 3600;
   };
@@ -79,8 +79,8 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
       {/* Buttons for selecting resolution */}
       <div style={{ marginBottom: "10px" }}>
         <button
-          style={{ marginRight: 6, padding: "4px 12px", fontWeight: resolution === "1H" ? "bold" : "normal" }}
-          onClick={() => setResolution("1H")}
+          style={{ marginRight: 6, padding: "4px 12px", fontWeight: resolution === "60" ? "bold" : "normal" }}
+          onClick={() => setResolution("60")}
         >
           Hourly
         </button>
