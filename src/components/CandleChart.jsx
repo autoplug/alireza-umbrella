@@ -11,7 +11,7 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
   const computeFrom = (res) => {
     const now = Math.floor(Date.now() / 1000);
     if (res === "60") return now - 24 * 3600;         // last 24 hours
-    if (res === "D") return now - 30 * 24 * 3600;    // last 30 days
+    if (res === "D") return now - 90 * 24 * 3600;    // last 30 days
     return now - 24 * 3600;
   };
 
