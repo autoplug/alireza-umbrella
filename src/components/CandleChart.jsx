@@ -86,6 +86,30 @@ export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 3
         </button>
       </div>
 
+
+      {/* Debug box */}
+      {debug && rawData && (
+        <div
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            border: "1px solid #ccc",
+            backgroundColor: "#f9f9f9",
+            fontFamily: "monospace",
+            fontSize: "12px",
+            maxHeight: "150px",
+            overflowY: "scroll",
+          }}
+        >
+          <pre>{JSON.stringify(rawData, null, 2)}</pre>
+        </div>
+      )}
+
+
+
+
+
+
       {/* Chart */}
       <div ref={chartContainerRef} style={{ width, height }} />
     </div>
