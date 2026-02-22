@@ -52,7 +52,7 @@ const calcRialValue = (amount, currency, markets) => {
 };
 
 
-
+//////////////////////////////////////////////
 export default function WalletList() {
   const [wallets, setWallets] = useState([]);
   const [markets, setMarkets] = useState({});
@@ -75,7 +75,7 @@ export default function WalletList() {
       <div
         style={{
           textAlign: "center",
-          marginBottom: 10,
+          marginBottom: 0,
           padding: "20px 0",
         }}
       >
@@ -85,9 +85,9 @@ export default function WalletList() {
       
         <div
           style={{
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: 700,
-            marginTop: 6,
+            marginTop: 0,
           }}
         >
           {calcTotalRial(wallets, markets)}
@@ -95,7 +95,7 @@ export default function WalletList() {
       </div>
 
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 0 }}>
         {wallets.map((wallet) => (
           <div
             key={wallet.currency}
@@ -103,7 +103,7 @@ export default function WalletList() {
               backgroundColor: "#ffffff",
               borderRadius: 0,
               padding: "16px 20px",
-              borderBottom: "1px solid #eee", 
+              borderTop: "1px solid #eee", 
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start", 
