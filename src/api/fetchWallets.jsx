@@ -2,7 +2,8 @@
 import axios from "axios";
 
 const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
-
+const CACHE_KEY = "WALLETS_CACHE";
+const CACHE_TIME_KEY = "WALLETS_CACHE_TIME";
 // ---------------- CACHE HELPERS ----------------
 const getCacheKey = (symbol, resolution) => `HISTORY_CACHE_${symbol}_${resolution}`;
 const getCacheTimeKey = (symbol, resolution) => `HISTORY_CACHE_TIME_${symbol}_${resolution}`;
