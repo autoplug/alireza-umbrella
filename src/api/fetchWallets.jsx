@@ -1,7 +1,7 @@
 // src/api/fetchHistory.jsx
 import axios from "axios";
 
-const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "WALLETS_CACHE";
 const CACHE_TIME_KEY = "WALLETS_CACHE_TIME";
 
@@ -29,7 +29,7 @@ const shouldFetch = () => {
 };
 
 // ---------------- FETCH HISTORY ----------------
-export const fetchHistory = async ({
+export const fetchWallets = async ({
   symbol = "BTCIRT",
   resolution = "60",
   from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
