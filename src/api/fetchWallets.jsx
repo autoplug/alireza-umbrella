@@ -58,7 +58,7 @@ export const fetchWallets = async () => {
     // Update cache and trigger callback if provided
     if (data.length > 0) {
       setCache(data);
-      if (typeof onUpdate === "function") onUpdate(data);
+      //if (typeof onUpdate === "function") onUpdate(data);
     }
 
       return data;
