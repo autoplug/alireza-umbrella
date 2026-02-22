@@ -45,28 +45,19 @@ export const fetchWallets = async () => {
       if (!token) return [];
       headers.Authorization = `Token ${token}`;
       const url = `${WORKER_URL}/users/wallets/list`;
-      const response = await axios.get(url, { validateStatus: () => true });
-      const raw = response.data;
+      
+    const response = await axios.get(url, {
+      headers,
+      validateStatus: () => true,
+    });
 
-      let data = [];
+    let data = response.data?.wallets || [];
 
-      // Parse response if status is ok
-      if (raw?.s === "ok" && Array.isArray(raw.t)) {
-        data = raw.t.map((time, i) => ({
-          time,                // unix timestamp in seconds
-          open: raw.o[i],
-          high: raw.h[i],
-          low: raw.l[i],
-          close: raw.c[i],
-          volume: raw.v[i],
-        }));
-      }
-
-      // Update cache and trigger callback if provided
-      if (data.length > 0) {
-        setCache(symbol, resolution, data);
-        if (typeof onUpdate === "function") onUpdate(data);
-      }
+    // Update cache and trigger callback if provided
+    if (data.length > 0) {
+      setCache(symbol, resolution, data);
+      if (typeof onUpdate === "function") onUpdate(data);
+    }
 
       return data;
     } catch (err) {
