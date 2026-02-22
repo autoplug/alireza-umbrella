@@ -19,12 +19,10 @@ const calcTotalRial = (wallets, markets) => {
     if( wallet.currency.toLowerCase() === "rls") 
       return balance
     
-    
     const marketKey = `${wallet.currency.toLowerCase()}-rls`;
     const rate = markets[marketKey];
 
     if (!rate) return 0;
-
     return balance * Number(rate);
   });
   
@@ -51,7 +49,6 @@ const calcRialValue = (amount, currency, markets) => {
   return formatPrice(Number(amount) * rate, "RLS");
 };
 
-
 //////////////////////////////////////////////
 export default function WalletList() {
   const [wallets, setWallets] = useState([]);
@@ -69,9 +66,6 @@ export default function WalletList() {
   }, []);
 
   if (!wallets.length) return <div>No wallets available</div>;
-
-
-
 
   return (
     <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
@@ -98,7 +92,6 @@ export default function WalletList() {
           {calcTotalRial(wallets, markets)}
         </div>
       </div>
-
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 0 }}>
         {wallets.map((wallet) => (
