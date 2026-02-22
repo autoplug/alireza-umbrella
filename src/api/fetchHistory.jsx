@@ -23,7 +23,7 @@ const setCache = (symbol, resolution, value) => {
 };
 
 // ---------------- FETCH HISTORY ----------------
-export default const fetchHistory = async ({
+export const fetchHistory = async ({
   symbol = "BTCIRT",
   resolution = "60",
   from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
