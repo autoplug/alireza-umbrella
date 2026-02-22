@@ -31,6 +31,11 @@ const shouldFetch = () => {
 export const fetchWallets = async () => {
   const cached = getCache();
 
+  // Use cache if still valid
+  if (!shouldFetch() && cached) {
+    return cached;
+  }
+
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
     let headers = {};
