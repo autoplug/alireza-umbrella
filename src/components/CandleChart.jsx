@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
-import fetchHistory from "../api/fetchHistory";
+import { fetchHistory } from "../api/fetchHistory";
 
 export default function CandleChart({ symbol = "BTCIRT", width = 600, height = 300 }) {
   const chartContainerRef = useRef();
