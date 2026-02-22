@@ -59,7 +59,7 @@ export default function WalletList() {
     const loadData = async () => {
       const cachedData = await fetchWallets();
       setWallets(cachedData);
-    });
+    };
     loadData();
   
     setMarkets(getCache("MARKETS_CACHE"));
