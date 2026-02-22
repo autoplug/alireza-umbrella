@@ -3,6 +3,8 @@ import axios from "axios";
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "WALLETS_CACHE";
 const CACHE_TIME_KEY = "WALLETS_CACHE_TIME";
+// 5 minutes
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
 
 // ---------------- CACHE HELPERS ----------------
 const getCache = () => {
@@ -55,13 +57,13 @@ export const fetchWallets = async () => {
 
     // Update cache and trigger callback if provided
     if (data.length > 0) {
-      setCache(symbol, resolution, data);
+      setCache(data);
       if (typeof onUpdate === "function") onUpdate(data);
     }
 
       return data;
     } catch (err) {
-      console.error(`Fetch history failed (${symbol}, ${resolution}):`, err);
+      console.error(`Fetch history failed :`, err);
       return cached || [];
     }
   };
