@@ -23,17 +23,6 @@ const setCache = (symbol, resolution, value) => {
 };
 
 // ---------------- FETCH HISTORY ----------------
-/**
- * Fetch candlestick history from Nobitex API
- * Stale-while-revalidate: returns cached data immediately if available, then updates cache
- *
- * @param {Object} options
- * @param {string} options.symbol - Market symbol e.g., "BTCIRT"
- * @param {string} options.resolution - "1H" or "D" (default: "1H")
- * @param {number} options.from - Unix timestamp start (seconds)
- * @param {number} options.to - Unix timestamp end (seconds)
- * @param {function} options.onUpdate - optional callback when new data arrives
- */
 export const fetchHistory = async ({
   symbol = "BTCIRT",
   resolution = "60",
