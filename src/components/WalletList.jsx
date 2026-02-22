@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import fetchWallets from "../api/fetchWallets";
 import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
 import {formatPrice} from "../api/utils";
