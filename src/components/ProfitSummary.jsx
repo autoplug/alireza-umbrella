@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TitleBar from "./TitleBar";
 import localOrders from "../assets/nobitex.json";
-
+let
 // Import utils
 import { removeDuplicates, applyFee } from "../api/utils";
 
