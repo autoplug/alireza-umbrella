@@ -140,6 +140,7 @@ export const processAllSells = (sellOrders, buyOrders) => {
     updatedBuys: buys,  // buy amounts reduced by consumption
   };
 };
+
 // ---------------- FORMAT AMOUNT ----------------
 export const formatAmount = (value, market) => {
   let value = Number(price);
