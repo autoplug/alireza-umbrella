@@ -34,8 +34,10 @@ export const fetchWallets = async () => {
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
     try {
+      const token = localStorage.getItem("NOBITEX_TOKEN");
+      if (!token) return [];
+      headers.Authorization = `Token ${token}`;
       const url = `${WORKER_URL}/users/wallets/list`;
-
       const response = await axios.get(url, { validateStatus: () => true });
       const raw = response.data;
 
