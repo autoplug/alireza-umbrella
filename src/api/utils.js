@@ -140,8 +140,20 @@ export const processAllSells = (sellOrders, buyOrders) => {
     updatedBuys: buys,  // buy amounts reduced by consumption
   };
 };
+// ---------------- FORMAT AMOUNT ----------------
+export const formatAmount = (value, market) => {
+  let value = Number(price);
 
-// ---------------- FORMAT PRICE ----------------
+  // Return zero if value is invalid
+  if (!value || isNaN(value)) return "0";
+  
+  let baseCurrency = market.includes("-") ?
+    market?.split("-")[0]?.toUpperCase():market;
+  
+  return formatPrice(value, baseCurrency);
+};
+
+// ---------------- FORMAT PRICE  ----------------
 export const formatPrice = (price, market) => {
   let value = Number(price);
 
@@ -185,9 +197,12 @@ export const formatPrice = (price, market) => {
       return "BTC " + Math.floor(value * 1_000_000).toLocaleString("en-US");
   }
 
-
-
-
+  // ===== ETH =====
+  if (quoteCurrency === "ETH") {
+      // Show two decimal places if below 10
+      return "ETH " + Math.floor(value * 1_000_000).toLocaleString("en-US");
+  }
+  
   // ===== Default fallback =====
   return value.toLocaleString("en-US");
 };
