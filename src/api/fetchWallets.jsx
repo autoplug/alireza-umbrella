@@ -33,6 +33,8 @@ export const fetchWallets = async () => {
 
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
+    let headers = {};
+    
     try {
       const token = localStorage.getItem("NOBITEX_TOKEN");
       if (!token) return [];
