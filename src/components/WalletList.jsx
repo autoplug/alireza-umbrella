@@ -75,7 +75,7 @@ export default function WalletList() {
         style={{
           textAlign: "center",
           marginBottom: 0,
-          padding: "20px 0",
+          padding: "10px 0",
         }}
       >
         <div style={{ fontSize: 14, color: "#777" }}>
@@ -100,7 +100,7 @@ export default function WalletList() {
             style={{
               backgroundColor: "#ffffff",
               borderRadius: 0,
-              padding: "16px 20px",
+              padding: "5px 20px",
               borderTop: "1px solid #eee", 
               display: "flex",
               alignItems: "center",
