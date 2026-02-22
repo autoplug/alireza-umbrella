@@ -4,7 +4,7 @@ import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-
 
 // Import MarketIcon from your centralized component
 import MarketIcon from "./MarketIcon";
-import {formatPrice} from "../api/utils";
+import {formatPrice, formatAmount} from "../api/utils";
 
 // Column widths
 const COLUMN_WIDTHS = {
@@ -36,32 +36,6 @@ const tdStyle = {
   padding: "6px 20px",
   fontSize: "12px",
   fontFamily: "monospace",
-};
-
-// Format amount
-const formatAmount = (amount, market) => {
-  if (amount == null) return "";
-  let value = Number(amount);
-
-  if (market && market.toUpperCase().startsWith("BTC")) {
-    const newAmount = value * 1_000_000;
-    return "BTC " + newAmount.toLocaleString("en-US");
-  }
-
-  if (market && market.toUpperCase().startsWith("USD")) {
-    if (value < 10) {
-      // Show two decimal places if below 10
-      return "USD " + value.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    } else {
-      // No decimals if 10 or above
-      return "USD " + Math.floor(value).toLocaleString("en-US");
-    }
-  }
-
-  return Number(amount).toLocaleString("en-US");
 };
 
 // Render type
