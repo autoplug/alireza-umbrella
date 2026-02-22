@@ -6,9 +6,10 @@ const CACHE_KEY = "WALLETS_CACHE";
 const CACHE_TIME_KEY = "WALLETS_CACHE_TIME";
 
 // ---------------- CACHE HELPERS ----------------
-const getCache = (symbol, resolution) => {
-  const data = localStorage.getItem(getCacheKey(symbol, resolution));
+const getCache = () => {
+  const data = localStorage.getItem(CACHE_KEY);
   if (!data) return null;
+
   try {
     return JSON.parse(data);
   } catch {
@@ -16,9 +17,15 @@ const getCache = (symbol, resolution) => {
   }
 };
 
-const setCache = (symbol, resolution, value) => {
-  localStorage.setItem(getCacheKey(symbol, resolution), JSON.stringify(value));
-  localStorage.setItem(getCacheTimeKey(symbol, resolution), Date.now().toString());
+const setCache = (data) => {
+  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+};
+
+const shouldFetch = () => {
+  const last = localStorage.getItem(CACHE_TIME_KEY);
+  if (!last) return true;
+  return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
 // ---------------- FETCH HISTORY ----------------
