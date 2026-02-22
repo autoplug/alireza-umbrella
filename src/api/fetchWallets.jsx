@@ -28,7 +28,7 @@ const shouldFetch = () => {
 };
 
 // ---------------- FETCH WALLETS ----------------
-export const fetchWallets = async () => {
+export default const fetchWallets = async () => {
   const cached = getCache();
 
   // Use cache if still valid
