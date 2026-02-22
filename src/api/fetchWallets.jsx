@@ -27,16 +27,14 @@ const shouldFetch = () => {
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
-// ---------------- FETCH HISTORY ----------------
+// ---------------- FETCH WALLETS ----------------
 export const fetchWallets = async () => {
   const cached = getCache();
 
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
     try {
-      const url =
-        `${WORKER_URL}/market/udf/history?` +
-        new URLSearchParams({ symbol, resolution, from, to });
+      const url = `${WORKER_URL}/users/wallets/list`;
 
       const response = await axios.get(url, { validateStatus: () => true });
       const raw = response.data;
