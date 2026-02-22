@@ -143,7 +143,7 @@ export const processAllSells = (sellOrders, buyOrders) => {
 
 // ---------------- FORMAT AMOUNT ----------------
 export const formatAmount = (value, market) => {
-  let value = Number(price);
+  value = Number(value);
 
   // Return zero if value is invalid
   if (!value || isNaN(value)) return "0";
