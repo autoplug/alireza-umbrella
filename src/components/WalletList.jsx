@@ -59,7 +59,12 @@ export default function WalletList() {
   
   // Load wallets from localStorage/cache on mount
   useEffect(() => {
-    setWallets(getCache("WALLETS_CACHE"));
+    const loadData = async () => {
+      const cachedData = await fetchWallets();
+      setWallets(cachedData);
+    });
+    loadData();
+  
     setMarkets(getCache("MARKETS_CACHE"));
   }, []);
 
