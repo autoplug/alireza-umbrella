@@ -3,7 +3,7 @@ import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
-export const fetchTrades = async () => {
+export const fetchTrades = async ({ onUpdate } = {}) => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   if (!token) return [];
 
