@@ -42,11 +42,11 @@ persistQueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Header above all pages */}
+      <Header />
+      
       <Router>
         <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
-          {/* Header above all pages */}
-          <Header />
-          
           {/* Spacer for content */}
           <div style={{ height: "36px" }}></div>
 
