@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchWallets } from "../api/fetchWallets";
 
 export const useWallets = () => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["wallets"],
     queryFn: () => fetchWallets(),
 
@@ -14,8 +14,10 @@ export const useWallets = () => {
     placeholderData: (prev) => prev, // show previous data while fetching
   });
   
-  return {
-    wallets: data?.wallets || [],
-    lastUpdate: data?._lastUpdate || null,
-  };
+  // Safe access to data
+  const wallets = query.data?.wallets || [];
+  const lastUpdate = query.data?._lastUpdate || null;
+
+  return { ...query, wallets, lastUpdate };
+  
 };
