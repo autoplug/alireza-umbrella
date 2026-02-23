@@ -2,10 +2,10 @@
 import axios from "axios";
 
 const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
+const CACHE_TIME_KEY = "MARKETS_CACHE_TIME";
 
 // ---------------- CACHE HELPERS ----------------
 const getCacheKey = (symbol, resolution) => `HISTORY_CACHE_${symbol}_${resolution}`;
-const getCacheTimeKey = (symbol, resolution) => `HISTORY_CACHE_TIME_${symbol}_${resolution}`;
 
 const getCache = (symbol, resolution) => {
   const data = localStorage.getItem(getCacheKey(symbol, resolution));
@@ -19,7 +19,7 @@ const getCache = (symbol, resolution) => {
 
 const setCache = (symbol, resolution, value) => {
   localStorage.setItem(getCacheKey(symbol, resolution), JSON.stringify(value));
-  localStorage.setItem(getCacheTimeKey(symbol, resolution), Date.now().toString());
+  localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 };
 
 // ---------------- FETCH HISTORY ----------------
