@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchTrades } from "../api/fetchTrades";
 
-export const useTrades = () => {
+export const useWallets = () => {
   const query = useQuery({
     queryKey: ["trades"],
     queryFn: () => fetchTrades(),
@@ -15,7 +15,7 @@ export const useTrades = () => {
   });
   
   // Safe access to data
-  const trades = query.data?.trades || [];
+  const wallets = query.data?.trades || [];
   const lastUpdate = query.data?._lastUpdate || null;
 
   return { ...query, trades, lastUpdate };
