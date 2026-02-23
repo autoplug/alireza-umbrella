@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchWallets } from "../api/fetchWallets";
+import { fetchMarkets } from "../api/fetchMarkets";
 
-export const useWallets = () => {
+export const useMarkets = () => {
   const query = useQuery({
-    queryKey: ["wallets"],
-    queryFn: () => fetchWallets(),
+    queryKey: ["markets"],
+    queryFn: () => fetchMarkets(),
 
     staleTime: 5 * 60 * 1000,  // 5 minutes
     gcTime: Infinity,           // keep cache forever
@@ -15,9 +15,9 @@ export const useWallets = () => {
   });
   
   // Safe access to data
-  const wallets = query.data?.wallets || [];
+  const markets = query.data?.markets || [];
   const lastUpdate = query.data?._lastUpdate || null;
 
-  return { ...query, wallets, lastUpdate };
+  return { ...query, markets, lastUpdate };
   
 };
