@@ -5,7 +5,6 @@ const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "TRADES_CACHE";
 const CACHE_TIME_KEY = "TRADES_CACHE_TIME";
 
-// 5 minutes
 const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
 
 // ---------------- CACHE HELPERS ----------------
@@ -30,6 +29,9 @@ const shouldFetch = () => {
   if (!last) return true;
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
+
+// ---------------- UTILITY DELAY ----------------
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ---------------- FETCH TRADES ----------------
 export const fetchTrades = async () => {
@@ -58,7 +60,7 @@ export const fetchTrades = async () => {
           {
             params: {
               page,
-              pageSize: 100, // ✅ set pageSize to 100
+              pageSize: 100,
             },
             headers,
             validateStatus: () => true,
@@ -70,6 +72,9 @@ export const fetchTrades = async () => {
         if (trades.length > 0) {
           allTrades = [...allTrades, ...trades];
           page++;
+
+          // ✅ wait 2 seconds before next request
+          await delay(2000);
         } else {
           hasMore = false;
         }
