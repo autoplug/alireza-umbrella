@@ -3,7 +3,7 @@ import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
-export const fetchTrades = async (symbol) => {
+export const fetchTrades = async () => {
   const token = localStorage.getItem("NOBITEX_TOKEN");
   if (!token) return [];
 
@@ -14,7 +14,7 @@ export const fetchTrades = async (symbol) => {
 
   while (hasMore) {
     const response = await axios.get(`${WORKER_URL}/market/trades/list`, {
-      params: { page, pageSize: 100, symbol },
+      params: { page, pageSize: 100 },
       headers,
       validateStatus: () => true,
     });
