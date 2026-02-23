@@ -8,17 +8,10 @@ export const fetchMarkets = async ({ onUpdate } = {}) => {
     let headers = {};
     const url = `${WORKER_URL}/market/stats`;
 
-    const res = await axios.get(url, { validateStatus: () => true });
-    const rawOrders = res.data?.orders || [];
+    const res = await axios.get(url, { headers, validateStatus: () => true });
+    const rawMarkets = res.data?.markets || {};
 
-    // Normalize data
-    const orders = rawOrders.map((o) => ({
-      ...o,
-      price: Number(o.price),
-      amount: Number(o.amount),
-      fee: Number(o.fee),
-      market: o.market?.toLowerCase() || o.market,
-    }));
+    // Normalize Data
 
     const lastUpdate = Date.now();
 
