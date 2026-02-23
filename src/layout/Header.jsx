@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchWallets, fetchTrades, fetchOrders } from "../api/api";
+import { fetchWallets, fetchTrades, fetchOrders } from "../api";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
