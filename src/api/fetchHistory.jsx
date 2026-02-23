@@ -27,11 +27,11 @@ export const fetchHistory = async ({
     const raw = response.data;
 
     // Normalize for Lightweight Charts
-    let history = [];
+    let candles = [];
 
     // Parse response if status is ok
     if (raw?.s === "ok" && Array.isArray(raw.t)) {
-      history = raw.t.map((time, i) => ({
+      candles = raw.t.map((time, i) => ({
         time,                // unix timestamp in seconds
         open: raw.o[i],
         high: raw.h[i],
@@ -41,9 +41,9 @@ export const fetchHistory = async ({
       }));
     }
 
-    return {history, _lastUpdate: Date.now(),};
+    return {candles, _lastUpdate: Date.now(),};
   } catch (error) {
     console.error("fetchHistory failed:", error);
-    return { history: [], _lastUpdate: null };
+    return { candles: [], _lastUpdate: null };
   }
 };
