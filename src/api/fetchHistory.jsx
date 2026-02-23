@@ -6,7 +6,7 @@ const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 export const fetchHistory = async ({ onUpdate } = {}) => {
   try {
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
-    const headers = { Authorization: `Token ${token}` };
+    const headers = { };
 
     const res = await axios.get(url, { headers, validateStatus: () => true });
     const rawOrders = res.data?.orders || [];
