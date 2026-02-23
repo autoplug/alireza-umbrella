@@ -4,7 +4,7 @@ import { fetchTrades } from "../api/fetchTrades";
 export const useTrades = () => {
   return useQuery({
     queryKey: ["trades"],
-    queryFn: () => fetchTrades(symbol),
+    queryFn: () => fetchTrades(),
 
     staleTime: 5 * 60 * 1000,  // 5 minutes
     gcTime: Infinity,           // keep cache forever
@@ -13,4 +13,9 @@ export const useTrades = () => {
     refetchOnReconnect: true,
     placeholderData: (prev) => prev, // show previous data while fetching
   });
+  
+  return {
+    trades: data?.trades || [],
+    lastUpdate: data?._lastUpdate || null,
+  };
 };
