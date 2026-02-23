@@ -23,7 +23,7 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
       const data = response.data?.trades || [];
   
       if (data.length > 0) {
-        data = [...data, ...trades];
+        trades = [...data, ...trades];
         page++;
         await new Promise((resolve) => setTimeout(resolve, 2000)); // 2s delay
       } else {
