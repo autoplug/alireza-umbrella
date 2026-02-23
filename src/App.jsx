@@ -22,28 +22,30 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
-        
-        {/* Header above all pages */}
-        <Header />
-        
-        {/* Spacer برای محتوای صفحه */}
-        <div style={{ height: "36px" }}></div> 
-        
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/trades" element={<Trades />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/chart" element={<Chart />} />
-        </Routes>
-
-        {/* Bottom Navigation */}
-        <BottomNavigation />
-
-      </div>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
+          
+          {/* Header above all pages */}
+          <Header />
+          
+          {/* Spacer برای محتوای صفحه */}
+          <div style={{ height: "36px" }}></div> 
+          
+          {/* Routes */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/trades" element={<Trades />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/chart" element={<Chart />} />
+          </Routes>
+  
+          {/* Bottom Navigation */}
+          <BottomNavigation />
+  
+        </div>
+      </Router>
+    </QueryClientProvider>
   );
 }
 
