@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
 
 import { useWallets } from "../hooks/useWallets";
 import { useMarkets } from "../hooks/useMarkets";
 import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
 import {formatPrice} from "../api/utils";
-
-//////////////////////////////////////////////
-// Helper to get cached data
-const getCache = (key) => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
-};
 
 //////////////////////////////////////////////
 const calcTotalRial = (wallets, markets) => {
