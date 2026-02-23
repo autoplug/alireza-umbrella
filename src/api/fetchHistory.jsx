@@ -3,11 +3,8 @@ import axios from "axios";
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 // Fetch all active orders
-export const fetchOrders = async ({ onUpdate } = {}) => {
+export const fetchHistory = async ({ onUpdate } = {}) => {
   try {
-    const token = localStorage.getItem("NOBITEX_TOKEN");
-    if (!token) return { orders: [], _lastUpdate: null };
-
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
     const headers = { Authorization: `Token ${token}` };
 
