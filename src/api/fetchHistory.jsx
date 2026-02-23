@@ -37,7 +37,13 @@ export const fetchHistory = async ({
   to = Math.floor(Date.now() / 1000),
   onUpdate = null,
 } = {}) => {
+  
   const cached = getCache(symbol, resolution);
+
+  // Use cache if still valid
+  if (!shouldFetch() && cached) {
+    return cached;
+  }
 
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
