@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import BottomNavigation from "./layout/BottomNavigation";
 import Header from "./layout/Header";
