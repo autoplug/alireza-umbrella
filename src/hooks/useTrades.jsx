@@ -15,7 +15,7 @@ export const useTrades = () => {
   });
   
   return {
-    trades: data?.trades || [],
-    lastUpdate: data?._lastUpdate || null,
+    trades: trades || [],
+    lastUpdate: _lastUpdate || null,
   };
 };
