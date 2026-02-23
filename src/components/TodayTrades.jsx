@@ -29,6 +29,7 @@ const isTodayTehran = (timestamp) => {
 };
 
 export default function TodayTrades() {
+  const { data: trades2 = [], isLoading, error, refetch } = useTrades();
   const [trades, setTrades] = useState([]);
 
   // Load trades from localStorage and filter by Tehran today
