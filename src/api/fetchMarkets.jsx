@@ -40,31 +40,27 @@ export const fetchMarkets = async () => {
 
   // Internal function to fetch fresh data
   const fetchNewData = async () => {
-    let headers = {};
     
     try {
-      const token = localStorage.getItem("NOBITEX_TOKEN");
-      if (!token) return [];
-      headers.Authorization = `Token ${token}`;
-      const url = `${WORKER_URL}/users/wallets/list`;
+      const url = `${WORKER_URL}/market/stats`;
       
-    const response = await axios.get(url, {
-      headers,
-      validateStatus: () => true,
-    });
+      const response = await axios.get(url, {
+        headers,
+        validateStatus: () => true,
+      });
 
-    let data = response.data?.stats || {};
-    data = Object.fromEntries(
-      Object.entries(data)
-        .filter(([_, value]) => value && value.latest != null)
-        .map(([market, value]) => [market, Number(value.latest)])
-    );
-
-    // Update cache and trigger callback if provided
-    if (data && Object.keys(data).length > 0) {
-      setCache(data);
-      //if (typeof onUpdate === "function") onUpdate(data);
-    }
+      let data = response.data?.stats || {};
+      data = Object.fromEntries(
+        Object.entries(data)
+          .filter(([_, value]) => value && value.latest != null)
+          .map(([market, value]) => [market, Number(value.latest)])
+      );
+  
+      // Update cache and trigger callback if provided
+      if (data && Object.keys(data).length > 0) {
+        setCache(data);
+        //if (typeof onUpdate === "function") onUpdate(data);
+      }
 
       return data;
     } catch (err) {
