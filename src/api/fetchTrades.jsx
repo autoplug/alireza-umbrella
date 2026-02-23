@@ -30,15 +30,18 @@ const shouldFetch = () => {
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
-// ---------------- DELAY UTILITY ----------------
+// ---------------- DELAY ----------------
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ---------------- FETCH TRADES ----------------
 export const fetchTrades = async (onUpdate) => {
   const cached = getCache();
 
-  // Return cache immediately if still valid
+  // 🔹 If cache exists and still valid → return it AND trigger onUpdate
   if (!shouldFetch() && cached) {
+    if (typeof onUpdate === "function") {
+      onUpdate(cached);
+    }
     return cached;
   }
 
@@ -73,8 +76,6 @@ export const fetchTrades = async (onUpdate) => {
         if (trades.length > 0) {
           allTrades = [...allTrades, ...trades];
           page++;
-
-          // wait 2 seconds between requests
           await delay(2000);
         } else {
           hasMore = false;
@@ -84,7 +85,6 @@ export const fetchTrades = async (onUpdate) => {
       if (allTrades.length > 0) {
         setCache(allTrades);
 
-        // Trigger UI update if callback exists
         if (typeof onUpdate === "function") {
           onUpdate(allTrades);
         }
@@ -94,16 +94,26 @@ export const fetchTrades = async (onUpdate) => {
 
     } catch (err) {
       console.error("Fetch trades failed:", err);
+
+      // 🔹 On error → return cache and also trigger onUpdate
+      if (cached && typeof onUpdate === "function") {
+        onUpdate(cached);
+      }
+
       return cached || [];
     }
   };
 
-  // If cache exists → return immediately and refresh in background
+  // 🔹 If cache exists but expired → return cache immediately + refresh
   if (cached) {
-    fetchAllPages();
+    if (typeof onUpdate === "function") {
+      onUpdate(cached);
+    }
+
+    fetchAllPages(); // background refresh
     return cached;
   }
 
-  // Otherwise fetch and return
+  // 🔹 No cache → fetch fresh
   return await fetchAllPages();
 };
