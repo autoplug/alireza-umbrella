@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
-import { useUpdate } from "../context/UpdateContext";
+//import { useUpdate } from "../context/UpdateContext";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
@@ -17,7 +17,8 @@ const simpleTimeAgo = (timestamp) => {
 };
 
 export default function Header() {
-  const { lastUpdate } = useUpdate();
+  ///const { lastUpdate } = useUpdate();
+  const lastUpdate = Date.now();
   const { text, color } = simpleTimeAgo(lastUpdate);
 
   return (
