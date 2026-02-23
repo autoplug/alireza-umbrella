@@ -1,79 +1,29 @@
 import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
-const CACHE_KEY = "WALLETS_CACHE";
-const CACHE_TIME_KEY = "WALLETS_CACHE_TIME";
-// 5 minutes
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
 
-// ---------------- CACHE HELPERS ----------------
-const getCache = () => {
-  const data = localStorage.getItem(CACHE_KEY);
-  if (!data) return null;
-
+// Fetch wallets
+export const fetchWallets = async ({ onUpdate } = {}) => {
   try {
-    return JSON.parse(data);
-  } catch {
-    return null;
-  }
-};
+    const token = localStorage.getItem("NOBITEX_TOKEN");
+    if (!token) return { wallets: [], _lastUpdate: null };
 
-const setCache = (data) => {
-  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-  localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-};
+    const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
+    const headers = { Authorization: `Token ${token}` };
 
-const shouldFetch = () => {
-  const last = localStorage.getItem(CACHE_TIME_KEY);
-  if (!last) return true;
-  return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
-};
+    const res = await axios.get(url, { headers, validateStatus: () => true });
+    const rawWallets = res.data?.wallets || [];
 
-// ---------------- FETCH WALLETS ----------------
-export const fetchWallets = async () => {
-  const cached = getCache();
+    const lastUpdate = Date.now();
 
-  // Use cache if still valid
-  if (!shouldFetch() && cached) {
-    return cached;
-  }
-
-  // Internal function to fetch fresh data
-  const fetchNewData = async () => {
-    let headers = {};
-    
-    try {
-      const token = localStorage.getItem("NOBITEX_TOKEN");
-      if (!token) return [];
-      headers.Authorization = `Token ${token}`;
-      const url = `${WORKER_URL}/users/wallets/list`;
-      
-    const response = await axios.get(url, {
-      headers,
-      validateStatus: () => true,
-    });
-
-    let data = response.data?.wallets || [];
-
-    // Update cache and trigger callback if provided
-    if (data.length > 0) {
-      setCache(data);
-      //if (typeof onUpdate === "function") onUpdate(data);
+    // Callback for Header or other components
+    if (typeof onUpdate === "function") {
+      onUpdate({ wallets, _lastUpdate: lastUpdate });
     }
 
-      return data;
-    } catch (err) {
-      console.error(`Fetch history failed :`, err);
-      return cached || [];
-    }
-  };
-
-  // If cache exists, return it immediately and refresh in background
-  if (cached) {
-    fetchNewData(); // background refresh
-    return cached;
+    return { wallets, _lastUpdate: lastUpdate };
+  } catch (err) {
+    console.error("fetchOrders failed:", err);
+    return { wallets: [], _lastUpdate: null };
   }
-
-  // Otherwise, fetch and return immediately
-  return await fetchNewData();
 };
