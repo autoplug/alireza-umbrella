@@ -4,8 +4,6 @@ import { useTrades } from "../hooks/useTrades";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
-const TRADES_CACHE_KEY = "TRADES_CACHE";
-
 // Helper function to check if a timestamp is from today in Tehran timezone
 const isTodayTehran = (timestamp) => {
   if (!timestamp) return false;
@@ -29,22 +27,14 @@ const isTodayTehran = (timestamp) => {
 };
 
 export default function TodayTrades() {
-  const { data: trades2 = [], isLoading, error, refetch } = useTrades();
-  const [trades, setTrades] = useState([]);
+  const { data: trades = [], isLoading, error, refetch } = useTrades();
+  const [todayTrades, setTrades] = useState([]);
 
   // Load trades from localStorage and filter by Tehran today
   useEffect(() => {
-    const cached = localStorage.getItem(TRADES_CACHE_KEY);
-    if (!cached) {
-      setTrades([]);
-      return;
-    }
-
     try {
-      const allTrades = JSON.parse(cached);
-
       // Filter trades with timestamp >= 00:00 Tehran today
-      const todayTrades = allTrades.filter((t) => isTodayTehran(t.timestamp));
+      const todayTrades = trades.filter((t) => isTodayTehran(t.timestamp));
 
       setTrades(todayTrades);
     } catch {
@@ -54,8 +44,8 @@ export default function TodayTrades() {
 
   return (
     <div>
-      <TitleBar title="Today Trades" count={trades.length} />
-      <TableOrder orders={trades} />
+      <TitleBar title="Today Trades" count={todayTrades.length} />
+      <TableOrder orders={todayTrades} />
     </div>
   );
 }
