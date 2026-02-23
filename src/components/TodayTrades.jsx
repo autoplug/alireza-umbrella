@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+import { useTrades } from "../hooks/useTrades";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
