@@ -11,8 +11,8 @@ export const fetchWallets = async ({ onUpdate } = {}) => {
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
     const headers = { Authorization: `Token ${token}` };
 
-    const res = await axios.get(url, { headers, validateStatus: () => true });
-    const rawWallets = res.data?.wallets || [];
+    const response = await axios.get(url, { headers, validateStatus: () => true });
+    const wallets = response.data?.wallets || [];
 
     const lastUpdate = Date.now();
 
