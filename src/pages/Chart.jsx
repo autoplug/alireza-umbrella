@@ -1,13 +1,13 @@
 
-import CandleChart from "../components/CandleChart";
+//import CandleChart from "../components/CandleChart";
 
 export default function Chart() {
 
   return (
     <div style={{ padding: 16 }}>
       <h2>Chart</h2>
-      <CandleChart />
-      {/* Additional settings can be added here */}
+      
+      {/* Additional <CandleChart /> settings can be added here */}
     </div>
   );
 }
