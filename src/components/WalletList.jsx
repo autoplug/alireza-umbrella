@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { fetchWallets } from "../api/fetchWallets";
+import { useWallets } from "../hooks/useWallets";
 import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
 import {formatPrice} from "../api/utils";
@@ -52,17 +52,11 @@ const calcRialValue = (amount, currency, markets) => {
 
 //////////////////////////////////////////////
 export default function WalletList() {
-  const [wallets, setWallets] = useState([]);
+  const { data: wallets = [] } = useWallets();
   const [markets, setMarkets] = useState({});
   
   // Load wallets from localStorage/cache on mount
   useEffect(() => {
-    const loadData = async () => {
-      const cachedData = await fetchWallets();
-      setWallets(cachedData);
-    };
-    loadData();
-  
     setMarkets(getCache("MARKETS_CACHE"));
   }, []);
 
