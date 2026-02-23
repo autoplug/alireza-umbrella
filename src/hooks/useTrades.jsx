@@ -15,7 +15,7 @@ export const useTrades = () => {
   });
   
   // Safe access to data
-  const wallets = query.data?.trades || [];
+  const trades = query.data?.trades || [];
   const lastUpdate = query.data?._lastUpdate || null;
 
   return { ...query, trades, lastUpdate };
