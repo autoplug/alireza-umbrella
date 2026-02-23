@@ -22,6 +22,12 @@ const setCache = (symbol, resolution, value) => {
   localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 };
 
+const shouldFetch = () => {
+  const last = localStorage.getItem(CACHE_TIME_KEY);
+  if (!last) return true;
+  return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
+};
+
 // ---------------- FETCH HISTORY ----------------
 export const fetchHistory = async ({
   symbol = "BTCIRT",
