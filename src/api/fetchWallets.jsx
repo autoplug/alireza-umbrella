@@ -8,7 +8,7 @@ export const fetchWallets = async ({ onUpdate } = {}) => {
     const token = localStorage.getItem("NOBITEX_TOKEN");
     if (!token) return { wallets: [], _lastUpdate: null };
 
-    const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
+    const url = `${WORKER_URL}/users/wallets/list`;
     const headers = { Authorization: `Token ${token}` };
 
     const response = await axios.get(url, { headers, validateStatus: () => true });
