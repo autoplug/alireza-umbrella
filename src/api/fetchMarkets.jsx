@@ -5,6 +5,7 @@ const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 // Fetch all active orders
 export const fetchMarkets = async ({ onUpdate } = {}) => {
   try {
+    let headers = {};
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
 
     const res = await axios.get(url, { validateStatus: () => true });
