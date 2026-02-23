@@ -5,7 +5,6 @@ const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 // Fetch all active orders
 export const fetchHistory = async ({ onUpdate } = {}) => {
   try {
-    const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
     const headers = { };
 
     const url =
@@ -32,12 +31,12 @@ export const fetchHistory = async ({ onUpdate } = {}) => {
 
     // Callback for Header or other components
     if (typeof onUpdate === "function") {
-      onUpdate({ orders, _lastUpdate: lastUpdate });
+      onUpdate({ markets, _lastUpdate: lastUpdate });
     }
 
-    return { orders, _lastUpdate: lastUpdate };
+    return { markets, _lastUpdate: lastUpdate };
   } catch (err) {
     console.error("fetchOrders failed:", err);
-    return { orders: [], _lastUpdate: null };
+    return { markets: [], _lastUpdate: null };
   }
 };
