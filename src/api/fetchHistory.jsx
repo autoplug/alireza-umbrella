@@ -13,17 +13,20 @@ export const fetchHistory = async ({ onUpdate } = {}) => {
       new URLSearchParams({ symbol, resolution, from, to });
 
       const response = await axios.get(url, { validateStatus: () => true });
-      const rawMarkets = response.data;
+      const raw = response.data;
       
-      
-    // Normalize data
-    const markets = rawMarkets.map((o) => ({
-      ...o,
-      price: Number(o.price),
-      amount: Number(o.amount),
-      fee: Number(o.fee),
-      market: o.market?.toLowerCase() || o.market,
-    }));
+      let markets = []
+      // Parse response if status is ok
+      if (raw?.s === "ok" && Array.isArray(raw.t)) {
+        markets = raw.t.map((time, i) => ({
+          time,                // unix timestamp in seconds
+          open: raw.o[i],
+          high: raw.h[i],
+          low: raw.l[i],
+          close: raw.c[i],
+          volume: raw.v[i],
+        }));
+      }
 
     const lastUpdate = Date.now();
 
