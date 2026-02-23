@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchOrders } from "../api/fetchOrders";
 
-export const useOrders = () => {
-  return useQuery({
+export const useTrades = () => {
+  const query = useQuery({
     queryKey: ["orders"],
     queryFn: () => fetchOrders(),
 
@@ -14,8 +14,10 @@ export const useOrders = () => {
     placeholderData: (prev) => prev, // show previous data while fetching
   });
   
-  return {
-    orders: data?.orders || [],
-    lastUpdate: data?._lastUpdate || null,
-  };
+  // Safe access to data
+  const orders = query.data?.orders || [];
+  const lastUpdate = query.data?._lastUpdate || null;
+
+  return { ...query, orders, lastUpdate };
+  
 };
