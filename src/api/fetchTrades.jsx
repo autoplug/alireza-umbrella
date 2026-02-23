@@ -9,7 +9,7 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
     if (!token) return [];
   
     const headers = { Authorization: `Token ${token}` };
-    let allTrades = [];
+    let trades = [];
     let page = 1;
     let hasMore = true;
   
@@ -20,10 +20,10 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
         validateStatus: () => true,
       });
   
-      const trades = response.data?.trades || [];
+      const data = response.data?.trades || [];
   
-      if (trades.length > 0) {
-        allTrades = [...allTrades, ...trades];
+      if (data.length > 0) {
+        data = [...data, ...trades];
         page++;
         await new Promise((resolve) => setTimeout(resolve, 2000)); // 2s delay
       } else {
@@ -36,7 +36,7 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
 
     // Callback for Header or other components
     if (typeof onUpdate === "function") {
-      onUpdate({ allTrades, _lastUpdate: lastUpdate });
+      onUpdate({ trades, _lastUpdate: lastUpdate });
     }
 
     return { allTrades, _lastUpdate: lastUpdate };
