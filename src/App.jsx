@@ -44,11 +44,11 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       {/* Header above all pages */}
       <Header />
-      {/* Spacer for content */}
-      <div style={{ height: "36px" }}></div>
       
       <Router>
         <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
+          {/* Spacer for content */}
+          <div style={{ height: "36px" }}></div>
           {/* Routes */}
           <Routes>
             <Route path="/" element={<Home />} />
