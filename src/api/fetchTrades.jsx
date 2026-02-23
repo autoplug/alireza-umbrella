@@ -5,7 +5,7 @@ const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_KEY = "TRADES_CACHE";
 const CACHE_TIME_KEY = "TRADES_CACHE_TIME";
 
-const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
+const MIN_FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 // ---------------- CACHE HELPERS ----------------
 const getCache = () => {
@@ -30,13 +30,14 @@ const shouldFetch = () => {
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
-// ---------------- UTILITY DELAY ----------------
+// ---------------- DELAY UTILITY ----------------
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ---------------- FETCH TRADES ----------------
-export const fetchTrades = async () => {
+export const fetchTrades = async (onUpdate) => {
   const cached = getCache();
 
+  // Return cache immediately if still valid
   if (!shouldFetch() && cached) {
     return cached;
   }
@@ -73,7 +74,7 @@ export const fetchTrades = async () => {
           allTrades = [...allTrades, ...trades];
           page++;
 
-          // ✅ wait 2 seconds before next request
+          // wait 2 seconds between requests
           await delay(2000);
         } else {
           hasMore = false;
@@ -82,6 +83,11 @@ export const fetchTrades = async () => {
 
       if (allTrades.length > 0) {
         setCache(allTrades);
+
+        // Trigger UI update if callback exists
+        if (typeof onUpdate === "function") {
+          onUpdate(allTrades);
+        }
       }
 
       return allTrades;
@@ -92,10 +98,12 @@ export const fetchTrades = async () => {
     }
   };
 
+  // If cache exists → return immediately and refresh in background
   if (cached) {
-    fetchAllPages(); // background refresh
+    fetchAllPages();
     return cached;
   }
 
+  // Otherwise fetch and return
   return await fetchAllPages();
 };
