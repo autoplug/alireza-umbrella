@@ -45,8 +45,8 @@ const calcRialValue = (amount, currency, markets) => {
 
 //////////////////////////////////////////////
 export default function WalletList() {
-  const { data: wallets = [] } = useWallets();
-  const { data: markets = [] } = useMarkets();
+  const { wallets } = useWallets();
+  const { markets } = useMarkets();
 
   if (!wallets.length) return <div>No wallets available</div>;
 
