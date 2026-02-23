@@ -6,7 +6,7 @@ import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
 import BottomNavigation from "./layout/BottomNavigation";
-import Header from "./layout/Header";
+//import Header from "./layout/Header";
 
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
@@ -44,8 +44,8 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
-          {/* Header above all pages */}
-          <Header />
+          {/* Header   <Header />   above all pages */}
+          
 
           {/* Spacer for content */}
           <div style={{ height: "36px" }}></div>
