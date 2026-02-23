@@ -1,7 +1,7 @@
 import { useTrades } from "../hooks/useTrades";
 
 const TradesWidget = () => {
-  const { data: trades = [], isLoading, error, refetch } = useTrades("BTCIRT");
+  const { data: trades = [], isLoading, error, refetch } = useTrades();
 
   if (isLoading) return <div>Loading trades...</div>;
   if (error) return <div>Error loading trades</div>;
