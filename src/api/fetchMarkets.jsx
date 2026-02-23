@@ -29,8 +29,8 @@ const shouldFetch = () => {
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
-// ---------------- FETCH WALLETS ----------------
-export const fetchWallets = async () => {
+// ---------------- FETCH MARKETS ----------------
+export const fetchMarkets = async () => {
   const cached = getCache();
 
   // Use cache if still valid
@@ -61,7 +61,7 @@ export const fetchWallets = async () => {
     );
 
     // Update cache and trigger callback if provided
-    if (data.length > 0) {
+    if (data && Object.keys(data).length > 0) {
       setCache(data);
       //if (typeof onUpdate === "function") onUpdate(data);
     }
