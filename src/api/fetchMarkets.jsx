@@ -53,7 +53,12 @@ export const fetchWallets = async () => {
       validateStatus: () => true,
     });
 
-    let data = response.data?.wallets || [];
+    let data = response.data?.stats || {};
+    data = Object.fromEntries(
+      Object.entries(data)
+        .filter(([_, value]) => value && value.latest != null)
+        .map(([market, value]) => [market, Number(value.latest)])
+    );
 
     // Update cache and trigger callback if provided
     if (data.length > 0) {
