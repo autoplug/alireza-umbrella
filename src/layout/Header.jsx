@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { useQuery } from "@tanstack/react-query";
 
-// Keys from api.js
-const CACHE_TIME_KEYS = {
-  wallets: "WALLETS_CACHE_TIME",
-  orders: "ORDERS_CACHE_TIME",
-};
+import { fetchWallets, fetchTrades, fetchOrders } from "../api/api";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
@@ -21,32 +18,28 @@ const simpleTimeAgo = (timestamp) => {
 };
 
 export default function Header() {
-  const [lastUpdate, setLastUpdate] = useState(null);
+  // Fetch all data using React Query
+  const { data: wallets } = useQuery(["wallets"], fetchWallets, {
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: Infinity,
+  });
 
-  const updateTime = () => {
-    const walletTs = localStorage.getItem(CACHE_TIME_KEYS.wallets);
-    const ordersTs = localStorage.getItem(CACHE_TIME_KEYS.orders);
+  const { data: trades } = useQuery(["trades"], fetchTrades, {
+    staleTime: 5 * 60 * 1000,
+    cacheTime: Infinity,
+  });
 
-    const latest = [walletTs, ordersTs]
-      .filter(Boolean)
-      .map(Number)
-      .sort((a, b) => b - a)[0];
+  const { data: orders } = useQuery(["orders"], fetchOrders, {
+    staleTime: 5 * 60 * 1000,
+    cacheTime: Infinity,
+  });
 
-    setLastUpdate(latest || null);
-  };
+  // Determine the oldest update among all datasets
+  const lastWalletUpdate = wallets?._lastUpdate || 0;
+  const lastTradesUpdate = trades?._lastUpdate || 0;
+  const lastOrdersUpdate = orders?._lastUpdate || 0;
 
-  useEffect(() => {
-    updateTime();
-    const interval = setInterval(updateTime, 10000);
-
-    const listener = () => updateTime();
-    window.addEventListener("storage", listener);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("storage", listener);
-    };
-  }, []);
+  const lastUpdate = Math.min(lastWalletUpdate, lastTradesUpdate, lastOrdersUpdate) || null;
 
   const { text, color } = simpleTimeAgo(lastUpdate);
 
