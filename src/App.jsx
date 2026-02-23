@@ -5,63 +5,73 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
-import { UpdateTimeProvider, useUpdateTime } from "./context/UpdateTimeContext";
+import {
+  persistQueryClient,
+} from "@tanstack/react-query-persist-client";
+
+import {
+  createSyncStoragePersister,
+} from "@tanstack/query-sync-storage-persister";
+
+import { UpdateTimeProvider } from "./context/UpdateTimeContext";
 
 import BottomNavigation from "./layout/BottomNavigation";
 import Header from "./layout/Header";
 
-// Pages
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
 import Settings from "./pages/Settings";
 import Chart from "./pages/Chart";
 
-// Create QueryClient
-const queryClient = new QueryClient();
+// 1️⃣ Create QueryClient with default options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,     // data is always fresh
+      gcTime: Infinity,        // never garbage collected
+      refetchOnMount: false,   // don't refetch on mount
+      refetchOnWindowFocus: false, // don't refetch on window focus
+      refetchOnReconnect: false,   // don't refetch on reconnect
+    },
+  },
+});
 
-function QueryListener({ children }) {
-  const { setLastUpdate } = useUpdateTime();
+// 2️⃣ Create persister with localStorage
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
 
-  React.useEffect(() => {
-    const unsubscribe = queryClient
-      .getQueryCache()
-      .subscribe((event) => {
-        if (event?.type === "updated") {
-          const query = event.query;
-          if (query.state.status === "success") {
-            setLastUpdate(Date.now());
-          }
-        }
-      });
-
-    return unsubscribe;
-  }, [setLastUpdate]);
-
-  return children;
-}
+// 3️⃣ Enable persistent cache
+persistQueryClient({
+  queryClient,
+  persister,
+  maxAge: Infinity, // never expires
+});
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UpdateTimeProvider>
-        <QueryListener>
-          <Router>
-            <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
-              
-              <Header />
-              <div style={{ height: "36px" }}></div>
+        <Router>
+          <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
+            {/* Header above all pages */}
+            <Header />
+            
+            {/* Spacer for content */}
+            <div style={{ height: "36px" }}></div>
 
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/trades" element={<Trades />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chart" element={<Chart />} />
-              </Routes>
+            {/* Routes */}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/trades" element={<Trades />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/chart" element={<Chart />} />
+            </Routes>
 
-              <BottomNavigation />
-            </div>
-          </Router>
-        </QueryListener>
+            {/* Bottom navigation */}
+            <BottomNavigation />
+          </div>
+        </Router>
       </UpdateTimeProvider>
     </QueryClientProvider>
   );
