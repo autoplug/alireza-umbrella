@@ -39,10 +39,10 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
       onUpdate({ trades, _lastUpdate: lastUpdate });
     }
 
-    return { allTrades, _lastUpdate: lastUpdate };
+    return { trades, _lastUpdate: lastUpdate };
   } catch (err) {
     console.error("fetchOrders failed:", err);
-    return { allTrades: [], _lastUpdate: null };
+    return { trades: [], _lastUpdate: null };
   }
 
 
