@@ -13,7 +13,7 @@ export const fetchMarkets = async ({ onUpdate } = {}) => {
     // Normalize Data
     let markets = response.data?.stats || {};
     markets = Object.fromEntries(
-      Object.entries(data)
+      Object.entries(markets)
         .filter(([_, value]) => value && value.latest != null)
         .map(([market, value]) => [market, Number(value.latest)])
       );
