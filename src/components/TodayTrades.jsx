@@ -32,11 +32,9 @@ export default function TodayTrades() {
 
   // Load trades from localStorage and filter by Tehran today
   useEffect(() => {
-    if(trades){
-      // Filter trades with timestamp >= 00:00 Tehran today
-      const todayTrades = trades.filter((t) => isTodayTehran(t.timestamp));
-      setTrades(todayTrades);
-    }
+    // Filter trades with timestamp >= 00:00 Tehran today
+    const todayTrades = trades.filter((t) => isTodayTehran(t.timestamp));
+    setTrades(todayTrades);    
   }, [trades]);
 
   return (
