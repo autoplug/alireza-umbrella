@@ -7,7 +7,7 @@ import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persist
 import { UpdateProvider } from "./context/UpdateContext";
 
 import BottomNavigation from "./layout/BottomNavigation";
-import Header from "./layout/Header";
+//import Header from "./layout/Header";
 
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
@@ -44,8 +44,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UpdateProvider>
-      {/* Header above all pages */}
-      <Header />
+      {/* Header  <Header />  above all pages */}
+      
       
       <Router>
         <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
