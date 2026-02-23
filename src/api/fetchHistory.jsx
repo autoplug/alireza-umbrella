@@ -1,42 +1,46 @@
 import axios from "axios";
 
-const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
 
-// Fetch all active orders
-export const fetchHistory = async ({ onUpdate } = {}) => {
+export const fetchHistory = async ({
+  symbol,
+  resolution,
+  from,
+  to,
+} = {}) => {
   try {
-    const headers = { };
+    if (!symbol) return { candles: [], _lastUpdate: null };
 
-    const url =
-      `${WORKER_URL}/market/udf/history?` +
-      new URLSearchParams({ symbol, resolution, from, to });
+    const url = `${WORKER_URL}/market/history`;
 
-      const response = await axios.get(url, { validateStatus: () => true });
-      const raw = response.data;
-      
-      let markets = []
-      // Parse response if status is ok
-      if (raw?.s === "ok" && Array.isArray(raw.t)) {
-        markets = raw.t.map((time, i) => ({
-          time,                // unix timestamp in seconds
-          open: raw.o[i],
-          high: raw.h[i],
-          low: raw.l[i],
-          close: raw.c[i],
-          volume: raw.v[i],
-        }));
-      }
+    const response = await axios.get(url, {
+      params: {
+        symbol: symbol.toLowerCase(),
+        resolution,
+        from,
+        to,
+      },
+      validateStatus: () => true,
+    });
 
-    const lastUpdate = Date.now();
+    const raw = response.data?.candles || [];
 
-    // Callback for Header or other components
-    if (typeof onUpdate === "function") {
-      onUpdate({ markets, _lastUpdate: lastUpdate });
-    }
+    // Normalize for Lightweight Charts
+    const candles = raw.map((c) => ({
+      time: Number(c.time),      // unix (seconds)
+      open: Number(c.open),
+      high: Number(c.high),
+      low: Number(c.low),
+      close: Number(c.close),
+      volume: Number(c.volume),
+    }));
 
-    return { markets, _lastUpdate: lastUpdate };
-  } catch (err) {
-    console.error("fetchOrders failed:", err);
-    return { markets: [], _lastUpdate: null };
+    return {
+      candles,
+      _lastUpdate: Date.now(),
+    };
+  } catch (error) {
+    console.error("fetchHistory failed:", error);
+    return { candles: [], _lastUpdate: null };
   }
 };
