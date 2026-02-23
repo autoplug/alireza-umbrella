@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchWallets } from "../api/fetchWallets";
 
-export const useTrades = () => {
+export const useWallets = () => {
   return useQuery({
     queryKey: ["wallets"],
     queryFn: () => fetchWallets(),
