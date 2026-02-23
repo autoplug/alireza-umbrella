@@ -12,6 +12,9 @@ import Trades from "./pages/Trades";
 import Settings from "./pages/Settings";
 import Chart from "./pages/Chart";
 
+// Create a React Query client
+const queryClient = new QueryClient();
+
 export default function App() {
 
   useEffect(() => {
