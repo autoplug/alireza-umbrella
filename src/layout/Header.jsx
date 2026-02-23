@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { useQuery } from "@tanstack/react-query";
 
-import { fetchWallets } from "../api/fetchWallets";
-import { fetchTrades } from "../api/fetchTrades";
-import { fetchOrders } from "../api/fetchOrders";
+import { useUpdate } from "../context/UpdateContext";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
@@ -20,29 +17,7 @@ const simpleTimeAgo = (timestamp) => {
 };
 
 export default function Header() {
-  // Fetch all data using React Query
-  const { data: wallets } = useQuery(["wallets"], fetchWallets, {
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: Infinity,
-  });
-
-  const { data: trades } = useQuery(["trades"], fetchTrades, {
-    staleTime: 5 * 60 * 1000,
-    cacheTime: Infinity,
-  });
-
-  const { data: orders } = useQuery(["orders"], fetchOrders, {
-    staleTime: 5 * 60 * 1000,
-    cacheTime: Infinity,
-  });
-
-  // Determine the oldest update among all datasets
-  const lastWalletUpdate = wallets?._lastUpdate || 0;
-  const lastTradesUpdate = trades?._lastUpdate || 0;
-  const lastOrdersUpdate = orders?._lastUpdate || 0;
-
-  const lastUpdate = Math.min(lastWalletUpdate, lastTradesUpdate, lastOrdersUpdate) || null;
-
+  const { lastUpdate } = useUpdate();
   const { text, color } = simpleTimeAgo(lastUpdate);
 
   return (
