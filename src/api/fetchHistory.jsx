@@ -9,7 +9,7 @@ export const fetchHistory = async ({
   to,
 } = {}) => {
   try {
-    if (!symbol) return { candles: [], _lastUpdate: null };
+    if (!symbol) return { history: [], _lastUpdate: null };
 
     const url = `${WORKER_URL}/market/history`;
 
@@ -23,24 +23,26 @@ export const fetchHistory = async ({
       validateStatus: () => true,
     });
 
-    const raw = response.data?.candles || [];
+    const raw = response.data;
 
     // Normalize for Lightweight Charts
-    const candles = raw.map((c) => ({
-      time: Number(c.time),      // unix (seconds)
-      open: Number(c.open),
-      high: Number(c.high),
-      low: Number(c.low),
-      close: Number(c.close),
-      volume: Number(c.volume),
-    }));
+    let history = [];
 
-    return {
-      candles,
-      _lastUpdate: Date.now(),
-    };
+    // Parse response if status is ok
+    if (raw?.s === "ok" && Array.isArray(raw.t)) {
+      history = raw.t.map((time, i) => ({
+        time,                // unix timestamp in seconds
+        open: raw.o[i],
+        high: raw.h[i],
+        low: raw.l[i],
+        close: raw.c[i],
+        volume: raw.v[i],
+      }));
+    }
+
+    return {history, _lastUpdate: Date.now(),};
   } catch (error) {
     console.error("fetchHistory failed:", error);
-    return { candles: [], _lastUpdate: null };
+    return { history: [], _lastUpdate: null };
   }
 };
