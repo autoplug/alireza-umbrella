@@ -18,7 +18,9 @@
     "web-vitals": "^3.1.0",
     "axios": "^1.6.0",
     "lightweight-charts": "^4.2.0",
-    "@tanstack/react-query": "^5.0.0"
+    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-query-persist-client": "^5.0.0",
+    "@tanstack/query-sync-storage-persister": "^5.0.0"
   },
   "overrides": {
     "@svgr/webpack": "^8.0.1",
