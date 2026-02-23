@@ -45,7 +45,6 @@ export const fetchMarkets = async () => {
       const url = `${WORKER_URL}/market/stats`;
       
       const response = await axios.get(url, {
-        headers,
         validateStatus: () => true,
       });
 
