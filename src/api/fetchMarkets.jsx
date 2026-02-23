@@ -8,21 +8,26 @@ export const fetchMarkets = async ({ onUpdate } = {}) => {
     let headers = {};
     const url = `${WORKER_URL}/market/stats`;
 
-    const res = await axios.get(url, { headers, validateStatus: () => true });
-    const rawMarkets = res.data?.markets || {};
+    const response = await axios.get(url, { headers, validateStatus: () => true });
 
     // Normalize Data
+    let markets = response.data?.stats || {};
+    markets = Object.fromEntries(
+      Object.entries(data)
+        .filter(([_, value]) => value && value.latest != null)
+        .map(([market, value]) => [market, Number(value.latest)])
+      );
 
     const lastUpdate = Date.now();
 
     // Callback for Header or other components
     if (typeof onUpdate === "function") {
-      onUpdate({ orders, _lastUpdate: lastUpdate });
+      onUpdate({ markets, _lastUpdate: lastUpdate });
     }
 
-    return { orders, _lastUpdate: lastUpdate };
+    return { markets, _lastUpdate: lastUpdate };
   } catch (err) {
     console.error("fetchOrders failed:", err);
-    return { orders: [], _lastUpdate: null };
+    return { markets: [], _lastUpdate: null };
   }
 };
