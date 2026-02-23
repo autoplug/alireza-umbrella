@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useWallets } from "../hooks/useWallets";
+import { useMarkets } from "../hooks/useMarkets";
 import TitleBar from "./TitleBar";
 import MarketIcon from "./MarketIcon";
 import {formatPrice} from "../api/utils";
@@ -53,12 +54,7 @@ const calcRialValue = (amount, currency, markets) => {
 //////////////////////////////////////////////
 export default function WalletList() {
   const { data: wallets = [] } = useWallets();
-  const [markets, setMarkets] = useState({});
-  
-  // Load wallets from localStorage/cache on mount
-  useEffect(() => {
-    setMarkets(getCache("MARKETS_CACHE"));
-  }, []);
+  const { data: markets = [] } = useMarkets();
 
   if (!wallets.length) return <div>No wallets available</div>;
 
