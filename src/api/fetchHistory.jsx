@@ -8,11 +8,16 @@ export const fetchHistory = async ({ onUpdate } = {}) => {
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
     const headers = { };
 
-    const res = await axios.get(url, { headers, validateStatus: () => true });
-    const rawOrders = res.data?.orders || [];
+    const url =
+      `${WORKER_URL}/market/udf/history?` +
+      new URLSearchParams({ symbol, resolution, from, to });
 
+      const response = await axios.get(url, { validateStatus: () => true });
+      const rawMarkets = response.data;
+      
+      
     // Normalize data
-    const orders = rawOrders.map((o) => ({
+    const markets = rawMarkets.map((o) => ({
       ...o,
       price: Number(o.price),
       amount: Number(o.amount),
