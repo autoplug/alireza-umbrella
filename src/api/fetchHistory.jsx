@@ -3,10 +3,11 @@ import axios from "axios";
 const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
 
 export const fetchHistory = async ({
-  symbol,
-  resolution,
-  from,
-  to,
+  symbol = "BTCIRT",
+  resolution = "60",
+  from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
+  to = Math.floor(Date.now() / 1000),
+  onUpdate = null,
 } = {}) => {
   try {
     if (!symbol) return { history: [], _lastUpdate: null };
