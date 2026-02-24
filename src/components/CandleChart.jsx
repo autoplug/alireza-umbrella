@@ -17,6 +17,15 @@ export default function CandleChart({ symbol, orders }) {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // remove previous chart if exists
+    if (chartRef.current) {
+      chartRef.current.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+      priceLinesRef.current = [];
+    }
+
+  
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
