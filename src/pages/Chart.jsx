@@ -6,8 +6,8 @@ import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
 
 export default function Chart() {
-  const trades = useTrades();   // همه معاملات
-  const orders = useOrders();   // همه سفارشات فعال
+  const { trades } = useTrades();   // همه معاملات
+  const { orders } = useOrders();   // همه سفارشات فعال
 
   const symbols = Array.from(
     new Set([
