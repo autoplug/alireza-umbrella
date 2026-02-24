@@ -65,7 +65,7 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
 
   // Group by market
   const ordersByMarket = orders.reduce((acc, order) => {
-    const key = order.market || "Unknown";
+    const key = order.market.toUpperCase() || "Unknown";
     if (!acc[key]) acc[key] = [];
     acc[key].push(order);
     return acc;
