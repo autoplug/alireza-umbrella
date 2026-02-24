@@ -20,21 +20,20 @@ export default function Header() {
   const queryClient = useQueryClient();
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  const updateTime = () => {
-    const orders = queryClient.getQueryState(["orders"]);
-    const wallets = queryClient.getQueryState(["wallets"]);
-
-    const timestamps = [
-      orders?.dataUpdatedAt,
-      wallets?.dataUpdatedAt,
-    ].filter(Boolean);
-
-    if (timestamps.length) {
-      setLastUpdate(Math.max(...timestamps));
-    }
-  };
-
   useEffect(() => {
+    const updateTime = () => {
+      const orders = queryClient.getQueryState(["orders"]);
+      const wallets = queryClient.getQueryState(["wallets"]);
+  
+      const timestamps = [
+        orders?.dataUpdatedAt,
+        wallets?.dataUpdatedAt,
+      ].filter(Boolean);
+  
+      if (timestamps.length) {
+        setLastUpdate(Math.max(...timestamps));
+      }
+    };
     updateTime();
 
     const interval = setInterval(updateTime, 10000); // refresh header text
