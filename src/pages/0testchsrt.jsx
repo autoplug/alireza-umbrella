@@ -5,9 +5,7 @@ import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
 
-export default function SymbolDashboard({ symbols }) {
-  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
-
+export default function Chart() {
   const trades = useTrades();   // همه معاملات
   const orders = useOrders();   // همه سفارشات فعال
 
@@ -16,6 +14,8 @@ export default function SymbolDashboard({ symbols }) {
       ...trades.map(t => t.market.toLowerCase()),
     ])
   );
+
+  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
 
   // فیلتر سفارشات بر اساس سمبل انتخابی
   const filteredOrders = useMemo(() => {
