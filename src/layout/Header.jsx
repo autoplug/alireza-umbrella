@@ -6,7 +6,7 @@ import { useUpdate } from "../context/UpdateContext";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
-  if (!timestamp) return { text: "Never " + timestamp, color: "gray" };
+  if (!timestamp) return { text: "Never" , color: "gray" };
 
   const diff = Date.now() - Number(timestamp);
   const minutes = Math.floor(diff / 60000);
