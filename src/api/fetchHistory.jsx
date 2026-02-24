@@ -14,14 +14,16 @@ export const fetchHistory = async ({
     from -= 60 * 60 * 24 * 30;
   
   const to = Math.floor(Date.now() / 1000);
+  
   try {
     if (!symbol) return { history: [], _lastUpdate: null };
-
+    symbol = symbol.toUpperCase().replace("RLS","IRT").replace("-","");
+    
     const url = `${WORKER_URL}/market/history`;
 
     const response = await axios.get(url, {
       params: {
-        symbol: symbol.toLowerCase(),
+        symbol,
         resolution,
         from,
         to,
