@@ -1,6 +1,6 @@
 // src/components/CandleChart.jsx
 import React, { useEffect, useRef, useState } from "react";
-import { createChart } from "lightweight-charts";
+import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
 export default function CandleChart({ symbol, orders }) {
