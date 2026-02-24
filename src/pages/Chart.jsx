@@ -5,7 +5,7 @@ import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
 
-export default function SymbolDashboard({ symbols }) {
+export default function Chart() {
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
 
   const trades = useTrades();   // همه معاملات
