@@ -20,6 +20,10 @@ export default function CandleChart({ symbol, orders }) {
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
+      rightPriceScale: {
+        autoScale: true,
+        borderVisible: false,
+      },
       layout: {
         background: { color: "#ffffff" },
         textColor: "#000",
@@ -28,7 +32,6 @@ export default function CandleChart({ symbol, orders }) {
         vertLines: { visible: false },
         horzLines: { visible: true },
       },
-      rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
     });
 
