@@ -3,6 +3,7 @@ import { fetchOrders } from "../api/fetchOrders";
 import { useUpdate } from "../context/UpdateContext";
 
 export const useOrders = () => {
+  const { setLastUpdate } = useUpdate();
   const query = useQuery({
     queryKey: ["orders"],
     queryFn: () => fetchOrders(),
