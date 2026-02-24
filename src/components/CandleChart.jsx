@@ -64,30 +64,31 @@ export default function CandleChart({ symbol, orders }) {
   }, []);
 
 
-  // Update candles when data changes
-  const [filteredCandles, setFilteredCandles] = useState([]);
-  useEffect(() => {
-    if (!candles || !seriesRef.current) return;
-    setFilteredCandles(candles);
-    
+    // Update candles when data changes
+    useEffect(() => {
+    if (!candles || !seriesRef.current || !chartRef.current) return;
+  
+    // clear previous data
     seriesRef.current.setData([]);
+  
+    // reset time scale completely
     chartRef.current.timeScale().resetTimeScale();
-        
-    seriesRef.current.setData(filteredCandles);
-    
-      // 🔥 Force price scale reset
-    seriesRef.current.applyOptions({
-      autoscaleInfoProvider: () => null,
-    });
-    
-    // 🔥 Reset price scale
+  
+    // set new data
+    seriesRef.current.setData(candles);
+  
+    // reset price scale
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
     });
-    
-    chartRef.current?.timeScale().fitContent();
-    chartRef.current?.timeScale().scrollToRealTime();
-  }, [candles, filteredCandles]);
+  
+    // fit visible range and scroll to latest candle
+    chartRef.current.timeScale().fitContent();
+    chartRef.current.timeScale().scrollToRealTime();
+  
+  }, [candles, symbol]); // run again when candles OR symbol changes
+  
+
 
   // Draw orders as horizontal lines
   const [filteredOrders, setFilteredOrders] = useState([]);
