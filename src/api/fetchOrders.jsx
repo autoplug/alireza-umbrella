@@ -11,8 +11,8 @@ export const fetchOrders = async ({ onUpdate } = {}) => {
     const url = `${WORKER_URL}/market/orders/list?status=Active&details=2`;
     const headers = { Authorization: `Token ${token}` };
 
-    const res = await axios.get(url, { headers, validateStatus: () => true });
-    const rawOrders = res.data?.orders || [];
+    const response = await axios.get(url, { headers, validateStatus: () => true });
+    const rawOrders = response.data?.orders || [];
 
     // Normalize data
     const orders = rawOrders.map((o) => ({
