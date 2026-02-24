@@ -1,14 +1,16 @@
 // src/components/CandleChart.jsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
 export default function CandleChart({ symbol }) {
+  const [resolution, setResolution] = useState("60");
+
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const seriesRef = useRef(null);
 
-  const { candles } = useHistory(symbol, resolution);
+  const { candles, isFetching } = useHistory(symbol, resolution);
 
   // Create chart once
   useEffect(() => {
@@ -52,19 +54,69 @@ export default function CandleChart({ symbol }) {
   useEffect(() => {
     if (!candles || !seriesRef.current) return;
 
-    // Expected format from API:
-    // [{ time, open, high, low, close }]
+    /*
+      Expected candle format:
+      [
+        {
+          time: 1700000000,
+          open: 100,
+          high: 110,
+          low: 95,
+          close: 105
+        }
+      ]
+    */
 
     seriesRef.current.setData(candles);
   }, [candles]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100%",
-        height: "400px",
-      }}
-    />
+    <div style={{ width: "100%" }}>
+      {/* Timeframe buttons */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+        <button
+          onClick={() => setResolution("60")}
+          style={{
+            padding: "6px 12px",
+            background: resolution === "60" ? "#333" : "#eee",
+            color: resolution === "60" ? "#fff" : "#000",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          1H
+        </button>
+
+        <button
+          onClick={() => setResolution("1D")}
+          style={{
+            padding: "6px 12px",
+            background: resolution === "1D" ? "#333" : "#eee",
+            color: resolution === "1D" ? "#fff" : "#000",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          1D
+        </button>
+
+        {isFetching && (
+          <span style={{ fontSize: "12px", color: "#999" }}>
+            Updating...
+          </span>
+        )}
+      </div>
+
+      {/* Chart */}
+      <div
+        ref={containerRef}
+        style={{
+          width: "100%",
+          height: "400px",
+        }}
+      />
+    </div>
   );
 }
