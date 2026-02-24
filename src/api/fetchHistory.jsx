@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 
 export const fetchHistory = async ({
   symbol = "BTCIRT",
