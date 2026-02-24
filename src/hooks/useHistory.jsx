@@ -3,6 +3,7 @@ import { fetchHistory } from "../api/fetchHistory";
 import { useUpdate } from "../context/UpdateContext";
 
 export const useHistory = () => {
+  const { setLastUpdate } = useUpdate();
   const query = useQuery({
     queryKey: ["candles"],
     queryFn: () => fetchHistory(),
