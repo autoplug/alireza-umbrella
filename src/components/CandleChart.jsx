@@ -128,7 +128,7 @@ export default function CandleChart({ symbol, orders, trades }) {
         text: trade.amount.toString(),
       }));
 
-      seriesRef.current.setMarkers(markers);
+      seriesRef.current?.setMarkers(markers);
     }, [trades]); // triggers when trades change
 
 
