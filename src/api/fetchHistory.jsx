@@ -36,13 +36,11 @@ export const fetchHistory = async ({
 
     const raw = response.data;
 
-    // Normalize for Lightweight Charts
     let candles = [];
-
-    // Parse response if status is ok
+    
     if (raw?.s === "ok" && Array.isArray(raw.t)) {
       candles = raw.t.map((time, i) => ({
-        time: Math.floor(Number(raw.t[i]) / 1000),  // unix timestamp in seconds
+        time: Number(raw.t[i]),   // ✅ بدون تقسیم بر 1000
         open: Number(raw.o[i]),
         high: Number(raw.h[i]),
         low: Number(raw.l[i]),
