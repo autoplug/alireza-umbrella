@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
-import { useUpdate } from "../context/UpdateContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Helper: time ago with icon color
 const simpleTimeAgo = (timestamp) => {
@@ -17,7 +17,32 @@ const simpleTimeAgo = (timestamp) => {
 };
 
 export default function Header() {
-  const { lastUpdate } = useUpdate();
+  const queryClient = useQueryClient();
+  const [lastUpdate, setLastUpdate] = useState(null);
+
+  const updateTime = () => {
+    const orders = queryClient.getQueryState(["orders"]);
+    const wallets = queryClient.getQueryState(["wallets"]);
+
+    const timestamps = [
+      orders?.dataUpdatedAt,
+      wallets?.dataUpdatedAt,
+    ].filter(Boolean);
+
+    if (timestamps.length) {
+      setLastUpdate(Math.max(...timestamps));
+    }
+  };
+
+  useEffect(() => {
+    updateTime();
+
+    const interval = setInterval(updateTime, 10000); // refresh header text
+
+    return () => clearInterval(interval);
+  }, []);
+
+
   const { text, color } = simpleTimeAgo(lastUpdate);
 
   return (
