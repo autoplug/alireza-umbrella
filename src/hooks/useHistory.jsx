@@ -6,14 +6,11 @@ export const useHistory = () => {
   const query = useQuery({
     queryKey: ["candles"],
     queryFn: () => fetchHistory(),
-
-    staleTime: 5 * 60 * 1000,  // 5 minutes
-    gcTime: Infinity,           // keep cache forever
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    placeholderData: (prev) => prev, // show previous data while fetching
   });
+  
+  if (query.data?._lastUpdate) {
+    setLastUpdate(query.data._lastUpdate);
+  }
   
   // Safe access to data
   const candles = query.data?.candles || [];
