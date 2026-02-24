@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //import CandleChart from "../components/CandleChart";
 //import TableOrder from "../components/TableOrder";
@@ -18,21 +18,22 @@ export default function Chart() {
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
   
   
-  /*
-  const [filteredOrders, setFilteredOrders] = useState([]);
-  useEffect(() => {
-      if (!orders) return;
   
-      const result = orders.filter(
+  const [filteredTrades, setFilteredTrades] = useState([]);
+  useEffect(() => {
+      if (!trades) return;
+  
+      const result = trades.filter(
         (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
       );
   
-      setFilteredOrders(result);
-    }, [orders, selectedSymbol]);
-*/
+      setFilteredTrades(result);
+    }, [trades, selectedSymbol]);
+    
+    
   return (
     <div>
-      { trades.length }
+      { filteredTrades.length }
       {/* Symbol Buttons */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
         {symbols.map((s) => (
