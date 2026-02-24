@@ -117,10 +117,11 @@ export default function CandleChart({ symbol, orders, trades }) {
 
 
     // Draw trades as markers
+    const [filteredTrades, setFilteredTrades] = useState([]);
     useEffect(() => {
       if (!seriesRef.current || !trades) return;
-  
-      const markers = trades.map((trade) => ({
+      setFilteredOrders(trades);
+      const markers = filteredTrades.map((trade) => ({
         time: trade.time,
         position: trade.type === "buy" ? "belowBar" : "aboveBar",
         color: trade.type === "buy" ? "green" : "red",
