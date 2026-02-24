@@ -25,7 +25,7 @@ export default function CandleChart({ symbol, orders }) {
         textColor: "#000",
       },
       grid: {
-        vertLines: { visible: true },
+        vertLines: { visible: false },
         horzLines: { visible: true },
       },
       rightPriceScale: { borderVisible: false },
