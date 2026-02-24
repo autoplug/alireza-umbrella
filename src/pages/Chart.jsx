@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-import CandleChart from "../components/CandleChart";
+//import CandleChart from "../components/CandleChart";
 import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
@@ -54,11 +54,7 @@ export default function Chart() {
       </div>
 
       {/* Chart */}
-      <CandleChart 
-        symbol={selectedSymbol} 
-        orders={filteredOrders}
-        trades={filteredTrades}
-      />
+    
 
       {/* Orders Table */}
       <h4>Active Orders</h4>
