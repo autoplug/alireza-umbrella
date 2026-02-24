@@ -25,7 +25,7 @@ export default function Chart() {
   
       const result = trades.filter(
         (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
-      );
+      ).slice(-10); // get last 10 items;
   
       setFilteredTrades(result);
     }, [trades, selectedSymbol]);
