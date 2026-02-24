@@ -42,12 +42,12 @@ export const fetchHistory = async ({
     // Parse response if status is ok
     if (raw?.s === "ok" && Array.isArray(raw.t)) {
       candles = raw.t.map((time, i) => ({
-        time,                // unix timestamp in seconds
-        open: raw.o[i],
-        high: raw.h[i],
-        low: raw.l[i],
-        close: raw.c[i],
-        volume: raw.v[i],
+        time: Math.floor(Number(raw.t[i]) / 1000),  // unix timestamp in seconds
+        open: Number(raw.o[i]),
+        high: Number(raw.h[i]),
+        low: Number(raw.l[i]),
+        close: Number(raw.c[i]),
+        volume: Number(raw.v[i]),
       }));
     }
 
