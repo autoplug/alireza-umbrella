@@ -74,6 +74,7 @@ export default function CandleChart({ symbol }) {
     <div style={{ width: "100%" }}>
       {/* Timeframe buttons */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+        { candles.length }
         <button
           onClick={() => setResolution("60")}
           style={{
