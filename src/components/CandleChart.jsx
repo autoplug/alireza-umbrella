@@ -83,6 +83,22 @@ export default function CandleChart({ symbol, orders }) {
   }, [orders]);
 
 
+  // Draw trades as markers
+  useEffect(() => {
+    if (!seriesRef.current || !trades) return;
+
+    const markers = trades.map((trade) => ({
+      time: trade.time,
+      position: trade.type === "buy" ? "belowBar" : "aboveBar",
+      color: trade.type === "buy" ? "green" : "red",
+      shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
+      text: trade.amount.toString(),
+    }));
+
+    seriesRef.current.setMarkers(markers);
+  }, [trades]);
+
+
   // Update candles when data changes
   useEffect(() => {
     if (!candles || !seriesRef.current) return;
