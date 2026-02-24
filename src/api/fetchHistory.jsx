@@ -19,7 +19,7 @@ export const fetchHistory = async ({
     if (!symbol) return { history: [], _lastUpdate: null };
     symbol = symbol.toUpperCase().replace("RLS","IRT").replace("-","");
     
-    const url = `${WORKER_URL}/market/history`;
+    const url = `${WORKER_URL}/market/udf/history`;
 
     const response = await axios.get(url, {
       params: {
