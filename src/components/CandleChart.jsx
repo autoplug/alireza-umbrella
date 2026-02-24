@@ -77,7 +77,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     seriesRef.current.setData(candles);
     
     chartRef.current.timeScale().setVisibleRange({
-      from: Math.max(0, candles.length - 30),
+      from: Math.max(0, candles.length - 60),
       to: candles.length - 1,
     });
     
@@ -85,9 +85,8 @@ export default function CandleChart({ symbol, orders, trades }) {
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
     });
-  
     // fit visible range and scroll to latest candle
-    chartRef.current.timeScale().fitContent();
+    //chartRef.current.timeScale().fitContent();
     chartRef.current.timeScale().scrollToRealTime();
   }, [candles, symbol]); // run again when candles OR symbol changes
   
