@@ -53,10 +53,12 @@ export default function CandleChart({ symbol, orders, trades }) {
 
 
   // Update candles when data changes
+  const [filteredCandles, setFilteredCandles] = useState([]);
   useEffect(() => {
     if (!candles || !seriesRef.current) return;
-    seriesRef.current.setData(candles);
-  }, [candles]);
+    setFilteredCandles(candles);
+    seriesRef.current.setData(filteredCandles);
+  }, [candles, filteredCandles]);
 
   // Draw orders as horizontal lines
   useEffect(() => {
