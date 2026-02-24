@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { createChart } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
-export default function CandleChart({ symbol, resolution }) {
+export default function CandleChart({ symbol }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const seriesRef = useRef(null);
