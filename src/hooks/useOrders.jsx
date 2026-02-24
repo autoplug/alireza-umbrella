@@ -7,6 +7,10 @@ export const useOrders = () => {
     queryFn: () => fetchOrders(),
   });
   
+  if (query.data?._lastUpdate) {
+    setLastUpdate(query.data._lastUpdate);
+  }
+  
   // Safe access to data
   const orders = query.data?.orders || [];
   const lastUpdate = query.data?._lastUpdate || null;
