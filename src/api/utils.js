@@ -1,14 +1,14 @@
 // ---------------- APPLY FEE ----------------
 export const applyFee = (orders) => {
   for (const order of orders) {
-    const amt = Number(order.amount);
+    const amount = Number(order.amount);
     const price = Number(order.price);
     const fee = Number(order.fee || 0);
 
     if (order.type?.toLowerCase() === "buy") {
-      order.feePrice = price * (1 + fee / amt);
+      order.feePrice = price * (1 + fee / amount);
     } else if (order.type?.toLowerCase() === "sell") {
-      const totalPrice = price * amt;
+      const totalPrice = price * amount;
       order.feePrice = price * (1 - fee / totalPrice);
     }
   }
@@ -34,7 +34,7 @@ export const processSellSingle = (sell, buyOrders) => {
 
   const relevantBuys = buyOrders.filter(
     (b) =>
-      new Date(b.created_at) < new Date(sell.created_at) &&
+      new Date(b.timestamp) < new Date(sell.timestamp) &&
       b.amount > 0
   );
 
@@ -112,7 +112,7 @@ export const processAllSells = (sellOrders, buyOrders) => {
 
   // 🔹 Sort sell orders by creation time ascending
   const sortedSells = sells.sort(
-    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
   );
 
   for (const sell of sortedSells) {
