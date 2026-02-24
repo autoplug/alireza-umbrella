@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import {processAllSells, removeDuplicates} from "../api/utils";
+import {processAllSells} from "../api/utils";
 import { useTrades } from "../hooks/useTrades";
 
-import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
-
-const ORDERS_CACHE_KEY = "ORDERS_CACHE";
 
 const keepLastTenPerMarket = (orders) => {
   // Group orders by market
@@ -37,32 +34,13 @@ const keepLastTenPerMarket = (orders) => {
 
 
 export default function ProcessSellPanel() {
+  const { trades } = useTrades();
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
 
   useEffect(() => {
-    // ===== Load cached + local JSON orders =====
-    const cached = localStorage.getItem(ORDERS_CACHE_KEY);
-    let localData = [];
-
-    if (cached) {
-      try {
-        localData = JSON.parse(cached);
-      } catch (err) {
-        console.error("Error parsing localStorage orders:", err);
-      }
-    }
-
-    let combinedOrders = [...localData, ...localOrders];
-
-    // Remove duplicates
-    combinedOrders = removeDuplicates(combinedOrders);
-
-    // Only completed orders
-    const doneOrders = combinedOrders.filter((o) => o.status === "Done");
-
     // ===== Group orders by market =====
-    const ordersByMarket = doneOrders.reduce((acc, order) => {
+    const ordersByMarket = trades.reduce((acc, order) => {
       const key = order.market;
       if (!acc[key]) acc[key] = { buys: [], sells: [] };
       if (order.type?.toLowerCase() === "buy") acc[key].buys.push(order);
