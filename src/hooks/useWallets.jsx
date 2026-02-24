@@ -17,5 +17,4 @@ export const useWallets = () => {
   const lastUpdate = query.data?._lastUpdate || null;
 
   return { ...query, wallets, lastUpdate };
-  
 };
