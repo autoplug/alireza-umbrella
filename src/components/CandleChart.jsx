@@ -9,6 +9,7 @@ export default function CandleChart({ symbol, orders }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const seriesRef = useRef(null);
+  const priceLinesRef = useRef([]);
 
   const { candles, isFetching } = useHistory(symbol, resolution);
 
