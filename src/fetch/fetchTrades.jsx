@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
+const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_TIME_KEY = "MARKETS_CACHE_TIME";
 // 5 minutes
 const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
