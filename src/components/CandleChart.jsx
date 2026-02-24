@@ -69,6 +69,10 @@ export default function CandleChart({ symbol, orders }) {
   useEffect(() => {
     if (!candles || !seriesRef.current) return;
     setFilteredCandles(candles);
+    
+    seriesRef.current.setData([]);
+    chartRef.current.timeScale().resetTimeScale();
+        
     seriesRef.current.setData(filteredCandles);
     
       // 🔥 Force price scale reset
