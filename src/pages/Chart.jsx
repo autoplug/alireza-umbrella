@@ -11,6 +11,12 @@ export default function SymbolDashboard({ symbols }) {
   const trades = useTrades();   // همه معاملات
   const orders = useOrders();   // همه سفارشات فعال
 
+  const symbols = Array.from(
+    new Set([
+      ...trades.map(t => t.market.toLowerCase()),
+    ])
+  );
+
   // فیلتر سفارشات بر اساس سمبل انتخابی
   const filteredOrders = useMemo(() => {
     return orders.filter(
