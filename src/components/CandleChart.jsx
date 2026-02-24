@@ -12,7 +12,7 @@ export default function CandleChart({ symbol = "btcrls" }) {
 
   // Time range (last 24 hours default)
   const now = Math.floor(Date.now() / 1000);
-  const from = now - 24 * 60 * 60;
+  const from = now - 24 * 60 * 60 * 30;
 
   const { candles } = useHistory({
     symbol,
