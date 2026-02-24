@@ -1,11 +1,4 @@
 /*!
- * @license
- * TradingView Lightweight Charts™ v4.2.3
- * Copyright (c) 2025 TradingView, Inc.
- * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
- */
-
-/*!
  * Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  * Copyright 2024 Fonticons, Inc.
