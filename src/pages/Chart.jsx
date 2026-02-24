@@ -62,7 +62,7 @@ export default function Chart() {
 
       {/* Last 10 Trades */}
       <h4>Last 10 Trades</h4>
-      <TableOrder orders={filteredTrades} isTrades />
+      <TableOrder orders={filteredTrades}/>
     </div>
   );
 }
