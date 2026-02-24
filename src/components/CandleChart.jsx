@@ -119,7 +119,11 @@ export default function CandleChart({ symbol, orders, trades }) {
     // Draw trades as markers
     useEffect(() => {
       if (!seriesRef.current || !trades) return;
-    
+      
+      if (!trades?.length) {
+        seriesRef.current?.setMarkers([]); // پاک کردن markers قبلی
+        return;
+      }
       const markers = trades.map((trade) => ({
         time: trade.time,
         position: trade.type === "buy" ? "belowBar" : "aboveBar",
