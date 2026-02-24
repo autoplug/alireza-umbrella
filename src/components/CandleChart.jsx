@@ -19,7 +19,7 @@ export default function CandleChart({ symbol = "btcrls" }) {
     chartRef.current = createChart(chartContainerRef.current, {
       height: 400,
       layout: {
-        background: { color: "#1e1e1e" },
+        background: { color: "#ffffff" },
         textColor: "#DDD",
       },
       grid: {
