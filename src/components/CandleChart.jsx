@@ -70,6 +70,11 @@ export default function CandleChart({ symbol, orders }) {
     if (!candles || !seriesRef.current) return;
     setFilteredCandles(candles);
     seriesRef.current.setData(filteredCandles);
+    
+      // 🔥 Force price scale reset
+    seriesRef.current.applyOptions({
+      autoscaleInfoProvider: () => null,
+    });
     chartRef.current?.timeScale().fitContent();
     chartRef.current?.timeScale().scrollToRealTime();
   }, [candles, filteredCandles]);
