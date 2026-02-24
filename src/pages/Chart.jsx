@@ -16,11 +16,21 @@ export default function Chart() {
   );
 
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
-
-
+  
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  useEffect(() => {
+      if (!orders) return;
+  
+      const result = orders.filter(
+        (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
+      );
+  
+      setFilteredOrders(result);
+    }, [orders, selectedSymbol]);
 
   return (
     <div>
+      { filteredOrders.length }
       {/* Symbol Buttons */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
         {symbols.map((s) => (
