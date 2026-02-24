@@ -44,7 +44,13 @@ export default function Chart() {
     
   return (
     <div>
-      { filteredTrades.length }
+      {/* Chart */}
+      <CandleChart 
+        symbol={selectedSymbol} 
+        orders={filteredOrders}
+        trades={filteredTrades}
+      />
+      
       {/* Symbol Buttons */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
         {symbols.map((s) => (
@@ -65,13 +71,6 @@ export default function Chart() {
         ))}
       </div>
 
-      {/* Chart */}
-      <CandleChart 
-        symbol={selectedSymbol} 
-        orders={filteredOrders}
-        trades={filteredTrades}
-      />
-    
       {/* Orders Table */}
       <TableOrder orders={filteredOrders} />
 
