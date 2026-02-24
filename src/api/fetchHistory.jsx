@@ -5,10 +5,15 @@ const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
 export const fetchHistory = async ({
   symbol = "BTCIRT",
   resolution = "60",
-  from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
-  to = Math.floor(Date.now() / 1000),
   onUpdate = null,
 } = {}) => {
+  let from = Math.floor(Date.now() / 1000);
+  if(resolution === "60")
+    from -= 60 * 60 * 24 * 5;
+  if(resolution === "1D")
+    from -= 60 * 60 * 24 * 30;
+  
+  const to = Math.floor(Date.now() / 1000);
   try {
     if (!symbol) return { history: [], _lastUpdate: null };
 
