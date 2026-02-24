@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchMarkets } from "../api/fetchMarkets";
+import { useUpdate } from "../context/UpdateContext";
 
 export const useMarkets = () => {
   const query = useQuery({
