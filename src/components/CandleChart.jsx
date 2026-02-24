@@ -80,8 +80,6 @@ export default function CandleChart({ symbol, orders }) {
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
     });
-
-  ch
     
     chartRef.current?.timeScale().fitContent();
     chartRef.current?.timeScale().scrollToRealTime();
