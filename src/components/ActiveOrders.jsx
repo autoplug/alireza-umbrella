@@ -5,6 +5,7 @@ import TitleBar from "./TitleBar";
 import { useOrders } from "../hooks/useOrders";
 
 export default function ActiveOrders() {
+  const { orders } = useOrders();
   
 
   return (
