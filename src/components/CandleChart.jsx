@@ -1,53 +1,70 @@
-import React, { useEffect, useRef, useState } from "react";
+// src/components/CandleChart.jsx
+import React, { useEffect, useRef } from "react";
 import { createChart } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
-export default function CandleChart({ symbol = "btcrls" }) {
-  const chartContainerRef = useRef();
-  const chartRef = useRef();
-  const seriesRef = useRef();
-
-  const [resolution, setResolution] = useState("60"); // 60 = 1H, 1D = daily
+export default function CandleChart({ symbol, resolution }) {
+  const containerRef = useRef(null);
+  const chartRef = useRef(null);
+  const seriesRef = useRef(null);
 
   const { candles } = useHistory(symbol, resolution);
 
   // Create chart once
   useEffect(() => {
-    if (!chartContainerRef.current) return;
+    if (!containerRef.current) return;
 
-    chartRef.current = createChart(chartContainerRef.current, {
+    const chart = createChart(containerRef.current, {
+      width: containerRef.current.clientWidth,
       height: 400,
       layout: {
         background: { color: "#ffffff" },
-        textColor: "#DDD",
+        textColor: "#000",
       },
       grid: {
-        vertLines: { color: "#2B2B43" },
-        horzLines: { color: "#2B2B43" },
+        vertLines: { visible: false },
+        horzLines: { visible: false },
       },
+      rightPriceScale: { borderVisible: false },
+      timeScale: { borderVisible: false },
     });
 
-    seriesRef.current = chartRef.current.addCandlestickSeries();
+    const series = chart.addCandlestickSeries();
 
-    return () => chartRef.current.remove();
+    chartRef.current = chart;
+    seriesRef.current = series;
+
+    const handleResize = () => {
+      chart.applyOptions({
+        width: containerRef.current.clientWidth,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      chart.remove();
+    };
   }, []);
 
-  // Set data when candles change
+  // Update candles when data changes
   useEffect(() => {
-    if (seriesRef.current && candles.length > 0) {
-      seriesRef.current.setData(candles);
-    }
+    if (!candles || !seriesRef.current) return;
+
+    // Expected format from API:
+    // [{ time, open, high, low, close }]
+
+    seriesRef.current.setData(candles);
   }, [candles]);
 
   return (
-    <div>
-      {/* Timeframe buttons */}
-      <div style={{ marginBottom: 10 }}>
-        <button onClick={() => setResolution("60")}>1H</button>
-        <button onClick={() => setResolution("1D")}>1D</button>
-      </div>
-
-      <div ref={chartContainerRef} />
-    </div>
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        height: "400px",
+      }}
+    />
   );
 }
