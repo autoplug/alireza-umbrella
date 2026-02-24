@@ -75,6 +75,12 @@ export default function CandleChart({ symbol, orders, trades }) {
     chartRef.current.timeScale().resetTimeScale();
     // set new data
     seriesRef.current.setData(candles);
+    
+    chartRef.current.timeScale().setVisibleRange({
+      from: Math.max(0, candles.length - 30),
+      to: candles.length - 1,
+    });
+    
     // reset price scale
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
