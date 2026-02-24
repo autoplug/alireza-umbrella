@@ -8,6 +8,10 @@ export const useWallets = () => {
     queryFn: () => fetchWallets(),
   });
   
+  if (query.data?._lastUpdate) {
+    setLastUpdate(query.data._lastUpdate);
+  }
+  
   // Safe access to data
   const wallets = query.data?.wallets || [];
   const lastUpdate = query.data?._lastUpdate || null;
