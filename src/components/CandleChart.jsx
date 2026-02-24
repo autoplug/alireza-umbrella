@@ -76,11 +76,14 @@ export default function CandleChart({ symbol, orders, trades }) {
     // set new data
     seriesRef.current.setData(candles);
     
-    chartRef.current.timeScale().setVisibleRange({
-      from: Math.max(0, candles.length - 200),
-      to: candles.length - 1,
-    });
+    const chartWidth = containerRef.current.clientWidth;
+    const numberOfCandles = 30;
     
+    const barSpacing = chartWidth / numberOfCandles; // pixel per candle
+    
+    chartRef.current.timeScale().applyOptions({
+      barSpacing,
+    });
     // reset price scale
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
