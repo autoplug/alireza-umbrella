@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 //import CandleChart from "../components/CandleChart";
-//import TableOrder from "../components/TableOrder";
+import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
 //import { useOrders } from "../hooks/useOrders";
 
@@ -58,6 +58,7 @@ export default function Chart() {
     
 
       {/* Orders Table */}
+      <TableOrder orders={filteredTrades} />
     
     </div>
   );
