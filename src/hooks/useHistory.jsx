@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchHistory } from "../api/fetchHistory";
 import { useUpdate } from "../context/UpdateContext";
 
-export const useHistory = () => {
+export const useHistory = (symbol, resolution) => {
   const { setLastUpdate } = useUpdate();
   const query = useQuery({
-    queryKey: ["candles"],
-    queryFn: () => fetchHistory(),
+    queryKey: ["candles", symbol, resolution],
+    queryFn: () => fetchHistory({ symbol, resolution }),
+    enabled: !!symbol && !!resolution, // only run if both exist
   });
   
   if (query.data?._lastUpdate) {
