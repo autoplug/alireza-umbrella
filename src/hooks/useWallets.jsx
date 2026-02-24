@@ -1,17 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchWallets } from "../api/fetchWallets";
+import { useUpdate } from "../context/UpdateContext";
 
 export const useWallets = () => {
   const query = useQuery({
     queryKey: ["wallets"],
     queryFn: () => fetchWallets(),
-
-    staleTime: 5 * 60 * 1000,  // 5 minutes
-    gcTime: Infinity,           // keep cache forever
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    placeholderData: (prev) => prev, // show previous data while fetching
   });
   
   // Safe access to data
