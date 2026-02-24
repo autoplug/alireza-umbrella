@@ -133,7 +133,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       }));
 
       seriesRef.current?.setMarkers(markers);
-    }, [trades]); // triggers when trades change
+    }, [trades, seriesRef.current]); // triggers when trades change
 
 
 
