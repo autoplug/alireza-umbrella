@@ -2,14 +2,13 @@ import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
 const CACHE_TIME_KEY = "MARKETS_CACHE_TIME";
+const CASHE_KEY = "MARKETS_CACHE";
 // 5 minutes
 const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
 
 // ---------------- CACHE HELPERS ----------------
-const getCacheKey = (symbol, resolution) => `HISTORY_CACHE_${symbol}_${resolution}`;
-
-const getCache = (symbol, resolution) => {
-  const data = localStorage.getItem(getCacheKey(symbol, resolution));
+const getCache = () => {
+  const data = localStorage.getItem(CASHE_KEY);
   if (!data) return null;
   try {
     return JSON.parse(data);
@@ -18,8 +17,8 @@ const getCache = (symbol, resolution) => {
   }
 };
 
-const setCache = (symbol, resolution, value) => {
-  localStorage.setItem(getCacheKey(symbol, resolution), JSON.stringify(value));
+const setCache = (value) => {
+  localStorage.setItem( CACHE_KEY, JSON.stringify(value));
   localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 };
 
@@ -30,15 +29,9 @@ const shouldFetch = () => {
 };
 
 // ---------------- FETCH HISTORY ----------------
-export const fetchHistory = async ({
-  symbol = "BTCIRT",
-  resolution = "60",
-  from = Math.floor(Date.now() / 1000) - 3600, // default 1 hour ago
-  to = Math.floor(Date.now() / 1000),
-  onUpdate = null,
-} = {}) => {
+export const fetchHistory = async ( onUpdate = null) => {
   
-  const cached = getCache(symbol, resolution);
+  const cached = getCache();
 
   // Use cache if still valid
   if (!shouldFetch() && cached) {
