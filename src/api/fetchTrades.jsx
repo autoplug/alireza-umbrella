@@ -33,6 +33,7 @@ export const fetchTrades = async ({ onUpdate } = {}) => {
 
 
     const lastUpdate = Date.now();
+    localStorage.setItem("lastUpdate", Date.now().toString());
 
     // Callback for Header or other components
     if (typeof onUpdate === "function") {
