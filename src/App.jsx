@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 5 * 60 * 1000, // data considered fresh for 5 minutes
       gcTime: Infinity,          // never garbage collected
-      refetchOnMount: false,     // don't refetch when component mounts
+      refetchOnMount: true,     // don't refetch when component mounts
       refetchOnWindowFocus: true,// background refresh if window focused
       refetchOnReconnect: true,  // background refresh on network reconnect
       placeholderData: (prev) => prev, // keep previous data visible
