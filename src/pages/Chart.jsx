@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
-import CandleChart from "./CandleChart";
-import TableOrder from "./TableOrder";
+
+import CandleChart from "../components/CandleChart";
+import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
 
