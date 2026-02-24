@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 
 //import CandleChart from "../components/CandleChart";
 //import TableOrder from "../components/TableOrder";
