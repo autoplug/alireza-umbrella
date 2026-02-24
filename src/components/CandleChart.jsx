@@ -61,16 +61,17 @@ export default function CandleChart({ symbol, orders }) {
   }, [candles, filteredCandles]);
 
   // Draw orders as horizontal lines
+  const [filteredOrders, setFilteredOrders] = useState([]);
   useEffect(() => {
     if (!seriesRef.current) return;
-
+    setFilteredOrders(orders);
     // پاک کردن خطوط قبلی
     priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
     priceLinesRef.current = [];
 
     if (!orders || orders.length === 0) return;
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
         price: order.price,
@@ -82,7 +83,7 @@ export default function CandleChart({ symbol, orders }) {
       });
       priceLinesRef.current.push(line);
     });
-  }, [orders]);
+  }, [orders, filteredOrders]);
 
 
 
