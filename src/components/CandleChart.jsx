@@ -86,7 +86,7 @@ export default function CandleChart({ symbol, orders }) {
       });
       priceLinesRef.current.push(line);
     });
-  }, [orders, filteredOrders]);
+  }, [orders, filteredOrders, symbol]);
 
 
 
