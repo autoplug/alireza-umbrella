@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchHistory } from "../api/fetchHistory";
+import { useUpdate } from "../context/UpdateContext";
 
 export const useHistory = () => {
   const query = useQuery({
