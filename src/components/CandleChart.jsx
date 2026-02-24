@@ -70,8 +70,8 @@ export default function CandleChart({ symbol, orders }) {
     if (!candles || !seriesRef.current) return;
     setFilteredCandles(candles);
     seriesRef.current.setData(filteredCandles);
-    chart.timeScale().fitContent();
-    chart.timeScale().scrollToRealTime();
+    chartRef.current?.timeScale().fitContent();
+    chartRef.current?.timeScale().scrollToRealTime();
   }, [candles, filteredCandles]);
 
   // Draw orders as horizontal lines
