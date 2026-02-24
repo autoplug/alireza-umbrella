@@ -1,9 +1,13 @@
 // src/context/UpdateContext.jsx
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-const UpdateContext = createContext();
+const UpdateContext = createContext(null);
 
-export const useUpdate = () => useContext(UpdateContext);
+export const useUpdate = () => {
+  const context = useContext(UpdateContext);
+  if (!context) throw new Error("useUpdate must be used inside UpdateProvider");
+  return context;
+};
 
 export const UpdateProvider = ({ children }) => {
   const [lastUpdate, setLastUpdate] = useState(null);
