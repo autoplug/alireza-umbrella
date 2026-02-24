@@ -71,10 +71,13 @@ export default function CandleChart({ symbol, orders }) {
 
     if (!filteredOrders || filteredOrders.length === 0) return;
 
+    const isRlsMarket = symbol?.toLowerCase().endsWith("rls");
+    const factor = isRlsMarket ? 10 : 1;
+    
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
-        price: Number(order.price),
+        price: Number(order.price)/factor,
         color,
         lineWidth: 2,
         lineStyle: LineStyle.Solid,
