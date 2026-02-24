@@ -16,6 +16,8 @@ export const fetchHistory = async ({
   const to = Math.floor(Date.now() / 1000);
   
   try {
+    let headers = {};
+    
     if (!symbol) return { history: [], _lastUpdate: null };
     symbol = symbol.toUpperCase().replace("RLS","IRT").replace("-","");
     
