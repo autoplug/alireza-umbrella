@@ -51,7 +51,7 @@ export default function App() {
       <Router>
         <div style={{ minHeight: "100vh", paddingBottom: "60px" }}>
           {/* Spacer for content */}
-          <div style={{ height: "40px" }}></div>
+          <div style={{ height: "43px" }}></div>
           {/* Routes */}
           <Routes>
             <Route path="/" element={<Home />} />
