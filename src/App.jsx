@@ -4,10 +4,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-//import { UpdateProvider } from "./context/UpdateContext";
+import { UpdateProvider } from "./context/UpdateContext";
 
 import BottomNavigation from "./layout/BottomNavigation";
-//import Header from "./layout/Header";
+import Header from "./layout/Header";
 
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
@@ -43,8 +43,9 @@ persistQueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      
-      {/* Header     <UpdateProvider>  <Header />  above all pages */}
+      <UpdateProvider>
+        <Header />
+      {/* Header         above all pages */}
       
       
       <Router>
@@ -63,7 +64,7 @@ export default function App() {
           <BottomNavigation />
         </div>
       </Router>
-      
+      </UpdateProvider>
     </QueryClientProvider>
   );
 }
