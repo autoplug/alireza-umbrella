@@ -15,7 +15,7 @@ export const useMarkets = () => {
   });
   
   // Safe access to data
-  const markets = query.data?.markets || [];
+  const markets = query.data?.markets || {};
   const lastUpdate = query.data?._lastUpdate || null;
 
   return { ...query, markets, lastUpdate };
