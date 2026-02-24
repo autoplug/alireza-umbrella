@@ -3,6 +3,7 @@ import { fetchWallets } from "../api/fetchWallets";
 import { useUpdate } from "../context/UpdateContext";
 
 export const useWallets = () => {
+  const { setLastUpdate } = useUpdate();
   const query = useQuery({
     queryKey: ["wallets"],
     queryFn: () => fetchWallets(),
