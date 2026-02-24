@@ -69,7 +69,7 @@ export default function CandleChart({ symbol, orders }) {
     priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
     priceLinesRef.current = [];
 
-    if (!orders || orders.length === 0) return;
+    if (!filteredOrders || filteredOrders.length === 0) return;
 
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
