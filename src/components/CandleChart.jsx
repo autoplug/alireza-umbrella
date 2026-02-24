@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
-export default function CandleChart({ symbol, orders }) {
+export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("60");
 
   const containerRef = useRef(null);
@@ -73,10 +73,8 @@ export default function CandleChart({ symbol, orders }) {
   
     // reset time scale completely
     chartRef.current.timeScale().resetTimeScale();
-  
     // set new data
     seriesRef.current.setData(candles);
-  
     // reset price scale
     chartRef.current.priceScale("right").applyOptions({
       autoScale: true,
@@ -85,7 +83,6 @@ export default function CandleChart({ symbol, orders }) {
     // fit visible range and scroll to latest candle
     chartRef.current.timeScale().fitContent();
     chartRef.current.timeScale().scrollToRealTime();
-  
   }, [candles, symbol]); // run again when candles OR symbol changes
   
 
@@ -118,6 +115,21 @@ export default function CandleChart({ symbol, orders }) {
     });
   }, [orders, filteredOrders, symbol]);
 
+
+    // Draw trades as markers
+    useEffect(() => {
+      if (!seriesRef.current || !trades) return;
+  
+      const markers = trades.map((trade) => ({
+        time: trade.time,
+        position: trade.type === "buy" ? "belowBar" : "aboveBar",
+        color: trade.type === "buy" ? "green" : "red",
+        shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
+        text: trade.amount.toString(),
+      }));
+  
+      seriesRef.current.setMarkers(markers);
+    }, [trades]);
 
 
   return (
