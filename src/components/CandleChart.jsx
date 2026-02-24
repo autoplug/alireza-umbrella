@@ -99,25 +99,6 @@ export default function CandleChart({ symbol, orders, trades }) {
   }, [trades]);
 
 
-  // Update candles when data changes
-  useEffect(() => {
-    if (!candles || !seriesRef.current) return;
-
-    /*
-      Expected candle format:
-      [
-        {
-          time: 1700000000,
-          open: 100,
-          high: 110,
-          low: 95,
-          close: 105
-        }
-      ]
-    */
-
-    seriesRef.current.setData(candles);
-  }, [candles]);
 
   return (
     <div style={{ width: "100%" }}>
