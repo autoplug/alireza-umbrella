@@ -75,6 +75,14 @@ export default function CandleChart({ symbol, orders }) {
     seriesRef.current.applyOptions({
       autoscaleInfoProvider: () => null,
     });
+    
+    // 🔥 Reset price scale
+    chartRef.current.priceScale("right").applyOptions({
+      autoScale: true,
+    });
+
+  ch
+    
     chartRef.current?.timeScale().fitContent();
     chartRef.current?.timeScale().scrollToRealTime();
   }, [candles, filteredCandles]);
