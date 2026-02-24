@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
-export default function CandleChart({ symbol, orders, trades }) {
+export default function CandleChart({ symbol, orders }) {
   const [resolution, setResolution] = useState("60");
 
   const containerRef = useRef(null);
@@ -17,18 +17,30 @@ export default function CandleChart({ symbol, orders, trades }) {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // remove previous chart if exists
+    if (chartRef.current) {
+      chartRef.current.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+      priceLinesRef.current = [];
+    }
+
+  
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
+      rightPriceScale: {
+        autoScale: true,
+        borderVisible: false,
+      },
       layout: {
         background: { color: "#ffffff" },
         textColor: "#000",
       },
       grid: {
-        vertLines: { visible: true },
+        vertLines: { visible: false },
         horzLines: { visible: true },
       },
-      rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
     });
 
@@ -53,25 +65,48 @@ export default function CandleChart({ symbol, orders, trades }) {
 
 
   // Update candles when data changes
+  const [filteredCandles, setFilteredCandles] = useState([]);
   useEffect(() => {
     if (!candles || !seriesRef.current) return;
-    seriesRef.current.setData(candles);
-  }, [candles]);
+    setFilteredCandles(candles);
+    
+    seriesRef.current.setData([]);
+    chartRef.current.timeScale().resetTimeScale();
+        
+    seriesRef.current.setData(filteredCandles);
+    
+      // 🔥 Force price scale reset
+    seriesRef.current.applyOptions({
+      autoscaleInfoProvider: () => null,
+    });
+    
+    // 🔥 Reset price scale
+    chartRef.current.priceScale("right").applyOptions({
+      autoScale: true,
+    });
+    
+    chartRef.current?.timeScale().fitContent();
+    chartRef.current?.timeScale().scrollToRealTime();
+  }, [candles, filteredCandles]);
 
   // Draw orders as horizontal lines
+  const [filteredOrders, setFilteredOrders] = useState([]);
   useEffect(() => {
     if (!seriesRef.current) return;
-
+    setFilteredOrders(orders);
     // پاک کردن خطوط قبلی
     priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
     priceLinesRef.current = [];
 
-    if (!orders || orders.length === 0) return;
+    if (!filteredOrders || filteredOrders.length === 0) return;
 
-    orders.forEach((order) => {
+    const isRlsMarket = symbol?.toLowerCase().endsWith("rls");
+    const factor = isRlsMarket ? 10 : 1;
+    
+    filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
-        price: order.price,
+        price: Number(order.price)/factor,
         color,
         lineWidth: 2,
         lineStyle: LineStyle.Solid,
@@ -80,31 +115,24 @@ export default function CandleChart({ symbol, orders, trades }) {
       });
       priceLinesRef.current.push(line);
     });
-  }, [orders]);
-
-
-  // Draw trades as markers
-  useEffect(() => {
-    if (!seriesRef.current || !trades) return;
-
-    const markers = trades.map((trade) => ({
-      time: trade.time,
-      position: trade.type === "buy" ? "belowBar" : "aboveBar",
-      color: trade.type === "buy" ? "green" : "red",
-      shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
-      text: trade.amount.toString(),
-    }));
-
-    seriesRef.current.setMarkers(markers);
-  }, [trades]);
+  }, [orders, filteredOrders, symbol]);
 
 
 
   return (
     <div style={{ width: "100%" }}>
+      
+      {/* Chart */}
+      <div
+        ref={containerRef}
+        style={{
+          width: "100%",
+          height: "400px",
+        }}
+      />
+      
       {/* Timeframe buttons */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
-        { candles.length }
         <button
           onClick={() => setResolution("60")}
           style={{
@@ -140,14 +168,7 @@ export default function CandleChart({ symbol, orders, trades }) {
         )}
       </div>
 
-      {/* Chart */}
-      <div
-        ref={containerRef}
-        style={{
-          width: "100%",
-          height: "400px",
-        }}
-      />
+
     </div>
   );
 }
