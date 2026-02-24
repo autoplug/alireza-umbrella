@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const WORKER_URL = "https://nobitex.alireza-b83.workers.dev";
-const CACHE_TIME_KEY = "MARKETS_CACHE_TIME";
 const CASHE_KEY = "MARKETS_CACHE";
 // 5 minutes
 const MIN_FETCH_INTERVAL = 5 * 60 * 1000;
@@ -19,17 +18,17 @@ const getCache = () => {
 
 const setCache = (value) => {
   localStorage.setItem( CACHE_KEY, JSON.stringify(value));
-  localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+  localStorage.setItem(`${CACHE_KEY}_TIME`, Date.now().toString());
 };
 
 const shouldFetch = () => {
-  const last = localStorage.getItem(CACHE_TIME_KEY);
+  const last = localStorage.getItem(`${CACHE_KEY}_TIME`);
   if (!last) return true;
   return Date.now() - Number(last) > MIN_FETCH_INTERVAL;
 };
 
-// ---------------- FETCH HISTORY ----------------
-export const fetchHistory = async ( onUpdate = null) => {
+// ---------------- FETCH TRADES ----------------
+export const fetchTrades = async ( onUpdate = null) => {
   
   const cached = getCache();
 
@@ -50,21 +49,9 @@ export const fetchHistory = async ( onUpdate = null) => {
 
       let data = [];
 
-      // Parse response if status is ok
-      if (raw?.s === "ok" && Array.isArray(raw.t)) {
-        data = raw.t.map((time, i) => ({
-          time,                // unix timestamp in seconds
-          open: raw.o[i],
-          high: raw.h[i],
-          low: raw.l[i],
-          close: raw.c[i],
-          volume: raw.v[i],
-        }));
-      }
-
       // Update cache and trigger callback if provided
       if (data.length > 0) {
-        setCache(symbol, resolution, data);
+        setCache(data);
         if (typeof onUpdate === "function") onUpdate(data);
       }
 
