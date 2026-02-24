@@ -2,33 +2,10 @@ import React, { useEffect, useState } from "react";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
-const ORDERS_CACHE_KEY = "ORDERS_CACHE";
+import { useOrders } from "../hooks/useOrders";
 
 export default function ActiveOrders() {
-  const [orders, setOrders] = useState([]);
-
-  const loadOrders = () => {
-    const cached = localStorage.getItem(ORDERS_CACHE_KEY);
-    if (!cached) {
-      setOrders([]);
-      return;
-    }
-
-    try {
-      const allOrders = JSON.parse(cached);
-      // Filter Active orders
-      const activeOrders = allOrders.filter((o) => o.status === "Active");
-      setOrders(activeOrders);
-    } catch {
-      setOrders([]);
-    }
-  };
-
-  useEffect(() => {
-    loadOrders();
-    const interval = setInterval(loadOrders, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  
 
   return (
     <div>
