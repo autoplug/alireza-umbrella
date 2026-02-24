@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 //import CandleChart from "../components/CandleChart";
 //import TableOrder from "../components/TableOrder";
 import { useTrades } from "../hooks/useTrades";
-//import { useOrders } from "../hooks/useOrders";
+import { useOrders } from "../hooks/useOrders";
 
 export default function Chart() {
   const { trades } = useTrades();   // همه معاملات
-  //const { orders } = useOrders();   // همه سفارشات فعال
+  const { orders } = useOrders();   // همه سفارشات فعال
 
   const symbols = Array.from(
     new Set([
