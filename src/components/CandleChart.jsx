@@ -74,7 +74,7 @@ export default function CandleChart({ symbol, orders }) {
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
-        price: order.price,
+        price: Number(order.price),
         color,
         lineWidth: 2,
         lineStyle: LineStyle.Solid,
