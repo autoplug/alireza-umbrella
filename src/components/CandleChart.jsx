@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
-export default function CandleChart({ symbol = "btcusdt" }) {
+export default function CandleChart({ symbol = "btcrls" }) {
+  symbol = symbol.toUpperCase().replace("RLS","IRT").replace("-","");
   const chartContainerRef = useRef();
   const chartRef = useRef();
   const seriesRef = useRef();
