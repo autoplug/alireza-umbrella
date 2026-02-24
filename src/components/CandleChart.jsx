@@ -24,8 +24,8 @@ export default function CandleChart({ symbol }) {
         textColor: "#000",
       },
       grid: {
-        vertLines: { visible: false },
-        horzLines: { visible: false },
+        vertLines: { visible: true },
+        horzLines: { visible: true },
       },
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
