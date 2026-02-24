@@ -10,16 +10,7 @@ export default function CandleChart({ symbol = "btcrls" }) {
 
   const [resolution, setResolution] = useState("60"); // 60 = 1H, 1D = daily
 
-  // Time range (last 24 hours default)
-  const now = Math.floor(Date.now() / 1000);
-  const from = now - 24 * 60 * 60 * 30;
-
-  const { candles } = useHistory({
-    symbol,
-    resolution,
-    from,
-    to: now,
-  });
+  const { candles } = useHistory(symbol, resolution);
 
   // Create chart once
   useEffect(() => {
