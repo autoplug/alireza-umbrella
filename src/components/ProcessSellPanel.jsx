@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import {processAllSells, removeDuplicates} from "../api/utils";
+import { useTrades } from "../hooks/useTrades";
 
 import localOrders from "../assets/nobitex.json";
 import TableOrder from "./TableOrder";
