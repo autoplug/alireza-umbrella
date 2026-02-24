@@ -1,5 +1,6 @@
 
 import CandleChart from "../components/CandleChart";
+import { useTrades } from "../hooks/useTrades";
 
 export default function Chart() {
 
