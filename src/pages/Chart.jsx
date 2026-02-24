@@ -6,8 +6,6 @@ import { useTrades } from "../hooks/useTrades";
 import { useOrders } from "../hooks/useOrders";
 
 export default function Chart() {
-  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
-
   const trades = useTrades();   // همه معاملات
   const orders = useOrders();   // همه سفارشات فعال
 
@@ -16,6 +14,8 @@ export default function Chart() {
       ...trades.map(t => t.market.toLowerCase()),
     ])
   );
+
+  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
 
   // فیلتر سفارشات بر اساس سمبل انتخابی
   const filteredOrders = useMemo(() => {
