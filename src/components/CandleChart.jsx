@@ -1,6 +1,6 @@
 // src/components/CandleChart.jsx
 import React, { useEffect, useRef, useState } from "react";
-import { createChart } from "lightweight-charts";
+import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 
 export default function CandleChart({ symbol }) {
@@ -9,7 +9,7 @@ export default function CandleChart({ symbol }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const seriesRef = useRef(null);
-  //const priceLinesRef = useRef([]);
+  const priceLinesRef = useRef([]);
 
   const { candles, isFetching } = useHistory(symbol, resolution);
 
@@ -60,7 +60,29 @@ export default function CandleChart({ symbol }) {
     seriesRef.current.setData(filteredCandles);
   }, [candles, filteredCandles]);
 
+  // Draw orders as horizontal lines
+  useEffect(() => {
+    if (!seriesRef.current) return;
 
+    // پاک کردن خطوط قبلی
+    priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
+    priceLinesRef.current = [];
+
+    if (!orders || orders.length === 0) return;
+
+    orders.forEach((order) => {
+      const color = order.type === "buy" ? "green" : "red";
+      const line = seriesRef.current.createPriceLine({
+        price: order.price,
+        color,
+        lineWidth: 2,
+        lineStyle: LineStyle.Solid,
+        axisLabelVisible: true,
+        title: `${order.type === "buy" ? "Buy" : "Sell"} ${order.amount}`,
+      });
+      priceLinesRef.current.push(line);
+    });
+  }, [orders]);
 
 
 
