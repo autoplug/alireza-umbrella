@@ -89,7 +89,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       autoScale: true,
     });
     // fit visible range and scroll to latest candle
-    //chartRef.current.timeScale().fitContent();
+    chartRef.current.timeScale().fitContent();
     chartRef.current.timeScale().scrollToRealTime();
   }, [candles, symbol]); // run again when candles OR symbol changes
   
