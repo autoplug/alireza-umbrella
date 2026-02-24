@@ -18,5 +18,4 @@ export const useHistory = () => {
   const lastUpdate = query.data?._lastUpdate || null;
 
   return { ...query, candles, lastUpdate };
-  
 };
