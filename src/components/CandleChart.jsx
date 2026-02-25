@@ -33,7 +33,6 @@ export default function CandleChart({ symbol, orders, trades }) {
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
-      //barSpacing: containerRef.current.clientWidth/100,
       rightPriceScale: {
         autoScale: true,
         borderVisible: true,
@@ -131,7 +130,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       const line = seriesRef.current.createPriceLine({
         price: formatChartPrice(order.price, symbol),
         color,
-        lineWidth: 1,
+        lineWidth: 3,
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
         title: `${order.type === "buy" ? "Buy" : "Sell"} ${order.amount}`,
