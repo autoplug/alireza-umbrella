@@ -70,7 +70,7 @@ export default function Chart() {
               cursor: "pointer",
             }}
           >
-            {s}
+            {s.toUpperCase()}
           </button>
         ))}
       </div>
