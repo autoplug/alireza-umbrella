@@ -76,6 +76,7 @@ export default function Chart() {
               padding: "10px 0",
               border: "none",
               cursor: "pointer",
+              fontWeight: "700",
               background: selectedSymbol === s ? "#333" : "#eee",
               color: selectedSymbol === s ? "#fff" : "#000",
               borderRight: index !== symbols.length - 1 ? "1px solid #ccc" : "none", // خط جداکننده
