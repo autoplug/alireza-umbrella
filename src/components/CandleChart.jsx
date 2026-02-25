@@ -95,11 +95,10 @@ export default function CandleChart({ symbol, orders, trades }) {
     seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
-    chartRef.current.priceScale("right").applyOptions({
-      autoScale: true,
-    });
+    chartRef.current.priceScale("right").applyOptions({autoScale: true,});
+    
     // fit visible range and scroll to latest candle
-    chartRef.current.timeScale().fitContent();
+    //chartRef.current.timeScale().fitContent();
     chartRef.current.timeScale().scrollToRealTime();
   }, [candles, symbol]); // run again when candles OR symbol changes
   
