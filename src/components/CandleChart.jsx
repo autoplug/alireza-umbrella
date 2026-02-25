@@ -31,17 +31,17 @@ export default function CandleChart({ symbol, orders, trades }) {
       height: 400,
       rightPriceScale: {
         autoScale: true,
-        borderVisible: false,
+        borderVisible: true,
       },
       layout: {
         background: { color: "#ffffff" },
         textColor: "#000",
       },
       grid: {
-        vertLines: { visible: false },
+        vertLines: { visible: true },
         horzLines: { visible: true },
       },
-      timeScale: { borderVisible: false },
+      timeScale: { borderVisible: true },
     });
 
     const series = chart.addCandlestickSeries({
