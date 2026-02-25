@@ -218,6 +218,8 @@ export const formatChartPrice = (price, market) => {
     case "BTCRLS":
       value = Math.floor(value/10_000_000);
       break;
+    default:
+      value = Number(price)
   }
   
   return value;
