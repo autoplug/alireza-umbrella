@@ -209,5 +209,16 @@ export const formatPrice = (price, market) => {
 
 // ---------------- FORMAT CHART PRICE  ----------------
 export const formatChartPrice = (price, market) => {
-
+  const symbol = market.toUpperCase().replace("-","");
+  let value = Number(price);
+  switch(symbol){
+    case "BTCIRT":
+      value = Math.floor(value/1_000_000);
+      break;
+    case "BTCRLS":
+      value = Math.floor(value/10_000_000);
+      break;
+  }
+  
+  return value;
 };
