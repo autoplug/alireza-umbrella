@@ -75,7 +75,7 @@ export default function ProcessSellPanel() {
   return (
     <div>
       {/* ===== Sell Orders Table ===== */}
-      <TitleBar title="Process Sell" count={sellTable.length} />
+      <TitleBar title={"Process Sell " + trades.length} count={sellTable.length} />
       {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
