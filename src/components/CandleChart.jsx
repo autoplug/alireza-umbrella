@@ -146,7 +146,7 @@ export default function CandleChart({ symbol, orders, trades }) {
         position: trade.type === "buy" ? "belowBar" : "aboveBar",
         color: trade.type === "buy" ? "green" : "red",
         shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
-        text: trade.amount.toString(),
+        text: "",
       }));
   
     seriesRef.current.setMarkers(markers);
