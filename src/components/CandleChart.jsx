@@ -172,6 +172,7 @@ export default function CandleChart({ symbol, orders, trades }) {
             display: "flex",
             flex: 1,                 // نوار دکمه‌ها فضای باقی‌مانده را بگیرد
             maxWidth: "600px",
+            width: "30%",
             borderRadius: "8px",
             overflow: "hidden",
             border: "1px solid #ccc",
