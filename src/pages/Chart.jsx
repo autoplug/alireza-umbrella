@@ -56,24 +56,36 @@ export default function Chart() {
       />
       
       {/* Symbol Buttons */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
-        {symbols.map((s) => (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",           // تمام عرض صفحه
+          borderRadius: "8px",     // گوشه‌های گرد
+          overflow: "hidden",      // جلوگیری از بیرون زدن گوشه‌ها
+          marginBottom: "10px",
+          border: "1px solid #ccc" // حاشیه یکپارچه
+        }}
+      >
+        {symbols.map((s, index) => (
           <button
             key={s}
             onClick={() => setSelectedSymbol(s)}
             style={{
-              padding: "6px 12px",
-              background: s === selectedSymbol ? "#333" : "#eee",
-              color: s === selectedSymbol ? "#fff" : "#000",
+              flex: 1,                 // هر دکمه مساوی عرض بگیرد
+              padding: "10px 0",
               border: "none",
-              borderRadius: "4px",
               cursor: "pointer",
+              background: selectedSymbol === s ? "#333" : "#eee",
+              color: selectedSymbol === s ? "#fff" : "#000",
+              borderRight: index !== symbols.length - 1 ? "1px solid #ccc" : "none", // خط جداکننده
+              transition: "all 0.2s ease"
             }}
           >
             {s.toUpperCase()}
           </button>
         ))}
       </div>
+
 
       {/* Orders Table */}
       <TableOrder orders={filteredOrders} sortBy={"time"} />
