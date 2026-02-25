@@ -39,7 +39,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       },
       grid: {
         vertLines: { visible: true },
-        horzLines: { visible: true },
+        horzLines: { visible: false },
       },
       timeScale: { borderVisible: true },
     });
