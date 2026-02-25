@@ -27,7 +27,7 @@ export default function Chart() {
         const oneWeekAgo = Math.floor(Date.now()) - 7 * 24 * 60 * 60 * 1000;
         return (
           trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
-          trade.time >= oneWeekAgo
+          trade.timestamp >= oneWeekAgo
         );
       }) || [];
   
