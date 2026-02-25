@@ -191,13 +191,13 @@ export default function CandleChart({ symbol, orders, trades }) {
           </button>
         ))}
       
+      </div>
+
         {isFetching && (
           <span style={{ fontSize: "12px", color: "#999", marginLeft: "10px" }}>
             Updating...
           </span>
         )}
-      </div>
-
 
     </div>
   );
