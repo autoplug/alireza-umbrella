@@ -22,7 +22,7 @@ export default function CandleChart({ symbol, orders, trades }) {
   const seriesRef = useRef(null);
   const priceLinesRef = useRef([]);
 
-  const { candles, isFetching } = useHistory(symbol, resolution);
+  const { candles, isFetching, refresh } = useHistory(symbol, resolution);
 
   // Create chart once
   useEffect(() => {
@@ -172,7 +172,25 @@ export default function CandleChart({ symbol, orders, trades }) {
       
       {/* Timeframe buttons */}
       <div style={{ display: "flex", alignItems: "center", margin: "0 0 10px 5px" }}>
-        <div
+       
+          {/* Refresh buttons */}
+          <button
+            onClick={() => refresh()}
+            disabled={isFetching}
+            style={{
+              padding: "10px 12px",
+              marginRight: "8px",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+              background: "#eee",
+              cursor: "pointer",
+            }}
+          >
+            <FontAwesomeIcon icon={faSyncAlt} spin style={{ marginRight: "4px" }} />
+            Refresh
+          </button>
+        
+         <div
           style={{
             display: "flex",
             width: "50%",
