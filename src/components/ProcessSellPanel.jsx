@@ -66,7 +66,7 @@ export default function ProcessSellPanel() {
     finalSells = finalSells
       .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
       .map(order => ({
-        market: order.market
+        market: order.market,
         Profit: formatPrice(order.profit, order.market),
         "Avg Price": formatPrice(order.avgPrice, order.market),
         Type: order.type,
@@ -78,7 +78,7 @@ export default function ProcessSellPanel() {
     finalBuys = finalBuys
       .sort((a, b) => a.price - b.price)
       .map(order => ({
-        market: order.market
+        market: order.market,
         Price: formatPrice(order.price, order.market),
         Amount: formatAmount(order.amount, order.market),
         Type: order.type,
