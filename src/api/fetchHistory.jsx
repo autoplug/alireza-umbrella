@@ -1,4 +1,5 @@
 import axios from "axios";
+import { formatChartPrice } from "./utils";
 
 const WORKER_URL = "https://nobitex3.alireza-b83.workers.dev";
 
@@ -41,10 +42,10 @@ export const fetchHistory = async ({
     if (raw?.s === "ok" && Array.isArray(raw.t)) {
       candles = raw.t.map((time, i) => ({
         time: Number(raw.t[i]),   // ✅ بدون تقسیم بر 1000
-        open: Number(raw.o[i]),
-        high: Number(raw.h[i]),
-        low: Number(raw.l[i]),
-        close: Number(raw.c[i]),
+        open: formatChartPrice(raw.o[i], symbol),
+        high: formatChartPrice(raw.h[i], symbol),
+        low: formatChartPrice(raw.l[i], symbol),
+        close: formatChartPrice(raw.c[i], symbol),
         volume: Number(raw.v[i]),
       }));
     }
