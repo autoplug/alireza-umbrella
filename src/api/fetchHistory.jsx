@@ -9,12 +9,12 @@ export const fetchHistory = async ({
   onUpdate = null,
 } = {}) => {
   let from = Math.floor(Date.now() / 1000);
-  if(resolution === "30")
-    from -= 60 * 60 * 24 * 60;
-  if(resolution === "60")
-    from -= 60 * 60 * 24 * 60;
-  if(resolution === "1D")
-    from -= 60 * 60 * 24 * 30 * 24;
+  if(resolution === "1D"){
+    from -= 60 * 60 * 24 * 30 * 36; //3 years
+  }else{
+    from -= 60 * 60 * 24 * 90; //60 day
+  }
+    
   
   const to = Math.floor(Date.now() / 1000);
   
