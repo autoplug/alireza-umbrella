@@ -3,8 +3,8 @@ import React from "react";
 export default function TitleBar({ title, count }) {
   const barStyle = {
     backgroundColor: "#EFF0F4",       // کرم روشن
-    borderTop: "2px solid #d9bfae",   // کرم تیره‌تر
-    padding: "18px 10px",
+    borderTop: "2px solid #E7E7E7",   // کرم تیره‌تر
+    padding: "5px 10px",
     margin: "0 0",
     marginBottom : "10px",
     display: "flex",
