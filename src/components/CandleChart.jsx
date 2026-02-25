@@ -44,7 +44,18 @@ export default function CandleChart({ symbol, orders, trades }) {
       timeScale: { borderVisible: false },
     });
 
-    const series = chart.addCandlestickSeries();
+    const series = chart.addCandlestickSeries({
+      priceFormat: {
+        type: "custom",
+        minMove: 0.1,     // حداقل تغییر قیمت
+        formatter: (price) => {
+          return Number(price).toLocaleString("en-US", {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+            });
+        },
+      },
+    });
 
     chartRef.current = chart;
     seriesRef.current = series;
