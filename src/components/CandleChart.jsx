@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
+import { formatChartPrice } from "../api/utils";
 
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("60");
@@ -103,7 +104,7 @@ export default function CandleChart({ symbol, orders, trades }) {
   useEffect(() => {
     if (!seriesRef.current) return;
     setFilteredOrders(orders);
-    // پاک کردن خطوط قبلی
+    // Remove old price
     priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
     priceLinesRef.current = [];
 
@@ -115,7 +116,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
-        price: Number(order.price)/factor,
+        price: formatChartPrice(order.price, symbol),
         color,
         lineWidth: 1,
         lineStyle: LineStyle.Solid,
