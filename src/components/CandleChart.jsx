@@ -165,8 +165,8 @@ export default function CandleChart({ symbol, orders, trades }) {
       <div
         style={{
           display: "flex",
-          width: "30%", // 10px فاصله از چپ و راست
-          margin: "0 5px 10px 5px", // فاصله از لبه و پایین
+          maxWidth: "600px",
+          margin: "0 0 10px 5px", // فاصله از لبه و پایین
           borderRadius: "8px",
           overflow: "hidden",
           border: "1px solid #ccc",
