@@ -27,7 +27,6 @@ export const weightedAveragePrice = (usedBuys) => {
   return totalAmount === 0 ? 0 : totalCost / totalAmount;
 };
 
-  
 // ---------------- PROCESS SELL ----------------
 export const processSellSingle = (sell, buyOrders) => {
   const sellAmount = Number(sell.amount);
@@ -208,3 +207,7 @@ export const formatPrice = (price, market) => {
   return value.toLocaleString("en-US");
 };
 
+// ---------------- FORMAT CHART PRICE  ----------------
+export const formatChartPrice = (price, market) => {
+
+};
