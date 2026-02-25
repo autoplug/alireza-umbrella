@@ -6,6 +6,8 @@ import { useTrades } from "../hooks/useTrades";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
 
+import { formatPrice, formatAmount } from "../api/utils";
+
 const keepLastTenPerMarket = (orders) => {
   // Group orders by market
   const grouped = orders.reduce((acc, order) => {
