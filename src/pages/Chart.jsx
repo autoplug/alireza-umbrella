@@ -13,7 +13,7 @@ export default function Chart() {
     new Set([
       ...trades.map(t => t.market.toLowerCase()),
     ])
-  ).sort((a, b) => b.localeCompare(a));
+  ).sort((a, b) => a.localeCompare(b));
 
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
   
@@ -30,7 +30,8 @@ export default function Chart() {
           trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
           tradeTime >= oneWeekAgo
         );
-      }) || [];
+      }).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) 
+      || [];
   
       setFilteredTrades(result);
     }, [trades, selectedSymbol]);
