@@ -94,6 +94,7 @@ export default function Chart() {
       {/* Trades Ladlst 10 trade Table */}
       <TableOrder orders={filteredTrades} sortBy={"time"}/>
     
+      <div style={{ height: "60px" }}></div>
     </div>
   );
 }
