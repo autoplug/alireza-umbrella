@@ -82,25 +82,9 @@ export default function TableOrder({ orders, total = null }) {
         Object.entries(ordersByMarket)
           .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
-            // 🔹 Sort inside table
-            const sortedOrders = [...marketOrders].sort((a, b) => {
-              if (sortBy === "price") {
-                return Number(a.price) - Number(b.price);
-              }
-
-              // default: time
-              return (
-                new Date(a.created_at || a.timestamp) -
-                new Date(b.created_at || b.timestamp)
-              );
-            });
-
-
             // Determine columns: total keys or COLUMN_WIDTHS keys
-            const cols = total ? Object.keys(total) : Object.keys(COLUMN_WIDTHS);
+            const cols = total ? total : COLUMN_WIDTHS;
             const hasTotal = !!total
-
-
             return (
               <div key={market} style={{ marginBottom: "20px" }}>
                 <div
@@ -122,7 +106,7 @@ export default function TableOrder({ orders, total = null }) {
                  <thead>
                     <tr>
                       {cols.map((col, idx) => (
-                        <th key={idx} style={{ ...thStyle, width: COLUMN_WIDTHS[Object.keys(COLUMN_WIDTHS)[idx]] }}>
+                        <th key={idx} style={{ ...thStyle, width: cols[col] }}>
                           {col}
                         </th>
                       ))}
@@ -131,8 +115,8 @@ export default function TableOrder({ orders, total = null }) {
       
       
                   <tbody>
-                    {sortedOrders.map((order, index) => {
-                      rowCounter += 1;
+                    {marketOrders.map((order, index) => {
+            
 
                       const isBuy = order.type?.toLowerCase() === "buy";
                       const baseColor = isBuy ? "#568546" : "#c2191c";
@@ -141,7 +125,7 @@ export default function TableOrder({ orders, total = null }) {
                       return (
                         <tr key={rowCounter} style={{ backgroundColor: bgColor }}>
                           <td style={{ ...tdStyle, color: baseColor }}>
-                            {rowCounter}
+                            {index+1}
                           </td>
                           <td style={{ ...tdStyle, color: baseColor }}>
                             {hasTotal ? formatPrice(order.amount, order.market) : formatAmount(order.amount, order.market)}
