@@ -208,6 +208,7 @@ export default function CandleChart({ symbol, orders, trades }) {
                 flex: 1,
                 padding: "10px 0",
                 border: "none",
+                fontWeight: "700",
                 cursor: "pointer",
                 background: resolution === key ? "#333" : "#eee",
                 color: resolution === key ? "#fff" : "#000",
