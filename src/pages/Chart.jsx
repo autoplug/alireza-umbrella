@@ -24,7 +24,7 @@ export default function Chart() {
       if (!trades) return;
       
       const result = trades?.filter((trade) => {
-        const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
+        const oneWeekAgo = Math.floor(Date.now()) - 7 * 24 * 60 * 60 * 1000;
         return (
           trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
           trade.time >= oneWeekAgo
@@ -38,7 +38,6 @@ export default function Chart() {
   const [filteredOrders, setFilteredOrders] = useState([]);
   useEffect(() => {
       if (!orders) return;
-  
       const result = orders.filter(
         (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
       );
