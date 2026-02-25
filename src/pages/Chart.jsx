@@ -75,10 +75,10 @@ export default function Chart() {
       </div>
 
       {/* Orders Table */}
-      <TableOrder orders={filteredOrders} />
+      <TableOrder orders={filteredOrders} sortBy={"time"} />
 
       {/* Trades Ladlst 10 trade Table */}
-      <TableOrder orders={filteredTrades} />
+      <TableOrder orders={filteredTrades} sortBy={"time"}/>
     
     </div>
   );
