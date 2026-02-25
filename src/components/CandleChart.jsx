@@ -10,6 +10,10 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("30");
+  const timeframes = {
+      "30": "30M",
+      "1D": "1D",
+    };
 
   const containerRef = useRef(null);
   const chartRef = useRef(null);
@@ -175,24 +179,27 @@ export default function CandleChart({ symbol, orders, trades }) {
             border: "1px solid #ccc",
           }}
         >
-          {["30", "1D"].map((tf, index) => (
+        
+          {Object.entries(timeframes).map(([key, label], index) => (
             <button
-              key={tf}
-              onClick={() => setResolution(tf)}
+              key={key}
+              onClick={() => setResolution(key)}  // تغییر متغیر تایم فریم
               style={{
                 flex: 1,
                 padding: "10px 0",
                 border: "none",
                 cursor: "pointer",
-                background: resolution === tf ? "#333" : "#eee",
-                color: resolution === tf ? "#fff" : "#000",
-                borderRight: index !== 1 ? "1px solid #ccc" : "none",
+                background: resolution === key ? "#333" : "#eee",
+                color: resolution === key ? "#fff" : "#000",
+                borderRight: index !== Object.keys(timeframes).length - 1 ? "1px solid #ccc" : "none",
                 transition: "all 0.2s ease",
               }}
             >
-              {tf === "30" ? "30M" : "1D"}
+              {label}
             </button>
           ))}
+  
+  
         </div>
 
         {isFetching && (
