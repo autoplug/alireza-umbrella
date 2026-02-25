@@ -59,8 +59,9 @@ export default function Chart() {
       <div
         style={{
           display: "flex",
-          width: "calc(100% - 20px)",         
-          margin: "0 10px 10px 10px",
+          width: "calc(100% - 10px)",         
+          margin: "0 5px",
+          marginBottom: "10px",
           borderRadius: "8px",     // گوشه‌های گرد
           overflow: "hidden",      // جلوگیری از بیرون زدن گوشه‌ها
           border: "1px solid #ccc" // حاشیه یکپارچه
