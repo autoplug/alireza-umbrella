@@ -6,7 +6,7 @@ import { formatChartPrice } from "../api/utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
-
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("30");
