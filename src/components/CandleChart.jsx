@@ -91,7 +91,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     
     // Show 30 Candles
     const width = containerRef.current.clientWidth;
-    const barSpacing = width / 30;  // نمایش 30 کندل
+    const barSpacing = width / 50;  // نمایش 30 کندل
     seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
