@@ -49,7 +49,7 @@ export default function App() {
       
       
       <Router>
-        <div style={{ minHeight: "100vh", paddingBottom: "60px", backgroundColor: "#EFF0F4" }}>
+        <div style={{ minHeight: "100vh", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
           {/* Spacer for content */}
           <div style={{ height: "43px" }}></div>
           {/* Routes */}
