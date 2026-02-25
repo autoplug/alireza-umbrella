@@ -222,10 +222,10 @@ export const formatChartPrice = (price, market) => {
       value = value/10_000_000;
       break;
     case "ETHIRT":
-      value = value/1_000_000;
+      value = value/1_000;
       break;
     case "ETHRLS":
-      value = value/10_000_000;
+      value = value/10_000;
       break;
     default:
       value = Number(price)
