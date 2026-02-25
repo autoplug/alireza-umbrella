@@ -71,13 +71,14 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
     return acc;
   }, {});
 
-  let rowCounter = 0;
+  // Return early if no orders
+  if (!orders || orders.length === 0) {
+    return <p style={{ marginLeft: "20px" }}>No orders to display.</p>;
+  }
+
 
   return (
     <div>
-      {Object.keys(ordersByMarket).length === 0 ? (
-        <p style={{ marginLeft: "20px" }}>No orders to display.</p>
-      ) : (
         Object.entries(ordersByMarket)
           .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
@@ -173,7 +174,6 @@ export default function TableOrder({ orders, sortBy = "time", total = null }) {
               </div>
             );
           })
-      )}
     </div>
   );
 }
