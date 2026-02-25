@@ -70,7 +70,7 @@ export default function ProcessSellPanel() {
     
   }, [trades]);
   
-  const total = { "id": "5%", "Profit": "30", "Avg Price": "40%", "Type": "25%"}; 
+  const total = { "id": "5%", "Profit": "30%", "Avg Price": "40%", "Type": "25%"}; 
   
   return (
     <div>
