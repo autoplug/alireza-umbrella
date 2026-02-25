@@ -213,10 +213,10 @@ export const formatChartPrice = (price, market) => {
   let value = Number(price);
   switch(symbol){
     case "BTCIRT":
-      value = Math.floor(value/1_000_000);
+      value = value/1_000_000;
       break;
     case "BTCRLS":
-      value = Math.floor(value/10_000_000);
+      value = value/10_000_000;
       break;
     default:
       value = Number(price)
