@@ -41,7 +41,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       height: 400,
       rightPriceScale: {
         autoScale: true,
-        borderVisible: true,
+        borderVisible: false,
       },
       layout: {
         background: { color: "#ffffff" },
