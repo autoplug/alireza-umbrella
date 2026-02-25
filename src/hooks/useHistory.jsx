@@ -8,7 +8,7 @@ export const useHistory = (symbol, resolution) => {
     queryKey: ["candles", symbol, resolution],
     queryFn: () => fetchHistory({ symbol, resolution }),
     enabled: !!symbol && !!resolution, // only run if both exist
-    staleTime: 5 * 1000,
+    staleTime: 30 * 1000,
   });
   
   if (query.data?._lastUpdate) {
