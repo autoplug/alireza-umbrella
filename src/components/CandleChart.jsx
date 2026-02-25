@@ -11,8 +11,8 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("30");
   const timeframes = {
-      "15": "15M",
-      "30": "30M",
+      //"15": "15M",
+      //"30": "30M",
       "60": "1H",
       "1D": "1D",
     };
