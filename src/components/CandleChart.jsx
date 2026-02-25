@@ -47,11 +47,11 @@ export default function CandleChart({ symbol, orders, trades }) {
     const series = chart.addCandlestickSeries({
       priceFormat: {
         type: "custom",
-        minMove: 0.1,     // حداقل تغییر قیمت
+        minMove: 1,     // حداقل تغییر قیمت
         formatter: (price) => {
           return Number(price).toLocaleString("en-US", {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
             });
         },
       },
@@ -91,7 +91,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     
     // Show 30 Candles
     const width = containerRef.current.clientWidth;
-    const barSpacing = width / 50;  // نمایش 30 کندل
+    const barSpacing = width / 90;  // نمایش 30 کندل
     seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
