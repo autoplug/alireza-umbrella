@@ -96,7 +96,7 @@ export const removeDuplicates = (orders) => {
   });
 };
 
-// ---------------- PROCESS SELL ORDERS ----------------
+// ---------------- PROCESS ALL SELL ORDERS ----------------
 export const processAllSells = (sellOrders, buyOrders) => {
   // 🔥 Copy arrays to avoid mutation
   const buys = JSON.parse(JSON.stringify(buyOrders));
@@ -127,6 +127,9 @@ export const processAllSells = (sellOrders, buyOrders) => {
     const profit = (sellPrice - avgPrice) * Number(sell.amount);
 
     processedSells.push({
+      Profit: profit,
+      "Avg Price": avgPrice,
+      Type: "Sell",
       ...sell,
       price: avgPrice,   // replace price with weighted average
       amount: profit,    // replace amount with profit
