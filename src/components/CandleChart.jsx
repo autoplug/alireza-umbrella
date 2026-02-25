@@ -206,7 +206,7 @@ export default function CandleChart({ symbol, orders, trades }) {
         >
           1D
         </button>
-      </div>
+  
 
         {isFetching && (
           <span style={{ fontSize: "12px", color: "#999" }}>
