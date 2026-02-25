@@ -218,6 +218,12 @@ export const formatChartPrice = (price, market) => {
     case "BTCRLS":
       value = value/10_000_000;
       break;
+    case "ETHIRT":
+      value = value/1_000_000;
+      break;
+    case "ETHRLS":
+      value = value/10_000_000;
+      break;
     default:
       value = Number(price)
   }
