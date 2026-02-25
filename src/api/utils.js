@@ -212,6 +212,9 @@ export const formatChartPrice = (price, market) => {
   const symbol = market.toUpperCase().replace("-","");
   let value = Number(price);
   switch(symbol){
+    case "USDTRLS":
+      value = value/10;
+      break;
     case "BTCIRT":
       value = value/1_000_000;
       break;
