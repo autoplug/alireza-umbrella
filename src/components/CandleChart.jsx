@@ -5,7 +5,7 @@ import { useHistory } from "../hooks/useHistory";
 import { formatChartPrice } from "../api/utils";
 
 export default function CandleChart({ symbol, orders, trades }) {
-  const [resolution, setResolution] = useState("30");
+  const [resolution, setResolution] = useState("60");
 
   const containerRef = useRef(null);
   const chartRef = useRef(null);
@@ -167,53 +167,42 @@ export default function CandleChart({ symbol, orders, trades }) {
         }}
       />
       
-      
       {/* Timeframe buttons */}
-      <div
-        style={{
-          display: "flex",
-          marginLeft: "10px",     // 10px from left
-          marginBottom: "10px",
-        }}
-      >
+      <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
         <button
-          onClick={() => setResolution("30")}
+          onClick={() => setResolution("60")}
           style={{
-            flex: 1,
             padding: "6px 12px",
-            background: resolution === "30" ? "#333" : "#eee",
-            color: resolution === "30" ? "#fff" : "#000",
-            border: "1px solid #ccc",
-            borderRight: "none",              // remove middle border
-            borderRadius: "6px 0 0 6px",      // round left side only
+            background: resolution === "60" ? "#333" : "#eee",
+            color: resolution === "60" ? "#fff" : "#000",
+            border: "none",
+            borderRadius: "4px",
             cursor: "pointer",
           }}
         >
-          30M
+          1H
         </button>
-      
+
         <button
           onClick={() => setResolution("1D")}
           style={{
-            flex: 1,
             padding: "6px 12px",
             background: resolution === "1D" ? "#333" : "#eee",
             color: resolution === "1D" ? "#fff" : "#000",
-            border: "1px solid #ccc",
-            borderRadius: "0 6px 6px 0",      // round right side only
+            border: "none",
+            borderRadius: "4px",
             cursor: "pointer",
           }}
         >
           1D
         </button>
-       </div>
 
         {isFetching && (
           <span style={{ fontSize: "12px", color: "#999" }}>
             Updating...
           </span>
         )}
- 
+      </div>
 
 
     </div>
