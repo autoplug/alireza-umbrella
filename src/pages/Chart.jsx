@@ -22,10 +22,14 @@ export default function Chart() {
   const [filteredTrades, setFilteredTrades] = useState([]);
   useEffect(() => {
       if (!trades) return;
-  
-      const result = trades.filter(
-        (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
-      ).slice(-10); // get last 10 items;
+      
+      const result = trades?.filter((trade) => {
+      const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
+      return (
+        trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
+        trade.time >= oneWeekAgo
+      );
+      }) || [];
   
       setFilteredTrades(result);
     }, [trades, selectedSymbol]);
@@ -37,7 +41,7 @@ export default function Chart() {
   
       const result = orders.filter(
         (o) => o.market.toLowerCase() === selectedSymbol.toLowerCase()
-      )// get last 10 items;
+      );
   
       setFilteredOrders(result);
     }, [orders, selectedSymbol]);
