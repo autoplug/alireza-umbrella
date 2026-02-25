@@ -11,9 +11,7 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("30");
   const timeframes = {
-      //"15": "15M",
-      //"30": "30M",
-      "60": "1H",
+      "30": "30M",
       "1D": "1D",
     };
 
@@ -136,7 +134,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       const line = seriesRef.current.createPriceLine({
         price: formatChartPrice(order.price, symbol),
         color,
-        lineWidth: 2,
+        lineWidth: 3,
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
         title: `${order.type === "buy" ? "Buy" : "Sell"} ${order.amount}`,
@@ -175,7 +173,7 @@ export default function CandleChart({ symbol, orders, trades }) {
         <div
           style={{
             display: "flex",
-            width: "40%",
+            width: "30%",
             borderRadius: "8px",
             overflow: "hidden",
             border: "1px solid #ccc",
