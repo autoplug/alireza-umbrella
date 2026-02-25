@@ -30,7 +30,7 @@ export default function Chart() {
           trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
           tradeTime >= oneWeekAgo
         );
-      }).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) 
+      }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) 
       || [];
   
       setFilteredTrades(result);
