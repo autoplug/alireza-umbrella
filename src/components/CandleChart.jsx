@@ -31,7 +31,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       height: 400,
       barSpacing: containerRef.current.clientWidth/70,
       rightPriceScale: {
-        autoScale: true,
+        autoScale: false,
         borderVisible: true,
       },
       layout: {
@@ -96,7 +96,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     //seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
-    chartRef.current.priceScale("right").applyOptions({autoScale: true,});
+    //chartRef.current.priceScale("right").applyOptions({autoScale: true,});
     
     // fit visible range and scroll to latest candle
     //chartRef.current.timeScale().fitContent();
