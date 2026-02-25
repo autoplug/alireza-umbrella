@@ -137,6 +137,24 @@ export default function CandleChart({ symbol, orders, trades }) {
   }, [orders, filteredOrders, symbol]);
 
 
+ // Draw marker for trades
+  useEffect(() => {
+    if (!seriesRef.current || !trades) return;
+  
+    const markers = trades.map((trade) => ({
+        time: Math.floor(new Date(trade.timestamp).getTime() / 1000), // 🔥 seconds
+        position: trade.type === "buy" ? "belowBar" : "aboveBar",
+        color: trade.type === "buy" ? "green" : "red",
+        shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
+        text: trade.amount.toString(),
+      }));
+  
+    seriesRef.current.setMarkers(markers);
+  }, [trades, symbol]);
+
+
+
+
   return (
     <div style={{ width: "100%" }}>
       
