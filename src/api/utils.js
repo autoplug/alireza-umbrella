@@ -127,12 +127,9 @@ export const processAllSells = (sellOrders, buyOrders) => {
     const profit = (sellPrice - avgPrice) * Number(sell.amount);
 
     processedSells.push({
-      Profit: profit,
-      "Avg Price": avgPrice,
-      Type: "Sell",
       ...sell,
-      price: avgPrice,   // replace price with weighted average
-      amount: profit,    // replace amount with profit
+      profit,
+      avgPrice,
       usedBuys: used,    // optional: store which buys were used
     });
   }
