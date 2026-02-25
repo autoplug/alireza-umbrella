@@ -159,46 +159,40 @@ export default function CandleChart({ symbol, orders, trades }) {
     <div style={{ width: "100%" }}>
       
       {/* Chart */}
-      <div
-        ref={containerRef}
-        style={{
-          width: "100%",
-          height: "400px",
-        }}
-      />
+      <div ref={containerRef} style={{width: "100%",height: "400px",}}/>
       
       {/* Timeframe buttons */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
-        <button
-          onClick={() => setResolution("60")}
-          style={{
-            padding: "6px 12px",
-            background: resolution === "60" ? "#333" : "#eee",
-            color: resolution === "60" ? "#fff" : "#000",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          1H
-        </button>
-
-        <button
-          onClick={() => setResolution("1D")}
-          style={{
-            padding: "6px 12px",
-            background: resolution === "1D" ? "#333" : "#eee",
-            color: resolution === "1D" ? "#fff" : "#000",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          1D
-        </button>
-
+      <div
+        style={{
+          display: "flex",
+          width: "calc(100% - 20px)", // 10px فاصله از چپ و راست
+          margin: "0 10px 10px 10px", // فاصله از لبه و پایین
+          borderRadius: "8px",
+          overflow: "hidden",
+          border: "1px solid #ccc",
+        }}
+      >
+        {["60", "1D"].map((tf, index) => (
+          <button
+            key={tf}
+            onClick={() => setResolution(tf)}
+            style={{
+              flex: 1,                 // هر دکمه مساوی
+              padding: "10px 0",
+              border: "none",
+              cursor: "pointer",
+              background: resolution === tf ? "#333" : "#eee",
+              color: resolution === tf ? "#fff" : "#000",
+              borderRight: index !== 1 ? "1px solid #ccc" : "none", // خط جداکننده
+              transition: "all 0.2s ease",
+            }}
+          >
+            {tf === "60" ? "1H" : "1D"}
+          </button>
+        ))}
+      
         {isFetching && (
-          <span style={{ fontSize: "12px", color: "#999" }}>
+          <span style={{ fontSize: "12px", color: "#999", marginLeft: "10px" }}>
             Updating...
           </span>
         )}
