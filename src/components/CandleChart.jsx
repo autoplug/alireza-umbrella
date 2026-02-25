@@ -5,7 +5,7 @@ import { useHistory } from "../hooks/useHistory";
 import { formatChartPrice } from "../api/utils";
 
 export default function CandleChart({ symbol, orders, trades }) {
-  const [resolution, setResolution] = useState("60");
+  const [resolution, setResolution] = useState("30");
 
   const containerRef = useRef(null);
   const chartRef = useRef(null);
@@ -172,7 +172,7 @@ export default function CandleChart({ symbol, orders, trades }) {
           border: "1px solid #ccc",
         }}
       >
-        {["60", "1D"].map((tf, index) => (
+        {["30", "1D"].map((tf, index) => (
           <button
             key={tf}
             onClick={() => setResolution(tf)}
@@ -187,7 +187,7 @@ export default function CandleChart({ symbol, orders, trades }) {
               transition: "all 0.2s ease",
             }}
           >
-            {tf === "60" ? "1H" : "1D"}
+            {tf === "30" ? "30M" : "1D"}
           </button>
         ))}
       
