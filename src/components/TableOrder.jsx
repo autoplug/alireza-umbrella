@@ -80,7 +80,6 @@ export default function TableOrder({ orders, total = null }) {
   return (
     <div>
         Object.entries(ordersByMarket)
-          .sort(([a], [b]) => b.localeCompare(a)) // Reverse  Sort markets alphabetically
           .map(([market, marketOrders]) => {
             // Determine columns: total keys or COLUMN_WIDTHS keys
             const hasTotal = !!total
