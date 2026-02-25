@@ -181,8 +181,8 @@ export default function CandleChart({ symbol, orders, trades }) {
           style={{
             flex: 1,
             padding: "6px 12px",
-            background: resolution === "60" ? "#333" : "#eee",
-            color: resolution === "60" ? "#fff" : "#000",
+            background: resolution === "30" ? "#333" : "#eee",
+            color: resolution === "30" ? "#fff" : "#000",
             border: "1px solid #ccc",
             borderRight: "none",              // remove middle border
             borderRadius: "6px 0 0 6px",      // round left side only
