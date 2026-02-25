@@ -25,7 +25,6 @@ export default function CandleChart({ symbol, orders, trades }) {
       seriesRef.current = null;
       priceLinesRef.current = [];
     }
-
   
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
