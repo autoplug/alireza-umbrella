@@ -2,8 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
+import { formatChartPrice } from "../api/utils";
 
-export default function CandleChart({ symbol, orders }) {
+export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("60");
 
   const containerRef = useRef(null);
@@ -24,27 +25,38 @@ export default function CandleChart({ symbol, orders }) {
       seriesRef.current = null;
       priceLinesRef.current = [];
     }
-
   
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
+      //barSpacing: containerRef.current.clientWidth/100,
       rightPriceScale: {
         autoScale: true,
-        borderVisible: false,
+        borderVisible: true,
       },
       layout: {
         background: { color: "#ffffff" },
         textColor: "#000",
       },
       grid: {
-        vertLines: { visible: false },
-        horzLines: { visible: true },
+        vertLines: { visible: true },
+        horzLines: { visible: false },
       },
-      timeScale: { borderVisible: false },
+      timeScale: { borderVisible: true },
     });
 
-    const series = chart.addCandlestickSeries();
+    const series = chart.addCandlestickSeries({
+      priceFormat: {
+        type: "custom",
+        minMove: 1,     // حداقل تغییر قیمت
+        formatter: (price) => {
+          return Number(price).toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+            });
+        },
+      },
+    });
 
     chartRef.current = chart;
     seriesRef.current = series;
@@ -64,51 +76,58 @@ export default function CandleChart({ symbol, orders }) {
   }, []);
 
 
-  // Update candles when data changes
-  const [filteredCandles, setFilteredCandles] = useState([]);
-  useEffect(() => {
-    if (!candles || !seriesRef.current) return;
-    setFilteredCandles(candles);
-    
+    // Update candles when data changes
+    useEffect(() => {
+    if (!candles || !seriesRef.current || !chartRef.current) return;
+  
+    // clear previous data
     seriesRef.current.setData([]);
+  
+
+    // set new data
+    seriesRef.current.setData(candles);
+    
+    // reset time scale completely
     chartRef.current.timeScale().resetTimeScale();
-        
-    seriesRef.current.setData(filteredCandles);
     
-      // 🔥 Force price scale reset
-    seriesRef.current.applyOptions({
-      autoscaleInfoProvider: () => null,
-    });
+    const total = candles.length;
+    const visibleBars = 120;
     
-    // 🔥 Reset price scale
-    chartRef.current.priceScale("right").applyOptions({
-      autoScale: true,
-    });
+    if (total > visibleBars) {
+      chartRef.current.timeScale().setVisibleLogicalRange({
+        from: total - visibleBars,
+        to: total,
+      });
+    }
+
+
+    // reset price scale
+    chartRef.current.priceScale("right").applyOptions({autoScale: true,});
     
-    chartRef.current?.timeScale().fitContent();
-    chartRef.current?.timeScale().scrollToRealTime();
-  }, [candles, filteredCandles]);
+    // fit visible range and scroll to latest candle
+    //chartRef.current.timeScale().fitContent();
+    chartRef.current.timeScale().scrollToRealTime();
+  }, [candles, symbol]); // run again when candles OR symbol changes
+  
+
 
   // Draw orders as horizontal lines
   const [filteredOrders, setFilteredOrders] = useState([]);
   useEffect(() => {
     if (!seriesRef.current) return;
     setFilteredOrders(orders);
-    // پاک کردن خطوط قبلی
+    // Remove old price
     priceLinesRef.current.forEach((line) => seriesRef.current.removePriceLine(line));
     priceLinesRef.current = [];
 
     if (!filteredOrders || filteredOrders.length === 0) return;
-
-    const isRlsMarket = symbol?.toLowerCase().endsWith("rls");
-    const factor = isRlsMarket ? 10 : 1;
     
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
       const line = seriesRef.current.createPriceLine({
-        price: Number(order.price)/factor,
+        price: formatChartPrice(order.price, symbol),
         color,
-        lineWidth: 2,
+        lineWidth: 1,
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
         title: `${order.type === "buy" ? "Buy" : "Sell"} ${order.amount}`,
@@ -116,6 +135,23 @@ export default function CandleChart({ symbol, orders }) {
       priceLinesRef.current.push(line);
     });
   }, [orders, filteredOrders, symbol]);
+
+
+ // Draw marker for trades
+  useEffect(() => {
+    if (!seriesRef.current || !trades) return;
+  
+    const markers = trades.map((trade) => ({
+        time: Math.floor(new Date(trade.timestamp).getTime() / 1000), // 🔥 seconds
+        position: trade.type === "buy" ? "belowBar" : "aboveBar",
+        color: trade.type === "buy" ? "green" : "red",
+        shape: trade.type === "buy" ? "arrowUp" : "arrowDown",
+        text: "",
+      }));
+  
+    seriesRef.current.setMarkers(markers);
+  }, [trades, symbol]);
+
 
 
 
