@@ -136,7 +136,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       const line = seriesRef.current.createPriceLine({
         price: formatChartPrice(order.price, symbol),
         color,
-        lineWidth: 3,
+        lineWidth: 2,
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
         title: `${order.type === "buy" ? "Buy" : "Sell"} ${order.amount}`,
