@@ -25,9 +25,10 @@ export default function Chart() {
       
       const result = trades?.filter((trade) => {
         const oneWeekAgo = Math.floor(Date.now()) - 7 * 24 * 60 * 60 * 1000;
+        const tradeTime = new Date(trade.timestamp).getTime();
         return (
           trade.market?.toLowerCase() === selectedSymbol?.toLowerCase() &&
-          trade.timestamp >= oneWeekAgo
+          tradeTime >= oneWeekAgo
         );
       }) || [];
   
