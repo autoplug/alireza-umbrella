@@ -170,7 +170,6 @@ export default function CandleChart({ symbol, orders, trades }) {
         <div
           style={{
             display: "flex",
-            width: "30%",
             borderRadius: "8px",
             overflow: "hidden",
             border: "1px solid #ccc",
