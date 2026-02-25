@@ -31,7 +31,7 @@ export default function CandleChart({ symbol, orders, trades }) {
       height: 400,
       barSpacing: containerRef.current.clientWidth/70,
       rightPriceScale: {
-        autoScale: false,
+        autoScale: true,
         borderVisible: true,
       },
       layout: {
@@ -91,12 +91,12 @@ export default function CandleChart({ symbol, orders, trades }) {
     chartRef.current.timeScale().resetTimeScale();
     
     // Show 30 Candles
-    //const width = containerRef.current.clientWidth;
-    //const barSpacing = width / 90;  // نمایش 30 کندل
-    //seriesRef.current.applyOptions({ barSpacing });
+    const width = containerRef.current.clientWidth;
+    const barSpacing = width / 90;  // نمایش 30 کندل
+    seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
-    //chartRef.current.priceScale("right").applyOptions({autoScale: true,});
+    chartRef.current.priceScale("right").applyOptions({autoScale: true,});
     
     // fit visible range and scroll to latest candle
     //chartRef.current.timeScale().fitContent();
