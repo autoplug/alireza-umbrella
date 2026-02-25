@@ -83,10 +83,17 @@ export default function CandleChart({ symbol, orders, trades }) {
     // clear previous data
     seriesRef.current.setData([]);
   
-    // reset time scale completely
-    chartRef.current.timeScale().resetTimeScale();
+
     // set new data
     seriesRef.current.setData(candles);
+    
+    // reset time scale completely
+    chartRef.current.timeScale().resetTimeScale();
+    
+    // Show 30 Candles
+    const width = containerRef.current.clientWidth;
+    const barSpacing = width / 30;  // نمایش 30 کندل
+    seriesRef.current.applyOptions({ barSpacing });
     
     // reset price scale
     chartRef.current.priceScale("right").applyOptions({
@@ -109,9 +116,6 @@ export default function CandleChart({ symbol, orders, trades }) {
     priceLinesRef.current = [];
 
     if (!filteredOrders || filteredOrders.length === 0) return;
-
-    //const isRlsMarket = symbol?.toLowerCase().endsWith("rls");
-    //const factor = isRlsMarket ? 10 : 1;
     
     filteredOrders.forEach((order) => {
       const color = order.type === "buy" ? "green" : "red";
