@@ -29,7 +29,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
       height: 400,
-      barSpacing: containerRef.current.clientWidth/100,
+      //barSpacing: containerRef.current.clientWidth/100,
       rightPriceScale: {
         autoScale: true,
         borderVisible: true,
@@ -90,11 +90,17 @@ export default function CandleChart({ symbol, orders, trades }) {
     // reset time scale completely
     chartRef.current.timeScale().resetTimeScale();
     
-    // Show 30 Candles
-    const width = containerRef.current.clientWidth;
-    const barSpacing = width / 100;  // نمایش 30 کندل
-    seriesRef.current.applyOptions({ barSpacing });
+    const total = candles.length;
+    const visibleBars = 100;
     
+    if (total > visibleBars) {
+      chartRef.current.timeScale().setVisibleLogicalRange({
+        from: total - visibleBars,
+        to: total,
+      });
+    }
+
+
     // reset price scale
     chartRef.current.priceScale("right").applyOptions({autoScale: true,});
     
