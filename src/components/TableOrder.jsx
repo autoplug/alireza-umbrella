@@ -9,7 +9,7 @@ export default function TableOrder({
   orders = [],
   widths = DEFAULT_WIDTHS,
   summary = false,
-  colTypes = ["id", "amount", "price", "type"], // type of each column
+  colTypes = ["amount", "price", "type"], // types for data columns, id excluded
 }) {
   if (!orders.length) {
     return <p style={{ marginLeft: "20px" }}>No orders to display.</p>;
@@ -17,7 +17,7 @@ export default function TableOrder({
 
   const firstOrder = orders[0];
   const dynamicKeys = Object.keys(firstOrder).filter(k => k !== "market");
-  const columns = ["id", ...dynamicKeys]; // order of columns
+  const columns = ["id", ...dynamicKeys]; // id always first
 
   const tableStyle = { width: "100%", borderCollapse: "collapse", backgroundColor: "#f9f9f9", fontWeight: "bold", marginBottom: "10px" };
   const thStyle = { borderBottom: "1px solid #aaa", textAlign: "left", padding: "8px 20px", fontSize: "14px" };
@@ -42,9 +42,10 @@ export default function TableOrder({
     return acc;
   }, {});
 
-  // Helper to format cell based on colType
+  // Helper to format cell based on colType (skip 'id')
   const formatCell = (col, value, order) => {
-    const type = colTypes[columns.indexOf(col)];
+    if (col === "id") return value;
+    const type = colTypes[columns.indexOf(col) - 1]; // subtract 1 for id
     if (type === "type") return renderType(value);
     if (type === "amount") return formatAmount(value, order.market);
     if (type === "price") return formatPrice(value, order.market);
