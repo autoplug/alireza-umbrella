@@ -4,6 +4,10 @@ import { createChart, LineStyle } from "lightweight-charts";
 import { useHistory } from "../hooks/useHistory";
 import { formatChartPrice } from "../api/utils";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+
+
 export default function CandleChart({ symbol, orders, trades }) {
   const [resolution, setResolution] = useState("30");
 
@@ -162,44 +166,50 @@ export default function CandleChart({ symbol, orders, trades }) {
       <div ref={containerRef} style={{width: "100%",height: "400px",}}/>
       
       {/* Timeframe buttons */}
-      <div
-        style={{
-          display: "flex",
-          width: "30%",
-          maxWidth: "600px",
-          margin: "0 0 10px 5px", // فاصله از لبه و پایین
-          borderRadius: "8px",
-          overflow: "hidden",
-          border: "1px solid #ccc",
-        }}
-      >
-        {["30", "1D"].map((tf, index) => (
-          <button
-            key={tf}
-            onClick={() => setResolution(tf)}
-            style={{
-              flex: 1,                 // هر دکمه مساوی
-              padding: "10px 0",
-              border: "none",
-              cursor: "pointer",
-              background: resolution === tf ? "#333" : "#eee",
-              color: resolution === tf ? "#fff" : "#000",
-              borderRight: index !== 1 ? "1px solid #ccc" : "none", // خط جداکننده
-              transition: "all 0.2s ease",
-            }}
-          >
-            {tf === "30" ? "30M" : "1D"}
-          </button>
-        ))}
-      
-      </div>
+      <div style={{ display: "flex", alignItems: "center", margin: "0 0 10px 5px" }}>
+        <div
+          style={{
+            display: "flex",
+            flex: 1,                 // نوار دکمه‌ها فضای باقی‌مانده را بگیرد
+            maxWidth: "600px",
+            borderRadius: "8px",
+            overflow: "hidden",
+            border: "1px solid #ccc",
+          }}
+        >
+          {["30", "1D"].map((tf, index) => (
+            <button
+              key={tf}
+              onClick={() => setResolution(tf)}
+              style={{
+                flex: 1,
+                padding: "10px 0",
+                border: "none",
+                cursor: "pointer",
+                background: resolution === tf ? "#333" : "#eee",
+                color: resolution === tf ? "#fff" : "#000",
+                borderRight: index !== 1 ? "1px solid #ccc" : "none",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {tf === "30" ? "30M" : "1D"}
+            </button>
+          ))}
+        </div>
 
         {isFetching && (
-          <span style={{ fontSize: "12px", color: "#999", marginLeft: "10px" }}>
-            Updating...
-          </span>
+          <FontAwesomeIcon
+            icon={faCircle}
+            style={{
+              color: "green",
+              marginLeft: "10px",  // فاصله از نوار دکمه‌ها
+              fontSize: "14px",
+            }}
+          />
         )}
+      </div>
 
+      
     </div>
   );
 }
