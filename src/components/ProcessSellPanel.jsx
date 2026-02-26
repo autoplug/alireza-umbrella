@@ -50,7 +50,7 @@ export default function ProcessSellPanel() {
       {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
-        <TableOrder orders={sellTable} summary={true} colTypes = {["price", "price", "type"]}/>
+        <TableOrder orders={sellTable} summary={true}/>
       )}
 
       {/* ===== Remaining Buy Orders Table ===== */}
@@ -59,7 +59,7 @@ export default function ProcessSellPanel() {
         {buyTable.length === 0 ? (
           <p>No remaining buy orders.</p>
         ) : (
-          <TableOrder orders={buyTable} />
+          <TableOrder orders={buyTable} summary={true}/>
         )}
       </div>
     </div>
