@@ -168,11 +168,11 @@ export const formatPrice = (price, market) => {
     if (value < 100_000_000) {
       // Remove one zero (divide by 10)
       value = value / 10;
-      return "IRT " + Math.floor(value).toLocaleString("en-US");
+      return "IRT " + parseInt(value).toLocaleString("en-US");
     } else {
       // Remove seven zeros (divide by 10,000,000)
       value = value / 10_000_000;
-      return "IRM " + Math.floor(value).toLocaleString("en-US");
+      return "IRM " + parseInt(value).toLocaleString("en-US");
     }
   }
 
@@ -186,20 +186,20 @@ export const formatPrice = (price, market) => {
       });
     } else {
       // No decimals if 10 or above
-      return "USD " + Math.floor(value).toLocaleString("en-US");
+      return "USD " + parseInt(value).toLocaleString("en-US");
     }
   }
 
   // ===== BTC =====
   if (quoteCurrency === "BTC") {
       // Show two decimal places if below 10
-      return "BTC " + Math.floor(value * 1_000_000).toLocaleString("en-US");
+      return "BTC " + parseInt(value * 1_000_000).toLocaleString("en-US");
   }
 
   // ===== ETH =====
   if (quoteCurrency === "ETH") {
       // Show two decimal places if below 10
-      return "ETH " + Math.floor(value * 1_000_000).toLocaleString("en-US");
+      return "ETH " + parseInt(value * 1_000_000).toLocaleString("en-US");
   }
   
   // ===== Default fallback =====
