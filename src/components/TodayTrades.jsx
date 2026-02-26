@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useTrades } from "../hooks/useTrades";
 import TableOrder from "./TableOrder";
 import TitleBar from "./TitleBar";
-import { formatPrice, formatAmount } from "../api/utils";
+
 // Helper function to check if a timestamp is from today in Tehran timezone
 const isTodayTehran = (timestamp) => {
   if (!timestamp) return false;
@@ -34,14 +34,7 @@ export default function TodayTrades() {
   useEffect(() => {
     // Filter trades with timestamp >= 00:00 Tehran today
     const todayTrades = trades
-      .filter((t) => isTodayTehran(t.timestamp))
-      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-      .map(order => ({
-        market: order.market
-        Amount: formatAmount(order.amount, order.market),
-        Price: formatPrice(order.price, order.market),
-        Type: order.type,
-      }));
+      .filter((t) => isTodayTehran(t.timestamp));
     setTrades(todayTrades);    
   }, [trades]);
 
