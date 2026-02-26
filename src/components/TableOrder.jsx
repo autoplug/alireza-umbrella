@@ -1,5 +1,6 @@
 import React from "react";
 import { formatPrice, formatAmount } from "../api/utils";
+import MarketIcon from "../components/MarketIcon";
 
 export default function TableOrder({ orders = [], summary = false }) {
   if (!orders.length) {
@@ -13,6 +14,7 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderCollapse: "collapse",
     backgroundColor: "#f9f9f9",
     marginBottom: "25px",
+    fontFamily: "monospace",
   };
 
   const thStyle = {
@@ -26,7 +28,6 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderBottom: "1px solid #ddd",
     padding: "6px 20px",
     fontSize: "12px",
-    fontFamily: "monospace",
   };
 
   // Extract time safely
@@ -36,7 +37,7 @@ export default function TableOrder({ orders = [], summary = false }) {
     return 0;
   };
 
-  // Group orders by market
+  // Group by market
   const grouped = orders.reduce((acc, order) => {
     const key = order.market?.toUpperCase() || "UNKNOWN";
     if (!acc[key]) acc[key] = [];
@@ -50,7 +51,7 @@ export default function TableOrder({ orders = [], summary = false }) {
         const orderType = marketOrders[0].type?.toLowerCase();
         let sorted = [...marketOrders];
 
-        // Sorting
+        // Sorting logic
         if (!summary) {
           sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
         }
@@ -90,9 +91,27 @@ export default function TableOrder({ orders = [], summary = false }) {
           headers = ["Id", "Profit", "Avg Price", "Type"];
         }
 
+        const titleColor = orderType === "sell" ? "red" : "green";
+        const arrow = orderType === "sell" ? "↓" : "↑";
+
         return (
           <div key={market}>
-            <h4 style={{ marginLeft: "20px" }}>{market}</h4>
+            {/* Title */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginLeft: "20px",
+                marginBottom: "8px",
+                color: titleColor,
+                fontWeight: "bold",
+              }}
+            >
+              <MarketIcon market={market} />
+              <span>{market}</span>
+              <span>{arrow}</span>
+            </div>
 
             <table style={tableStyle}>
               <thead>
