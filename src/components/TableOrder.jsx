@@ -1,98 +1,175 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { formatPrice, formatAmount } from "../api/utils";
 
-const DEFAULT_WIDTHS = ["5%", "35%", "45%", "15%"];
-
-export default function TableOrder({
-  orders = [],
-  widths = DEFAULT_WIDTHS,
-  summary = false,
-  colTypes = ["amount", "price", "type"], // types for data columns, id excluded
-}) {
+export default function TableOrder({ orders = [], summary = false }) {
   if (!orders.length) {
     return <p style={{ marginLeft: "20px" }}>No orders to display.</p>;
   }
 
-  const firstOrder = orders[0];
-  const dynamicKeys = Object.keys(firstOrder).filter(k => k !== "market");
-  const columns = ["id", ...dynamicKeys]; // id always first
+  const COLUMN_WIDTHS = ["5%", "35%", "45%", "15%"];
 
-  const tableStyle = { width: "100%", borderCollapse: "collapse", backgroundColor: "#f9f9f9", fontWeight: "bold", marginBottom: "10px" };
-  const thStyle = { borderBottom: "1px solid #aaa", textAlign: "left", padding: "8px 20px", fontSize: "14px" };
-  const tdStyle = { borderBottom: "1px solid #ddd", padding: "6px 20px", fontSize: "12px", fontFamily: "monospace" };
+  const tableStyle = {
+    width: "100%",
+    borderCollapse: "collapse",
+    backgroundColor: "#f9f9f9",
+    marginBottom: "25px",
+  };
 
-  const renderType = (type) => {
-    if (!type) return "";
-    const isBuy = type.toLowerCase() === "buy";
-    return (
-      <span style={{ color: isBuy ? "#568546" : "#c2191c", display: "flex", alignItems: "center", gap: "6px" }}>
-        <FontAwesomeIcon icon={isBuy ? faCircleArrowUp : faCircleArrowDown} size="sm" />
-        {type}
-      </span>
-    );
+  const thStyle = {
+    borderBottom: "1px solid #aaa",
+    textAlign: "left",
+    padding: "8px 20px",
+    fontSize: "14px",
+  };
+
+  const tdStyle = {
+    borderBottom: "1px solid #ddd",
+    padding: "6px 20px",
+    fontSize: "12px",
+    fontFamily: "monospace",
+  };
+
+  // Extract time safely
+  const getOrderTime = (order) => {
+    if (order.timestamp) return new Date(order.timestamp).getTime();
+    if (order.created_at) return new Date(order.created_at).getTime();
+    return 0;
   };
 
   // Group orders by market
-  const ordersByMarket = orders.reduce((acc, order) => {
+  const grouped = orders.reduce((acc, order) => {
     const key = order.market?.toUpperCase() || "UNKNOWN";
     if (!acc[key]) acc[key] = [];
     acc[key].push(order);
     return acc;
   }, {});
 
-  // Helper to format cell based on colType (skip 'id')
-  const formatCell = (col, value, order) => {
-    if (col === "id") return value;
-    const type = colTypes[columns.indexOf(col) - 1]; // subtract 1 for id
-    if (type === "type") return renderType(value);
-    if (type === "amount") return formatAmount(value, order.market);
-    if (type === "price") return formatPrice(value, order.market);
-    return value;
-  };
-
   return (
     <div>
-      {Object.entries(ordersByMarket).map(([market, marketOrders]) => {
-        const dataRows = summary ? marketOrders.slice(0, -1) : marketOrders;
-        const summaryRow = summary ? marketOrders[marketOrders.length - 1] : null;
+      {Object.entries(grouped).map(([market, marketOrders]) => {
+        const orderType = marketOrders[0].type?.toLowerCase();
+        let sorted = [...marketOrders];
+
+        // Sorting
+        if (!summary) {
+          sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
+        }
+
+        if (summary && orderType === "buy") {
+          sorted.sort((a, b) => b.price - a.price);
+        }
+
+        if (summary && orderType === "sell") {
+          sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
+        }
+
+        // Summary calculations
+        let totalAmount = 0;
+        let totalProfit = 0;
+        let weightedSum = 0;
+
+        if (summary) {
+          sorted.forEach((order) => {
+            const amount = Number(order.amount || 0);
+            const price = Number(order.price || 0);
+            const profit = Number(order.profit || 0);
+
+            totalAmount += amount;
+            weightedSum += amount * price;
+            totalProfit += profit;
+          });
+        }
+
+        const weightedAvg =
+          totalAmount > 0 ? weightedSum / totalAmount : 0;
+
+        // Headers
+        let headers = ["Id", "Amount", "Price", "Type"];
+
+        if (summary && orderType === "sell") {
+          headers = ["Id", "Profit", "Avg Price", "Type"];
+        }
 
         return (
-          <div key={market} style={{ marginBottom: "20px" }}>
-            <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "5px", marginLeft: "20px", display: "flex", alignItems: "center", gap: "8px" }}>
-              {market}
-            </div>
+          <div key={market}>
+            <h4 style={{ marginLeft: "20px" }}>{market}</h4>
 
             <table style={tableStyle}>
               <thead>
                 <tr>
-                  {columns.map((col, idx) => (
-                    <th key={col} style={{ ...thStyle, width: widths[idx] }}>{col}</th>
+                  {headers.map((h, i) => (
+                    <th
+                      key={h}
+                      style={{ ...thStyle, width: COLUMN_WIDTHS[i] }}
+                    >
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
 
               <tbody>
-                {dataRows.map((order, index) => {
-                  const bgColor = index % 2 === 0 ? "#ffffff" : "#f3f3f3";
+                {sorted.map((order, index) => (
+                  <tr key={index}>
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
+                      {index + 1}
+                    </td>
 
-                  return (
-                    <tr key={index} style={{ backgroundColor: bgColor }}>
-                      {columns.map((col, idx) => {
-                        const value = col === "id" ? index + 1 : order[col] ?? "";
-                        return <td key={idx} style={{ ...tdStyle }}>{formatCell(col, value, order)}</td>;
-                      })}
-                    </tr>
-                  );
-                })}
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
+                      {summary && orderType === "sell"
+                        ? formatPrice(order.profit, market)
+                        : formatAmount(order.amount, market)}
+                    </td>
 
-                {summaryRow && (
-                  <tr style={{ backgroundColor: "#eef2f7", fontWeight: "bold", borderTop: "2px solid #bbb" }}>
-                    {columns.map((col, idx) => {
-                      const value = col === "id" ? "T" : summaryRow[col] ?? "";
-                      return <td key={idx} style={tdStyle}>{formatCell(col, value, summaryRow)}</td>;
-                    })}
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
+                      {formatPrice(order.price, market)}
+                    </td>
+
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
+                      {order.type}
+                    </td>
+                  </tr>
+                ))}
+
+                {summary && (
+                  <tr
+                    style={{
+                      backgroundColor: "#eef2f7",
+                      fontWeight: "bold",
+                      borderTop: "2px solid #bbb",
+                    }}
+                  >
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
+                      T
+                    </td>
+
+                    {orderType === "buy" && (
+                      <>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
+                          {formatAmount(totalAmount, market)}
+                        </td>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
+                          {formatPrice(weightedAvg, market)}
+                        </td>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
+                          buy
+                        </td>
+                      </>
+                    )}
+
+                    {orderType === "sell" && (
+                      <>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
+                          {formatPrice(totalProfit, market)}
+                        </td>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
+                          {formatPrice(weightedAvg, market)}
+                        </td>
+                        <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
+                          sell
+                        </td>
+                      </>
+                    )}
                   </tr>
                 )}
               </tbody>
