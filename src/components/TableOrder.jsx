@@ -30,7 +30,6 @@ export default function TableOrder({ orders = [], summary = false }) {
     fontSize: "12px",
   };
 
-  // Extract time safely
   const getOrderTime = (order) => {
     if (order.timestamp) return new Date(order.timestamp).getTime();
     if (order.created_at) return new Date(order.created_at).getTime();
@@ -51,7 +50,7 @@ export default function TableOrder({ orders = [], summary = false }) {
         const orderType = marketOrders[0].type?.toLowerCase();
         let sorted = [...marketOrders];
 
-        // Sorting logic
+        // Sorting
         if (!summary) {
           sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
         }
@@ -84,14 +83,12 @@ export default function TableOrder({ orders = [], summary = false }) {
         const weightedAvg =
           totalAmount > 0 ? weightedSum / totalAmount : 0;
 
-        // Headers
         let headers = ["Id", "Amount", "Price", "Type"];
 
         if (summary && orderType === "sell") {
           headers = ["Id", "Profit", "Avg Price", "Type"];
         }
 
-        const titleColor = orderType === "sell" ? "red" : "green";
         const arrow = orderType === "sell" ? "↓" : "↑";
 
         return (
@@ -104,7 +101,6 @@ export default function TableOrder({ orders = [], summary = false }) {
                 gap: "8px",
                 marginLeft: "20px",
                 marginBottom: "8px",
-                color: titleColor,
                 fontWeight: "bold",
               }}
             >
@@ -128,27 +124,35 @@ export default function TableOrder({ orders = [], summary = false }) {
               </thead>
 
               <tbody>
-                {sorted.map((order, index) => (
-                  <tr key={index}>
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
-                      {index + 1}
-                    </td>
+                {sorted.map((order, index) => {
+                  const rowColor =
+                    order.type?.toLowerCase() === "sell"
+                      ? "#d32f2f"
+                      : "#2e7d32";
 
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
-                      {summary && orderType === "sell"
-                        ? formatPrice(order.profit, market)
-                        : formatAmount(order.amount, market)}
-                    </td>
+                  return (
+                    <tr key={index} style={{ color: rowColor }}>
+                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
+                        {index + 1}
+                      </td>
 
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
-                      {formatPrice(order.price, market)}
-                    </td>
+                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
+                        {summary &&
+                        order.type?.toLowerCase() === "sell"
+                          ? formatPrice(order.profit, market)
+                          : formatAmount(order.amount, market)}
+                      </td>
 
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
-                      {order.type}
-                    </td>
-                  </tr>
-                ))}
+                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
+                        {formatPrice(order.price, market)}
+                      </td>
+
+                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
+                        {order.type}
+                      </td>
+                    </tr>
+                  );
+                })}
 
                 {summary && (
                   <tr
