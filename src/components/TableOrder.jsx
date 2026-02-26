@@ -50,20 +50,21 @@ export default function TableOrder({ orders = [], summary = false }) {
         const orderType = marketOrders[0].type?.toLowerCase();
         let sorted = [...marketOrders];
 
-        // Sorting
-        if (!summary) {
-          sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
-        }
+        // Default sort by time
+        sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
 
+        // Summary + buy → sort by price
         if (summary && orderType === "buy") {
           sorted.sort((a, b) => b.price - a.price);
         }
 
+        // For display only: sell + summary → last 5 orders
+        let displayOrders = sorted;
         if (summary && orderType === "sell") {
-          sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
+          displayOrders = sorted.slice(0, 5);
         }
 
-        // Summary calculations
+        // Summary calculations: always from all orders
         let totalAmount = 0;
         let totalProfit = 0;
         let weightedSum = 0;
@@ -80,11 +81,9 @@ export default function TableOrder({ orders = [], summary = false }) {
           });
         }
 
-        const weightedAvg =
-          totalAmount > 0 ? weightedSum / totalAmount : 0;
+        const weightedAvg = totalAmount > 0 ? weightedSum / totalAmount : 0;
 
         let headers = ["Id", "Amount", "Price", "Type"];
-
         if (summary && orderType === "sell") {
           headers = ["Id", "Profit", "Avg Price", "Type"];
         }
@@ -93,7 +92,6 @@ export default function TableOrder({ orders = [], summary = false }) {
 
         return (
           <div key={market}>
-            {/* Title */}
             <div
               style={{
                 display: "flex",
@@ -113,10 +111,7 @@ export default function TableOrder({ orders = [], summary = false }) {
               <thead>
                 <tr>
                   {headers.map((h, i) => (
-                    <th
-                      key={h}
-                      style={{ ...thStyle, width: COLUMN_WIDTHS[i] }}
-                    >
+                    <th key={h} style={{ ...thStyle, width: COLUMN_WIDTHS[i] }}>
                       {h}
                     </th>
                   ))}
@@ -124,7 +119,7 @@ export default function TableOrder({ orders = [], summary = false }) {
               </thead>
 
               <tbody>
-                {sorted.map((order, index) => {
+                {displayOrders.map((order, index) => {
                   const rowColor =
                     order.type?.toLowerCase() === "sell"
                       ? "#d32f2f"
@@ -137,8 +132,7 @@ export default function TableOrder({ orders = [], summary = false }) {
                       </td>
 
                       <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
-                        {summary &&
-                        order.type?.toLowerCase() === "sell"
+                        {summary && orderType === "sell"
                           ? formatPrice(order.profit, market)
                           : formatAmount(order.amount, market)}
                       </td>
@@ -162,9 +156,7 @@ export default function TableOrder({ orders = [], summary = false }) {
                       borderTop: "2px solid #bbb",
                     }}
                   >
-                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
-                      T
-                    </td>
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>T</td>
 
                     {orderType === "buy" && (
                       <>
