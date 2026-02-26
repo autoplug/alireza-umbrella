@@ -161,7 +161,6 @@ export default function TableOrder({ orders = [], summary = false }) {
                     </td>
 
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
-                      {/*formatPrice(order.price, market)*/}
                       {summary && orderType === "sell"
                         ? formatPrice(order.avgPrice, market)
                         : formatPrice(order.price, market)}
