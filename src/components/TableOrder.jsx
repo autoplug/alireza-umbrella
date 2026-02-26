@@ -90,7 +90,7 @@ export default function TableOrder({ orders = [], summary = false }) {
         // For display only: sell + summary → last 5 orders reversed
         let displayOrders = sorted;
         if (summary && orderType === "sell") {
-          displayOrders = sorted.slice(-20);
+          displayOrders = sorted.slice(-5);
         }
 
         // Summary calculations: always from all orders
