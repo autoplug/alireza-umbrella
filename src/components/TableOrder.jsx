@@ -16,7 +16,7 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderCollapse: "collapse",
     backgroundColor: "#f9f9f9",
     marginBottom: "25px",
-    fontWeight: "bold", // entire table bold
+    fontWeight: "bold",
   };
 
   const thStyle = {
@@ -30,7 +30,7 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderBottom: "1px solid #ddd",
     padding: "6px 20px",
     fontSize: "12px",
-    fontFamily: "monospace", // monospace only for rows
+    fontFamily: "monospace",
   };
 
   const getOrderTime = (order) => {
@@ -69,24 +69,28 @@ export default function TableOrder({ orders = [], summary = false }) {
     return acc;
   }, {});
 
+  // Sort markets alphabetically
+  const sortedMarkets = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+
   return (
     <div>
-      {Object.entries(grouped).map(([market, marketOrders]) => {
+      {sortedMarkets.map((market) => {
+        const marketOrders = grouped[market];
         const orderType = marketOrders[0].type?.toLowerCase();
         let sorted = [...marketOrders];
 
-        // Default sort by time
-        sorted.sort((a, b) => getOrderTime(b) - getOrderTime(a));
+        // Default sort by time reversed
+        sorted.sort((a, b) => getOrderTime(a) - getOrderTime(b));
 
-        // Summary + buy → sort by price
+        // Summary + buy → sort by price reversed
         if (summary && orderType === "buy") {
-          sorted.sort((a, b) => b.price - a.price);
+          sorted.sort((a, b) => a.price - b.price);
         }
 
-        // For display only: sell + summary → last 5 orders
+        // For display only: sell + summary → last 5 orders reversed
         let displayOrders = sorted;
         if (summary && orderType === "sell") {
-          displayOrders = sorted.slice(0, 5);
+          displayOrders = sorted.slice(-5);
         }
 
         // Summary calculations: always from all orders
@@ -113,10 +117,9 @@ export default function TableOrder({ orders = [], summary = false }) {
           headers = ["Id", "Profit", "Avg Price", "Type"];
         }
 
-        const arrow = orderType === "sell" ? "↓" : "↑";
-
         return (
           <div key={market}>
+            {/* Only show market icon, no name or arrow */}
             <div
               style={{
                 display: "flex",
@@ -124,12 +127,10 @@ export default function TableOrder({ orders = [], summary = false }) {
                 gap: "8px",
                 marginLeft: "20px",
                 marginBottom: "8px",
-                fontWeight: "bold", // bold market header
+                fontWeight: "bold",
               }}
             >
               <MarketIcon market={market} />
-              <span>{market}</span>
-              <span>{arrow}</span>
             </div>
 
             <table style={tableStyle}>
@@ -145,7 +146,12 @@ export default function TableOrder({ orders = [], summary = false }) {
 
               <tbody>
                 {displayOrders.map((order, index) => (
-                  <tr key={index} style={{ color: order.type?.toLowerCase() === "sell" ? "#d32f2f" : "#568546" }}>
+                  <tr
+                    key={index}
+                    style={{
+                      color: order.type?.toLowerCase() === "sell" ? "#d32f2f" : "#568546",
+                    }}
+                  >
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>{index + 1}</td>
 
                     <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
