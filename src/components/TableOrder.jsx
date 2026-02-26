@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleArrowUp, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { formatPrice, formatAmount } from "../api/utils";
 import MarketIcon from "../components/MarketIcon";
 
@@ -14,7 +16,7 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderCollapse: "collapse",
     backgroundColor: "#f9f9f9",
     marginBottom: "25px",
-    fontFamily: "monospace",
+    fontWeight: "bold", // entire table bold
   };
 
   const thStyle = {
@@ -28,12 +30,35 @@ export default function TableOrder({ orders = [], summary = false }) {
     borderBottom: "1px solid #ddd",
     padding: "6px 20px",
     fontSize: "12px",
+    fontFamily: "monospace", // monospace only for rows
   };
 
   const getOrderTime = (order) => {
     if (order.timestamp) return new Date(order.timestamp).getTime();
     if (order.created_at) return new Date(order.created_at).getTime();
     return 0;
+  };
+
+  const renderType = (type) => {
+    if (!type) return "";
+    const isBuy = type.toLowerCase() === "buy";
+
+    return (
+      <span
+        style={{
+          color: isBuy ? "#568546" : "#d32f2f",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={isBuy ? faCircleArrowUp : faCircleArrowDown}
+          size="sm"
+        />
+        {type}
+      </span>
+    );
   };
 
   // Group by market
@@ -99,7 +124,7 @@ export default function TableOrder({ orders = [], summary = false }) {
                 gap: "8px",
                 marginLeft: "20px",
                 marginBottom: "8px",
-                fontWeight: "bold",
+                fontWeight: "bold", // bold market header
               }}
             >
               <MarketIcon market={market} />
@@ -119,34 +144,25 @@ export default function TableOrder({ orders = [], summary = false }) {
               </thead>
 
               <tbody>
-                {displayOrders.map((order, index) => {
-                  const rowColor =
-                    order.type?.toLowerCase() === "sell"
-                      ? "#d32f2f"
-                      : "#2e7d32";
+                {displayOrders.map((order, index) => (
+                  <tr key={index} style={{ color: order.type?.toLowerCase() === "sell" ? "#d32f2f" : "#568546" }}>
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>{index + 1}</td>
 
-                  return (
-                    <tr key={index} style={{ color: rowColor }}>
-                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[0] }}>
-                        {index + 1}
-                      </td>
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
+                      {summary && orderType === "sell"
+                        ? formatPrice(order.profit, market)
+                        : formatAmount(order.amount, market)}
+                    </td>
 
-                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[1] }}>
-                        {summary && orderType === "sell"
-                          ? formatPrice(order.profit, market)
-                          : formatAmount(order.amount, market)}
-                      </td>
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
+                      {formatPrice(order.price, market)}
+                    </td>
 
-                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[2] }}>
-                        {formatPrice(order.price, market)}
-                      </td>
-
-                      <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
-                        {order.type}
-                      </td>
-                    </tr>
-                  );
-                })}
+                    <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
+                      {renderType(order.type)}
+                    </td>
+                  </tr>
+                ))}
 
                 {summary && (
                   <tr
@@ -167,7 +183,7 @@ export default function TableOrder({ orders = [], summary = false }) {
                           {formatPrice(weightedAvg, market)}
                         </td>
                         <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
-                          buy
+                          {renderType("buy")}
                         </td>
                       </>
                     )}
@@ -181,7 +197,7 @@ export default function TableOrder({ orders = [], summary = false }) {
                           {formatPrice(weightedAvg, market)}
                         </td>
                         <td style={{ ...tdStyle, width: COLUMN_WIDTHS[3] }}>
-                          sell
+                          {renderType("sell")}
                         </td>
                       </>
                     )}
