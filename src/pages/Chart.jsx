@@ -13,7 +13,7 @@ export default function Chart() {
     new Set([
       ...trades.map(t => t.market.toLowerCase()),
     ])
-  );
+  ).sort();
 
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
   
