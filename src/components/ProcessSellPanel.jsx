@@ -63,26 +63,9 @@ export default function ProcessSellPanel() {
 
 
     finalSells = keepLastTenPerMarket(finalSells);
-    finalSells = finalSells
-      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-      .map(order => ({
-        market: order.market,
-        Profit: formatPrice(order.profit, order.market),
-        "Avg Price": formatPrice(order.avgPrice, order.market),
-        Type: order.type,
-      }));
-
     setSellTable(finalSells);
     
     finalBuys = finalBuys.filter((order) => Number(order.amount) > 0);
-    finalBuys = finalBuys
-      .sort((a, b) => a.price - b.price)
-      .map(order => ({
-        market: order.market,
-        Price: formatPrice(order.price, order.market),
-        Amount: formatAmount(order.amount, order.market),
-        Type: order.type,
-      }));
     setBuyTable(finalBuys);
     
     
