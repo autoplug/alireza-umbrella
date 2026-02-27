@@ -182,6 +182,8 @@ export default function CandleChart({ symbol, orders, trades }) {
               border: "1px solid #ccc",
               borderRadius: "6px",
               background: "#eee",
+              color: "#000",
+              fontWeight: "700",
               cursor: "pointer",
             }}
           >
