@@ -99,7 +99,7 @@ export default function CandleChart({ symbol, orders, trades }) {
     chartRef.current.timeScale().resetTimeScale();
     
     const total = candles.length;
-    const visibleBars = 120;
+    const visibleBars = 100;
     
     if (total > visibleBars) {
       chartRef.current.timeScale().setVisibleLogicalRange({
