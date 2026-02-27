@@ -51,7 +51,11 @@ export default function Wallets() {
   if (!wallets.length) return <div>No wallets available</div>;
 
   return (
-    <div style={{ maxHeight: "80vh", overflowY: "auto" }}>
+    <div style={{ 
+      maxHeight: "80vh", 
+      overflowY: "auto" ,
+      
+    }}>
       <TitleBar title="Wallets" count={0} />
       
       <div
