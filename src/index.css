@@ -19,7 +19,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #101418;
+  background-color: #FAF9F7;
   overflow-x: hidden;          /* prevent horizontal scroll */
   touch-action: pan-y;         /* allow only vertical scrolling on mobile */
 }
