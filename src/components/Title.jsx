@@ -2,9 +2,8 @@ import React from "react";
 
 export default function Title({ title }) {
   const barStyle = {
-    padding: "10px 20px",
-    margin: "0 0",
-    marginBottom : "10px",
+    padding: "5px 20px",
+    margin: "5px 0",
     display: "flex",
     alignItems: "center",
     gap: "6px",
