@@ -18,7 +18,8 @@ import Chart from "./pages/Chart";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // data considered fresh for 5 minutes
+      staleTime: 30 * 1000, // data considered fresh for 5 minutes
+      cacheTime: 1000 * 60 * 5,
       gcTime: Infinity,          // never garbage collected
       refetchOnMount: true,     // don't refetch when component mounts
       refetchOnWindowFocus: true,// background refresh if window focused
