@@ -33,6 +33,7 @@ export default function NobitexToken({ onSave, initialToken = "" }) {
           border: "none",
           borderRadius: 4,
           cursor: "pointer",
+          fontWeight: "bold",
         }}
       >
         Save Token
