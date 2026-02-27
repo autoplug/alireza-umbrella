@@ -44,17 +44,20 @@ export default function ProcessSell() {
   
   
   return (
-    <div className="RowStyle">
-      {/* ===== Sell Orders Table ===== */}
-      <Title title={"Process Sell : " + sellTable.length} />
-      {sellTable.length === 0 ? (
-        <p>No sell orders to display.</p>
-      ) : (
-        <TableOrder orders={sellTable} summary={true}/>
-      )}
+    <div>
+      <div className="RowStyle">
+        {/* ===== Sell Orders Table ===== */}
+        <Title title={"Process Sell : " + sellTable.length} />
+        {sellTable.length === 0 ? (
+          <p>No sell orders to display.</p>
+        ) : (
+          <TableOrder orders={sellTable} summary={true}/>
+        )}
+      </div>
+      
 
       {/* ===== Remaining Buy Orders Table ===== */}
-      <div style={{ marginTop: "30px" }}>
+      <div className="RowStyle">
         <Title title={"Remain Buy :" + buyTable.length} />
         {buyTable.length === 0 ? (
           <p>No remaining buy orders.</p>
@@ -62,6 +65,7 @@ export default function ProcessSell() {
           <TableOrder orders={buyTable} summary={true}/>
         )}
       </div>
+      
     </div>
   );
 }
