@@ -4,17 +4,6 @@ import { useTrades } from "../../hooks/useTrades";
 import TableOrder from "../../components/TableOrder";
 import Title from "../../components/Title";
 
-
-const rowStyle = {
-  padding: "10px 0",
-  margin: "0 0",
-  marginTop: "20px",
-  overflowY: "auto" ,
-  backgroundColor: "#fff",
-  borderTop: "1px solid #CCC",
-  borderBottom: "1px solid #CCC",
-};
-
 // Helper function to check if a timestamp is from today in Tehran timezone
 const isTodayTehran = (timestamp) => {
   if (!timestamp) return false;
@@ -50,7 +39,7 @@ export default function Today() {
   }, [trades]);
 
   return (
-    <div style={{...rowStyle}}>
+    <div className="RowStyle">
       <Title title={"Today Trades : " + todayTrades.length } />
       <TableOrder orders={todayTrades} />
     </div>
