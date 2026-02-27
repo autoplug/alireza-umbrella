@@ -7,16 +7,6 @@ import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
 
-//////////////////////////////////////////////
-const rowStyle = {
-  padding: "10px 0",
-  margin: "0 0",
-  marginTop: "20px",
-  overflowY: "auto" ,
-  backgroundColor: "#fff",
-  borderTop: "1px solid #CCC",
-  borderBottom: "1px solid #CCC",
-};
 
 //////////////////////////////////////////////
 const calcTotalRial = (wallets, markets) => {
@@ -64,7 +54,7 @@ export default function Wallets() {
   if (!wallets.length) return <div>No wallets available</div>;
 
   return (
-    <div style={{...rowStyle}}>
+    <div className="RowStyle">
       <Title title="Wallets" />
       
       <div
