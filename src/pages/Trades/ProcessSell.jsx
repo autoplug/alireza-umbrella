@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import {processAllSells} from "../api/utils";
-import { useTrades } from "../hooks/useTrades";
+import {processAllSells} from "../../api/utils";
+import { useTrades } from "../../hooks/useTrades";
 
-import TableOrder from "./TableOrder";
-import TitleBar from "./TitleBar";
+import TableOrder from "../../TableOrder";
+import TitleBar from "../../TitleBar";
 
 
-export default function ProcessSellPanel() {
+export default function ProcessSell() {
   const { trades } = useTrades();
   const [sellTable, setSellTable] = useState([]);
   const [buyTable, setBuyTable] = useState([]);
