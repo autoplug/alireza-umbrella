@@ -92,7 +92,7 @@ export default function Wallets() {
               backgroundColor: "#ffffff",
               borderRadius: 0,
               padding: "5px 20px",
-              borderTop: "1px solid #eee", 
+              border: "1px solid #EDEDED", 
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start", 
