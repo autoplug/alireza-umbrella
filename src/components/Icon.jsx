@@ -12,7 +12,7 @@ const logoMap = {
   RLS: RLSLogo,
 };
 
-export default function MarketIcon({ market, size = "normal" }) {
+export default function Icon({ market, size = "normal" }) {
   const divRef = useRef(null); // changed from spanRef
   const [fontPx, setFontPx] = useState(14); // fallback if parent font not ready
 
