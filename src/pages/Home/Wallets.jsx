@@ -53,8 +53,8 @@ export default function Wallets() {
 
   return (
     <div style={{ 
-      padding: "10px 0",
-      margin: "10px 0",
+      padding: "20px 0",
+      margin: "0 0",
       maxHeight: "80vh", 
       overflowY: "auto" ,
       backgroundColor: "#fff",
