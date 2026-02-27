@@ -8,7 +8,7 @@ import {formatPrice} from "../../api/utils";
 
 //////////////////////////////////////////////
 const rowStyle = {
-  padding: "20px 0",
+  padding: "10px 0",
   margin: "0 0",
   marginTop: "10px",
   maxHeight: "80vh", 
