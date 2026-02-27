@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useTrades } from "../../hooks/useTrades";
 import TableOrder from "../../components/TableOrder";
 import Title from "../../components/Title";
-import '../../Styles/RowStyle.css';
+import '../../styles/RowStyle.css';
 
 // Helper function to check if a timestamp is from today in Tehran timezone
 const isTodayTehran = (timestamp) => {
