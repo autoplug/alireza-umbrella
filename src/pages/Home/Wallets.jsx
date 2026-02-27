@@ -1,7 +1,7 @@
 
 import { useWallets } from "../../hooks/useWallets";
 import { useMarkets } from "../../hooks/useMarkets";
-import Title from "../../components/Title";
+///import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
 
@@ -57,7 +57,7 @@ export default function Wallets() {
       backgroundColor: "#fff",
       borderTop: "2px solid #E7E7E7",
     }}>
-      <Title title="Wallets" />
+      {/* <Title title="Wallets" /> */}
       
       <div
         style={{
