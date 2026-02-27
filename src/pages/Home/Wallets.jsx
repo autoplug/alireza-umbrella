@@ -2,7 +2,7 @@
 import { useWallets } from "../../hooks/useWallets";
 import { useMarkets } from "../../hooks/useMarkets";
 
-import '../../Styles/RowStyle.css';
+import '../../styles/RowStyle.css';
 import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
