@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NobitexToken from "../../components/NobitexToken";
+import NobitexToken from "./NobitexToken";
 
 function Settings() {
   const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
