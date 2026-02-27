@@ -1,9 +1,7 @@
 import React from "react";
 
-export default function TitleBar({ title, count }) {
+export default function Title({ title }) {
   const barStyle = {
-    backgroundColor: "#EFF0F4",       // کرم روشن
-    borderTop: "2px solid #E7E7E7",   // کرم تیره‌تر
     padding: "5px 10px",
     margin: "0 0",
     marginBottom : "10px",
@@ -20,7 +18,7 @@ export default function TitleBar({ title, count }) {
   return (
     <div style={barStyle}>
       <h3 style={h3Style}>
-        {title} {count > 0 ? `(${count})` : ""}
+        {title}
       </h3>
     </div>
   );
