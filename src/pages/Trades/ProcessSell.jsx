@@ -55,7 +55,7 @@ export default function ProcessSell() {
 
       {/* ===== Remaining Buy Orders Table ===== */}
       <div style={{ marginTop: "30px" }}>
-        <TitleBar title="Remain Buy" count={buyTable.length} />
+        <Title title={"Remain Buy :" + buyTable.length} />
         {buyTable.length === 0 ? (
           <p>No remaining buy orders.</p>
         ) : (
