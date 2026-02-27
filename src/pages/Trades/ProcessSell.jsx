@@ -35,7 +35,7 @@ export default function ProcessSell() {
 
     setSellTable(finalSells);
     
-    finalBuys = finalBuys.filter((order) => Number(order.amount) !== 0);
+    finalBuys = finalBuys.filter((order) => Number(order.amount) > 0);
     setBuyTable(finalBuys);
     
     
