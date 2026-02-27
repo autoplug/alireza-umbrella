@@ -89,7 +89,7 @@ export default function Wallets() {
           <div
             key={wallet.currency}
             style={{
-              backgroundColor: "#ffffff",
+              backgroundColor: "#F8F8F8",
               borderRadius: 0,
               padding: "5px 20px",
               margin: "10px 10px",
