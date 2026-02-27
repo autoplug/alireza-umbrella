@@ -21,7 +21,7 @@ export default function CandleChart({ symbol, orders, trades }) {
   const seriesRef = useRef(null);
   const priceLinesRef = useRef([]);
 
-  const { candles, isFetching, refresh } = useHistory(symbol, resolution);
+  const { candles, isFetching, refetch } = useHistory(symbol, resolution);
 
   // Create chart once
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function CandleChart({ symbol, orders, trades }) {
        
           {/* Refresh buttons */}
           <button
-            onClick={() => refresh()}
+            onClick={() => refetch()}
             disabled={isFetching}
             style={{
               padding: "10px 12px",
