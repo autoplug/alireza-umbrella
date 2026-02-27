@@ -67,7 +67,6 @@ export default function Wallets() {
         style={{
           textAlign: "center",
           marginBottom: 0,
-          padding: "10px 0",
         }}
       >
         <div style={{ fontSize: 14, color: "#777" }}>
