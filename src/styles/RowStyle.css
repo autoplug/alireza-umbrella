@@ -1,6 +1,6 @@
 .RowStyle {
-  padding: 0 0;
-  margin: 20px 0;
+  padding-bottom: 20px;
+  margin-top: 20px;
   overflow-y: auto;
   background-color: #fff;
   border-top: 1px solid #ccc;
