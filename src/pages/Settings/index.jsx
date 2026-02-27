@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NobitexToken from "./NobitexToken";
 
-function Settings() {
+export default function Settings() {
   const [token, setToken] = useState(localStorage.getItem("NOBITEX_TOKEN") || "");
 
   const handleTokenSave = (newToken) => {
@@ -18,4 +18,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+
