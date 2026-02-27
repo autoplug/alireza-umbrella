@@ -101,10 +101,10 @@ export default function Wallets() {
 
             {/* Right: Amounts */}
             <div style={{ display: "flex", flexDirection: "column"}}>
-              <div style={{ fontWeight: 700, fontSize: 16  }}>
+              <div style={{ fontWeight: 700, fontSize: 14  }}>
                 {formatPrice(wallet.balance, wallet.currency.toUpperCase())}
               </div>
-              <div style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>
+              <div style={{ fontWeight: 700, fontSize: 12, color: "#555" }}>
                 {calcRialValue(wallet.balance, wallet.currency, markets)}
               </div>
             </div>
