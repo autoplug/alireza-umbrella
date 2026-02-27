@@ -1,10 +1,10 @@
 import React from "react";
-import ProcessSellPanel from "../../components/ProcessSellPanel"; 
+import ProcessSell from "./ProcessSell"; 
 
 export default function MarketPage() {
   return (
     <div>
-      <ProcessSellPanel />
+      <ProcessSell />
       <div style={{ height: "60px" }}></div>
     </div>
   );
