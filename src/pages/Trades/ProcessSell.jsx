@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import {processAllSells} from "../../api/utils";
 import { useTrades } from "../../hooks/useTrades";
 
-import TableOrder from "../../TableOrder";
-import TitleBar from "../../TitleBar";
+import TableOrder from "../../components/TableOrder";
+import Title from "../../components/Title";
 
 
 export default function ProcessSell() {
@@ -46,7 +46,7 @@ export default function ProcessSell() {
   return (
     <div>
       {/* ===== Sell Orders Table ===== */}
-      <TitleBar title={"Process Sell "} count={sellTable.length} />
+      <Title title={"Process Sell : " + sellTable.length} />
       {sellTable.length === 0 ? (
         <p>No sell orders to display.</p>
       ) : (
