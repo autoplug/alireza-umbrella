@@ -44,7 +44,7 @@ const calcRialValue = (amount, currency, markets) => {
 };
 
 //////////////////////////////////////////////
-export default function WalletList() {
+export default function Wallets() {
   const { wallets } = useWallets();
   const { markets } = useMarkets();
 
