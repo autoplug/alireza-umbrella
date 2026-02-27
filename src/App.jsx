@@ -44,8 +44,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UpdateProvider>
-        <Header />
-      {/* Header         above all pages */}
+        
+      {/* Header     <Header />    above all pages */}
       
       
       <Router>
