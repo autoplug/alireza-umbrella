@@ -7,6 +7,18 @@ import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
 
 //////////////////////////////////////////////
+const rowStyle = {
+  padding: "20px 0",
+  margin: "0 0",
+  marginTop: "10px",
+  maxHeight: "80vh", 
+  overflowY: "auto" ,
+  backgroundColor: "#fff",
+  borderTop: "1px solid #CCC",
+  borderBottom: "1px solid #CCC",
+};
+
+//////////////////////////////////////////////
 const calcTotalRial = (wallets, markets) => {
   const values = wallets.map((wallet) => {
     const balance = Number(wallet.balance);
@@ -52,16 +64,7 @@ export default function Wallets() {
   if (!wallets.length) return <div>No wallets available</div>;
 
   return (
-    <div style={{ 
-      padding: "20px 0",
-      margin: "0 0",
-      marginTop: "10px",
-      maxHeight: "80vh", 
-      overflowY: "auto" ,
-      backgroundColor: "#fff",
-      borderTop: "1px solid #CCC",
-      borderBottom: "1px solid #CCC",
-    }}>
+    <div style={{...rowStyle}}>
       <Title title="Wallets" />
       
       <div
