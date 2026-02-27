@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useTrades } from "../../hooks/useTrades";
 import TableOrder from "../../components/TableOrder";
-import TitleBar from "../../components/TitleBar";
+import Title from "../../components/Title";
 
 // Helper function to check if a timestamp is from today in Tehran timezone
 const isTodayTehran = (timestamp) => {
@@ -40,7 +40,7 @@ export default function Today() {
 
   return (
     <div>
-      <TitleBar title="Today Trades" count={todayTrades.length} />
+      <Title title={"Today Trades" + todayTrades.length } />
       <TableOrder orders={todayTrades} />
     </div>
   );
