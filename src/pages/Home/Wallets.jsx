@@ -1,8 +1,8 @@
 
-import { useWallets } from "../hooks/useWallets";
-import { useMarkets } from "../hooks/useMarkets";
-import TitleBar from "./TitleBar";
-import MarketIcon from "./MarketIcon";
+import { useWallets } from "../../hooks/useWallets";
+import { useMarkets } from "../../hooks/useMarkets";
+import TitleBar from "../../components/TitleBar";
+import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../api/utils";
 
 //////////////////////////////////////////////
