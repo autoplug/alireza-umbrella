@@ -84,7 +84,7 @@ export default function Wallets() {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 0 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, marginTop: 0 }}>
         {wallets.map((wallet) => (
           <div
             key={wallet.currency}
