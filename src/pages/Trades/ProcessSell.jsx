@@ -44,7 +44,7 @@ export default function ProcessSell() {
   
   
   return (
-    <div>
+    <div className="RowStyle">
       {/* ===== Sell Orders Table ===== */}
       <Title title={"Process Sell : " + sellTable.length} />
       {sellTable.length === 0 ? (
