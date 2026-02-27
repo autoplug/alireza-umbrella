@@ -40,7 +40,7 @@ export default function Today() {
 
   return (
     <div>
-      <Title title={"Today Trades" + todayTrades.length } />
+      <Title title={"Today Trades : " + todayTrades.length } />
       <TableOrder orders={todayTrades} />
     </div>
   );
