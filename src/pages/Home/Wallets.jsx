@@ -10,7 +10,7 @@ import {formatPrice} from "../../api/utils";
 const rowStyle = {
   padding: "10px 0",
   margin: "0 0",
-  marginTop: "10px",
+  marginTop: "20px",
   overflowY: "auto" ,
   backgroundColor: "#fff",
   borderTop: "1px solid #CCC",
