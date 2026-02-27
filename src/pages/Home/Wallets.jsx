@@ -54,7 +54,7 @@ export default function Wallets() {
     <div style={{ 
       maxHeight: "80vh", 
       overflowY: "auto" ,
-      
+      borderTop: "2px solid #E7E7E7",
     }}>
       <TitleBar title="Wallets" count={0} />
       
