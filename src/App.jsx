@@ -7,7 +7,7 @@ import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persist
 import { UpdateProvider } from "./context/UpdateContext";
 
 import BottomNavigation from "./layout/BottomNavigation";
-import Header from "./layout/Header";
+//import Header from "./layout/Header";
 
 import Home from "./pages/Home";
 import Trades from "./pages/Trades";
