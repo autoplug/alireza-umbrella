@@ -26,7 +26,7 @@ const isTodayTehran = (timestamp) => {
   return dateTehran >= todayStart;
 };
 
-export default function TodayTrades() {
+export default function Today() {
   const { trades } = useTrades();
   const [todayTrades, setTrades] = useState([]);
 
