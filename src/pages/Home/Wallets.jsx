@@ -1,6 +1,7 @@
 
 import { useWallets } from "../../hooks/useWallets";
 import { useMarkets } from "../../hooks/useMarkets";
+
 import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
@@ -55,7 +56,7 @@ export default function Wallets() {
       maxHeight: "80vh", 
       overflowY: "auto" ,
       backgroundColor: "#fff",
-      borderTop: "2px solid #E7E7E7",
+      borderTop: "1px solid #E7E7E7",
     }}>
       <Title title="Wallets" />
       
