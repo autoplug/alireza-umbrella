@@ -56,7 +56,7 @@ export default function Wallets() {
       maxHeight: "80vh", 
       overflowY: "auto" ,
       backgroundColor: "#fff",
-      borderTop: "1px solid #E7E7E7",
+      borderTop: "1px solid #EDEDED",
     }}>
       <Title title="Wallets" />
       
