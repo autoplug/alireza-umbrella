@@ -1,7 +1,7 @@
 
 import { useWallets } from "../../hooks/useWallets";
 import { useMarkets } from "../../hooks/useMarkets";
-///import Title from "../../components/Title";
+import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
 
