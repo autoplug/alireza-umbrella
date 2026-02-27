@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/alireza-umbrella/static/css/main.e330585b.css",
-    "main.js": "/alireza-umbrella/static/js/main.4f142e5e.js",
+    "main.js": "/alireza-umbrella/static/js/main.69c5962b.js",
     "static/js/488.a8c14400.chunk.js": "/alireza-umbrella/static/js/488.a8c14400.chunk.js",
     "static/media/eth.PNG": "/alireza-umbrella/static/media/eth.a85b6de0dc4a013ae2f8.PNG",
     "static/media/btc.PNG": "/alireza-umbrella/static/media/btc.82491fef997ab841639c.PNG",
@@ -9,11 +9,11 @@
     "static/media/rls.jpg": "/alireza-umbrella/static/media/rls.b468483b8911f94651ca.jpg",
     "index.html": "/alireza-umbrella/index.html",
     "main.e330585b.css.map": "/alireza-umbrella/static/css/main.e330585b.css.map",
-    "main.4f142e5e.js.map": "/alireza-umbrella/static/js/main.4f142e5e.js.map",
+    "main.69c5962b.js.map": "/alireza-umbrella/static/js/main.69c5962b.js.map",
     "488.a8c14400.chunk.js.map": "/alireza-umbrella/static/js/488.a8c14400.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e330585b.css",
-    "static/js/main.4f142e5e.js"
+    "static/js/main.69c5962b.js"
   ]
 }
