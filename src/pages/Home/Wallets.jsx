@@ -57,7 +57,7 @@ export default function Wallets() {
       backgroundColor: "#fff",
       borderTop: "2px solid #E7E7E7",
     }}>
-      {/* <Title title="Wallets" /> */}
+      <Title title="Wallets" />
       
       <div
         style={{
