@@ -1,7 +1,7 @@
 
 import { useWallets } from "../../hooks/useWallets";
 import { useMarkets } from "../../hooks/useMarkets";
-import TitleBar from "../../components/TitleBar";
+import Title from "../../components/Title";
 import MarketIcon from "../../components/MarketIcon";
 import {formatPrice} from "../../api/utils";
 
@@ -54,9 +54,10 @@ export default function Wallets() {
     <div style={{ 
       maxHeight: "80vh", 
       overflowY: "auto" ,
+      backgroundColor: "#fff",
       borderTop: "2px solid #E7E7E7",
     }}>
-      <TitleBar title="Wallets" count={0} />
+      <Title title="Wallets" />
       
       <div
         style={{
