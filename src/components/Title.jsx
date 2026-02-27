@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Title({ title }) {
   const barStyle = {
-    padding: "10px 10px",
+    padding: "20px 20px",
     margin: "0 0",
     marginBottom : "10px",
     display: "flex",
@@ -17,7 +17,7 @@ export default function Title({ title }) {
 
   return (
     <div style={barStyle}>
-      <h3 style={h3Style}>
+      <h2 style={h3Style}>
         {title}
       </h3>
     </div>
