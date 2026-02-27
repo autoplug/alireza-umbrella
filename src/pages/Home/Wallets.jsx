@@ -90,7 +90,7 @@ export default function Wallets() {
             key={wallet.currency}
             style={{
               backgroundColor: "#F8F8F8",
-              borderRadius: 0,
+              borderRadius: "4px",
               padding: "5px 20px",
               margin: "5px 10px 0 10px",
               border: "1px solid #EDEDED", 
