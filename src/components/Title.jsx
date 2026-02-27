@@ -10,16 +10,16 @@ export default function Title({ title }) {
     gap: "6px",
   };
 
-  const h3Style = {
+  const h2Style = {
     margin: 0,
     fontWeight: "bold",
   };
 
   return (
     <div style={barStyle}>
-      <h2 style={h3Style}>
+      <h2 style={h2Style}>
         {title}
-      </h3>
+      </h2>
     </div>
   );
 }
